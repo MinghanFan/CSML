@@ -1,0 +1,28 @@
+{
+  "dataset_statistics": {
+    "total_matches": 2,
+    "total_players": 15,
+    "total_rounds": 35,
+    "avg_rounds_per_match": 17.5,
+    "total_player_performances": 20
+  },
+  "map_distribution": [
+    {
+      "map_name": "de_train",
+      "count": 2
+    }
+  ],
+  "performance_statistics": {
+    "avg_kills_per_match": 11.55,
+    "avg_deaths_per_match": 11.55,
+    "avg_adr": 73.76463775634765,
+    "avg_kd_ratio": 1.118225459754467,
+    "avg_survival_rate": 34.35855278968811,
+    "avg_utility_damage": 86.45,
+    "avg_flash_assists": 0.45,
+    "total_clutches_won": 1,
+    "avg_smokes_per_match": 58891.5,
+    "avg_flashes_per_match": 48419.4,
+    "avg_clutch_success_rate": 4.166666666666666
+  }
+}
