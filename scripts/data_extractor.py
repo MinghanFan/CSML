@@ -281,15 +281,82 @@ class CS2DataExtractor:
         """Extract match-level data"""
         header = data['header']
         rounds_df = data['rounds']
+        ticks_df = data['ticks']
         
         match_id = self.generate_match_id(demo_path, header)
         
         if len(rounds_df) == 0:
             return None
         
-        # Count wins per side
-        ct_wins = len(rounds_df.filter(pl.col('winner') == 'ct'))
-        t_wins = len(rounds_df.filter(pl.col('winner') == 't'))
+        # Map players to their teams (Team1 = started CT, Team2 = started T)
+        players_df = self.extract_all_players(data)
+        team_assignments = {}
+        team_starting_side = {}
+        team_players: Dict[str, set] = {'Team1': set(), 'Team2': set()}
+        for player_row in players_df.iter_rows(named=True):
+            player_id = str(player_row['steamid'])
+            team_name, starting_side, _ = self.determine_player_team(
+                player_id, ticks_df, rounds_df
+            )
+            if team_name == "None":
+                continue
+            team_assignments[player_id] = team_name
+            if starting_side in ('ct', 't') and team_name not in team_starting_side:
+                team_starting_side[team_name] = starting_side
+            player_name = player_row.get('name')
+            if player_name:
+                team_players[team_name].add(player_name)
+        
+        # Fallbacks if we couldn't infer a starting side for a team
+        if 'Team1' not in team_starting_side:
+            team_starting_side['Team1'] = 'ct'
+        if 'Team2' not in team_starting_side:
+            team_starting_side['Team2'] = 't'
+        
+        default_side_map = {
+            team_starting_side['Team1']: 'Team1',
+            team_starting_side['Team2']: 'Team2'
+        }
+        
+        # Determine which team was on each side for every round
+        player_round_sides = (
+            ticks_df
+            .select(['round_num', 'steamid', 'side'])
+            .unique(subset=['round_num', 'steamid'], keep='first')
+        )
+        
+        per_round_side_map: Dict[int, Dict[str, str]] = {}
+        for row in player_round_sides.iter_rows(named=True):
+            player_id = str(row['steamid'])
+            team_name = team_assignments.get(player_id)
+            if not team_name:
+                continue
+            round_entry = per_round_side_map.setdefault(int(row['round_num']), {})
+            round_entry[row['side']] = team_name
+        
+        round_side_team_map: Dict[int, Dict[str, str]] = {}
+        current_map = default_side_map.copy()
+        for round_num in sorted(rounds_df['round_num'].to_list()):
+            round_map = current_map.copy()
+            updates = per_round_side_map.get(round_num)
+            if updates:
+                round_map.update(updates)
+            round_side_team_map[round_num] = round_map
+            current_map = round_map
+        
+        # Count wins per actual team using the side map
+        team_wins = {'Team1': 0, 'Team2': 0}
+        for round_row in rounds_df.sort('round_num').iter_rows(named=True):
+            round_num = int(round_row['round_num'])
+            winner_side = round_row['winner']
+            side_map = round_side_team_map.get(round_num, default_side_map)
+            winning_team = side_map.get(winner_side)
+            if winning_team:
+                team_wins[winning_team] += 1
+        
+        team1_name_str = ', '.join(sorted(team_players['Team1'])) if team_players['Team1'] else 'Team1'
+        team2_name_str = ', '.join(sorted(team_players['Team2'])) if team_players['Team2'] else 'Team2'
+        winning_team = 'Team1' if team_wins['Team1'] > team_wins['Team2'] else 'Team2'
         
         match_data = {
             'match_id': match_id,
@@ -297,11 +364,11 @@ class CS2DataExtractor:
             'map_name': header.get('map_name', 'unknown'),
             'date': datetime.now().isoformat(),
             'total_rounds': len(rounds_df),
-            'team1_name': 'Team1',  # Team that started CT
-            'team2_name': 'Team2',  # Team that started T
-            'team1_score': ct_wins,
-            'team2_score': t_wins,
-            'winner': 'Team1' if ct_wins > t_wins else 'Team2',
+            'team1_name': team1_name_str,
+            'team2_name': team2_name_str,
+            'team1_score': team_wins['Team1'],
+            'team2_score': team_wins['Team2'],
+            'winner': team1_name_str if winning_team == 'Team1' else team2_name_str,
             'match_duration_seconds': float(rounds_df['official_end'].max() / 128),
         }
         
