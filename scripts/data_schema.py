@@ -50,7 +50,7 @@ class CS2DataSchema:
         'deaths': pl.Int32,
         'assists': pl.Int32,
         'headshot_kills': pl.Int32,
-        'damage': pl.Int32,
+        'damage': pl.Float32,
         'utility_damage': pl.Int32,
         'enemies_flashed': pl.Int32,
         'flash_assists': pl.Int32,

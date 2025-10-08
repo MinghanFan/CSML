@@ -386,6 +386,7 @@ class CS2DataExtractor:
         ticks_df = data['ticks']
         rounds_df = data['rounds']
         grenades_df = data['grenades']
+        match_meta = data.get('match_data', {})
         
         # Get ALL players
         players = self.extract_all_players(data)
@@ -433,6 +434,7 @@ class CS2DataExtractor:
             )
             rounds_survived = len(player_rounds.filter(pl.col('health') > 0))
             total_rounds = len(player_rounds)
+            damage_per_round = round(total_damage / max(total_rounds, 1), 1) if total_rounds > 0 else 0.0
             
             # === OPENING DUELS ===
             first_kills = 0
@@ -492,11 +494,28 @@ class CS2DataExtractor:
                 avg_cash_spent = 0.0
                 avg_equipment_value = 0.0
             
+            if team_name in ("Team1", "Team2"):
+                team_field_key = 'team1_name' if team_name == 'Team1' else 'team2_name'
+                team_display_name = match_meta.get(team_field_key, team_name)
+            else:
+                team_display_name = team_name
+            
+            performance_score = float(
+                (total_kills * 2.0)
+                + total_assists
+                - total_deaths
+                + adr
+                + (utility_damage / 100.0)
+                + (flash_assists * 0.5)
+                + (clutches_won * 5.0)
+                + (multi_kill_rounds * 2.0)
+            )
+            
             match_player_stats = {
                 'match_id': match_id,
                 'player_id': player_id,
                 'player_name': player_name,
-                'team': "None",  # FIXED: No team at match level (players switch sides)
+                'team': team_display_name or "None",
                 'role': 'unknown',
                 
                 # Core stats
@@ -504,7 +523,7 @@ class CS2DataExtractor:
                 'deaths': total_deaths,
                 'assists': total_assists,
                 'headshot_kills': headshot_kills,
-                'damage': total_damage,
+                'damage': damage_per_round,
                 'utility_damage': utility_damage,
                 'enemies_flashed': enemies_flashed,
                 'flash_assists': flash_assists,
@@ -535,6 +554,7 @@ class CS2DataExtractor:
                 'avg_equipment_value_per_round': avg_equipment_value,
                 
                 # Performance score (will calculate in next step)
+                # performance_score: performance_score,
                 'performance_score': 0.0,
                 
                 # Outcome - FIXED: Based on team, not side
