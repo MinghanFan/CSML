@@ -20,9 +20,9 @@
     "avg_survival_rate": 34.35855278968811,
     "avg_utility_damage": 86.45,
     "avg_flash_assists": 0.45,
-    "total_clutches_won": 1,
-    "avg_smokes_per_match": 58891.5,
-    "avg_flashes_per_match": 48419.4,
-    "avg_clutch_success_rate": 4.166666666666666
+    "total_clutches_won": 2,
+    "avg_smokes_per_match": 25.65,
+    "avg_flashes_per_match": 17.2,
+    "avg_clutch_success_rate": 11.538461538461538
   }
 }

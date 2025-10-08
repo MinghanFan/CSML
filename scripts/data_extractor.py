@@ -217,8 +217,8 @@ class CS2DataExtractor:
                 player_side_alive = tick_data.filter(pl.col('side') == player_side)
                 enemy_side_alive = tick_data.filter(pl.col('side') != player_side)
                 
-                # Check if it's a clutch situation (1vX where X >= 2)
-                if len(player_side_alive) == 1 and len(enemy_side_alive) >= 2:
+                # Check if it's a clutch situation (1vX where X >= 1)
+                if len(player_side_alive) == 1 and len(enemy_side_alive) >= 1:
                     # Check if our player is the one alive
                     if int(player_id) in player_side_alive['steamid'].to_list():
                         clutches_attempted += 1
@@ -250,8 +250,12 @@ class CS2DataExtractor:
                 'molotovs': 0
             }
         
-        # Group by round and tick to count unique throws
-        unique_throws = player_grenades.unique(subset=['round_num', 'tick', 'grenade_type'])
+        # Group by unique grenade entity (fallback to round/tick/type if needed)
+        if 'entity_id' in player_grenades.columns:
+            unique_subset = ['entity_id']
+        else:
+            unique_subset = ['round_num', 'tick', 'grenade_type']
+        unique_throws = player_grenades.unique(subset=unique_subset)
         
         # Count each type
         smokes = len(unique_throws.filter(
@@ -467,7 +471,7 @@ class CS2DataExtractor:
                 player_kills
                 .group_by('round_num')
                 .agg(pl.count('tick').alias('kills'))
-                .filter(pl.col('kills') >= 3)
+                .filter(pl.col('kills') >= 2)
             )
             
             # === ECONOMY - FIXED ===
@@ -478,7 +482,7 @@ class CS2DataExtractor:
                 cash_per_round = (
                     player_economy
                     .group_by('round_num')
-                    .agg(pl.col('cash_spent_this_round').sum().alias('round_cash'))
+                    .agg(pl.col('cash_spent_this_round').max().alias('round_cash'))
                 )
                 avg_cash_spent = float(cash_per_round['round_cash'].mean())
                 
@@ -655,7 +659,8 @@ class CS2DataExtractor:
                 player_round_ticks = round_ticks.filter(pl.col('steamid') == int(player_id))
                 if len(player_round_ticks) > 0:
                     equip_value = int(player_round_ticks['current_equip_value'].mean())
-                    cash_spent = int(player_round_ticks['cash_spent_this_round'].sum())
+                    round_cash_col = player_round_ticks['cash_spent_this_round']
+                    cash_spent = int(round_cash_col.max()) if len(round_cash_col) > 0 else 0
                     money_start = int(player_round_ticks['balance'].first())
                     money_end = int(player_round_ticks['balance'].last())
                 else:
