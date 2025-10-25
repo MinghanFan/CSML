@@ -5,11 +5,11 @@ Run this BEFORE main_pipeline.py
 """
 
 from pathlib import Path
-from awpy import Demo
 import sys
 from multiprocessing import Pool, cpu_count
 
 from config import RAW_DEMOS_FOLDER, PARSED_DEMOS_FOLDER, NUM_WORKERS
+from demo_utils import parse_demo_to_zip
 
 def parse_single_demo(args):
     """Parse a single demo (for multiprocessing)"""
@@ -17,35 +17,7 @@ def parse_single_demo(args):
     
     try:
         print(f"Parsing {demo_path.name}...")
-        
-        demo = Demo(path=demo_path, verbose=False)
-        
-        # Parse with all needed properties
-        demo.parse(
-            player_props=[
-                "X", "Y", "Z", "health", "armor_value",
-                "kills_total", "deaths_total", "assists_total",
-                "damage_total", "utility_damage_total",
-                "headshot_kills_total", "score", "mvps",
-                "active_weapon_name", "inventory", "balance",
-                "current_equip_value", "cash_spent_this_round",
-                "is_alive", "team_name", "last_place_name",
-                "flash_duration", "velocity_X", "velocity_Y", "velocity_Z",
-                "pitch", "yaw"
-            ],
-            other_props=[
-                "game_time", "is_bomb_planted", "which_bomb_zone",
-                "is_freeze_period", "is_warmup_period",
-                "total_rounds_played", "is_match_started"
-            ]
-        )
-        
-        # FIXED: demo.compress() adds .zip automatically, so don't include it
-        # Pass the output folder, not the full path
-        # It will create: output_folder/demo_stem.zip
-        demo.compress(outpath=output_folder)
-        
-        output_path = output_folder / f"{demo_path.stem}.zip"
+        output_path = parse_demo_to_zip(demo_path, output_folder)
         
         print(f"  ✓ {demo_path.name} -> {output_path.name}")
         return {'success': True, 'demo': demo_path.name}
@@ -70,7 +42,10 @@ def main():
         print(f"\n  Create the folder and put your .dem files there.")
         sys.exit(1)
     
-    demo_files = list(RAW_DEMOS_FOLDER.glob("*.dem"))
+    demo_files = sorted(
+        p for p in RAW_DEMOS_FOLDER.glob("*.dem")
+        if not p.name.startswith("._")
+    )
     if len(demo_files) == 0:
         print(f"✗ ERROR: No .dem files found!")
         print(f"  Folder: {RAW_DEMOS_FOLDER}")

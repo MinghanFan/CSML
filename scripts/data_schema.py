@@ -80,7 +80,7 @@ class CS2DataSchema:
         'avg_cash_spent_per_round': pl.Float32,
         'avg_equipment_value_per_round': pl.Float32,
         
-        # Performance score (calculated later)
+        # Performance score (per-round composite metric)
         'performance_score': pl.Float32,
         
         # Outcome

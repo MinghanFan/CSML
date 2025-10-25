@@ -40,11 +40,45 @@ class CS2DataExtractor:
         self.match_players_data = []
         self.rounds_data = []
         self.round_players_data = []
-    
+
     def generate_match_id(self, demo_path: Path, header: dict) -> str:
         """Generate unique match ID"""
         unique_string = f"{demo_path.stem}_{header.get('map_name', '')}_{header.get('demo_file_stamp', '')}"
         return hashlib.md5(unique_string.encode()).hexdigest()[:16]
+
+    def compute_performance_score(
+        self,
+        *,
+        kills_per_round: float,
+        assists_per_round: float,
+        deaths_per_round: float,
+        adr: float,
+        survival_rate: float,
+        multi_kill_rate: float,
+        first_kill_rate: float,
+        clutch_success_rate: float,
+        utility_damage_per_round: float,
+        flash_assists_per_round: float,
+    ) -> float:
+        """
+        Compute a holistic performance score using per-round rates so different
+        match lengths remain comparable.
+        """
+
+        score = (
+            (kills_per_round * 120.0)
+            + (assists_per_round * 40.0)
+            - (deaths_per_round * 75.0)
+            + (adr * 0.45)  # ADR already per round
+            + (survival_rate * 0.25)  # survival_rate is percentage
+            + (multi_kill_rate * 120.0)
+            + (first_kill_rate * 90.0)
+            + (clutch_success_rate * 70.0)
+            + (utility_damage_per_round * 0.2)
+            + (flash_assists_per_round * 80.0)
+        )
+
+        return float(max(score, 0.0))
     
     def determine_player_team(self, player_id: str, ticks_df: pl.DataFrame, rounds_df: pl.DataFrame) -> tuple:
         """
@@ -500,15 +534,28 @@ class CS2DataExtractor:
             else:
                 team_display_name = team_name
             
-            performance_score = float(
-                (total_kills * 2.0)
-                + total_assists
-                - total_deaths
-                + adr
-                + (utility_damage / 100.0)
-                + (flash_assists * 0.5)
-                + (clutches_won * 5.0)
-                + (multi_kill_rounds * 2.0)
+            kills_per_round = total_kills / max(total_rounds, 1)
+            assists_per_round = total_assists / max(total_rounds, 1)
+            deaths_per_round = total_deaths / max(total_rounds, 1)
+            multi_kill_rate = multi_kill_rounds / max(total_rounds, 1)
+            first_kill_rate = first_kills / max(total_rounds, 1)
+            clutch_success_rate = (
+                clutches_won / clutches_attempted if clutches_attempted > 0 else 0.0
+            )
+            utility_damage_per_round = utility_damage / max(total_rounds, 1)
+            flash_assists_per_round = flash_assists / max(total_rounds, 1)
+            
+            performance_score = self.compute_performance_score(
+                kills_per_round=kills_per_round,
+                assists_per_round=assists_per_round,
+                deaths_per_round=deaths_per_round,
+                adr=adr,
+                survival_rate=survival_rate,
+                multi_kill_rate=multi_kill_rate,
+                first_kill_rate=first_kill_rate,
+                clutch_success_rate=clutch_success_rate,
+                utility_damage_per_round=utility_damage_per_round,
+                flash_assists_per_round=flash_assists_per_round,
             )
             
             match_player_stats = {
@@ -523,7 +570,7 @@ class CS2DataExtractor:
                 'deaths': total_deaths,
                 'assists': total_assists,
                 'headshot_kills': headshot_kills,
-                'damage': damage_per_round,
+                'damage': damage_per_round, # total_damage 
                 'utility_damage': utility_damage,
                 'enemies_flashed': enemies_flashed,
                 'flash_assists': flash_assists,
@@ -553,9 +600,9 @@ class CS2DataExtractor:
                 'avg_cash_spent_per_round': avg_cash_spent,
                 'avg_equipment_value_per_round': avg_equipment_value,
                 
-                # Performance score (will calculate in next step)
-                # performance_score: performance_score,
-                'performance_score': 0.0,
+                # Performance score (normalized per-round composite)
+                'performance_score': performance_score,
+                #'performance_score': 0.0,
                 
                 # Outcome - FIXED: Based on team, not side
                 'won_match': won_match,
