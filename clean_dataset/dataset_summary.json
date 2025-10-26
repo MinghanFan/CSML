@@ -1,56 +1,56 @@
 {
   "dataset_statistics": {
-    "total_matches": 178,
-    "total_players": 134,
-    "total_rounds": 3382,
-    "avg_rounds_per_match": 19.6123595505618,
-    "total_player_performances": 1721
+    "total_matches": 1198,
+    "total_players": 239,
+    "total_rounds": 24661,
+    "avg_rounds_per_match": 20.676126878130216,
+    "total_player_performances": 11927
   },
   "map_distribution": [
     {
       "map_name": "de_inferno",
-      "count": 34
+      "count": 220
     },
     {
       "map_name": "de_dust2",
-      "count": 30
-    },
-    {
-      "map_name": "de_mirage",
-      "count": 27
-    },
-    {
-      "map_name": "de_ancient",
-      "count": 27
+      "count": 202
     },
     {
       "map_name": "de_nuke",
-      "count": 26
+      "count": 196
     },
     {
-      "map_name": "de_train",
-      "count": 17
+      "map_name": "de_mirage",
+      "count": 195
     },
     {
-      "map_name": "de_overpass",
-      "count": 15
+      "map_name": "de_ancient",
+      "count": 168
     },
     {
       "map_name": "de_anubis",
-      "count": 2
+      "count": 98
+    },
+    {
+      "map_name": "de_train",
+      "count": 90
+    },
+    {
+      "map_name": "de_overpass",
+      "count": 29
     }
   ],
   "performance_statistics": {
-    "avg_kills_per_match": 13.149912841371295,
-    "avg_deaths_per_match": 13.238233585124927,
-    "avg_adr": 72.21505615615624,
-    "avg_kd_ratio": 1.0862189389154844,
-    "avg_survival_rate": 35.84677987040509,
-    "avg_utility_damage": 100.66763509587449,
-    "avg_flash_assists": 0.7332945961650204,
-    "total_clutches_won": 271,
-    "avg_smokes_per_match": 27.22080185938408,
-    "avg_flashes_per_match": 23.596165020337015,
-    "avg_clutch_success_rate": 14.081908190819084
+    "avg_kills_per_match": 13.62287247421816,
+    "avg_deaths_per_match": 13.740085520248176,
+    "avg_adr": 72.45479669999055,
+    "avg_kd_ratio": 1.0792254175382692,
+    "avg_survival_rate": 35.32124455636591,
+    "avg_utility_damage": 102.24054665884128,
+    "avg_flash_assists": 0.6836589251278612,
+    "total_clutches_won": 1779,
+    "avg_smokes_per_match": 28.67887985243565,
+    "avg_flashes_per_match": 24.462983147480507,
+    "avg_clutch_success_rate": 13.910359608758185
   }
 }
