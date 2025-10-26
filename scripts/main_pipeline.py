@@ -1,7 +1,5 @@
 """
-Main pipeline script - RUN THIS FILE!
-
-This orchestrates the entire data acquisition process.
+Main pipeline script to RUN.
 """
 
 from pathlib import Path
@@ -104,11 +102,6 @@ def main():
     print(f"{'='*80}")
     print(f"\nYour clean dataset is ready at:")
     print(f"  {CLEAN_DATASET_FOLDER}")
-    print(f"\nMain file for ML:")
-    print(f"  {CLEAN_DATASET_FOLDER / 'match_players.parquet'}")
-    print(f"\nNext steps:")
-    print(f"  1. Run: python scripts/verify_dataset.py")
-    print(f"  2. Start feature engineering and ML model training")
 
 if __name__ == "__main__":
     main()

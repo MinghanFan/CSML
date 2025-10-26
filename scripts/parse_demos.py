@@ -1,7 +1,7 @@
 """
-Demo parser script - Parses raw .dem files.
+Demo parser script to parses raw .dem files.
 
-Run this BEFORE main_pipeline.py
+Run before main_pipeline.py.
 """
 
 from pathlib import Path

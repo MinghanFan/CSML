@@ -1,7 +1,7 @@
 """
 Dataset verification script.
 
-Run this AFTER main_pipeline.py to verify your dataset is ready.
+Run after main_pipeline.py to verify dataset.
 """
 
 from pathlib import Path

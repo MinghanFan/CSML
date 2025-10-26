@@ -29,7 +29,7 @@ def evaluate_clusters(
     random_state: int,
     output_dir: Path,
 ) -> pd.DataFrame:
-    """Run PCA + KMeans for each K and capture metrics/profiles."""
+    """Run PCA + KMeans for each K and capture metrics."""
     features = df[feature_cols].fillna(0)
 
     scaler = StandardScaler()
@@ -137,7 +137,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--random-state",
         type=int,
-        default=42,
+        default=253,
         help="Random seed for reproducibility.",
     )
     return parser.parse_args()

@@ -1,4 +1,8 @@
 import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report
 
 # Load player+cluster dataset
 mp = pd.read_csv("clean_dataset/match_players_with_clusters.csv")
@@ -25,20 +29,13 @@ team_features = (
     .reset_index()
 )
 
-team_features.head()
-
 # Expand cluster dict into separate columns per cluster type
 cluster_df = team_features["cluster"].apply(lambda d: pd.Series(d)).fillna(0)
 cluster_df.columns = [f"cluster_{int(c)}" for c in cluster_df.columns]
 
 team_data = pd.concat([team_features.drop(columns=["cluster"]), cluster_df], axis=1)
 
-team_data.head()
-
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, classification_report
-
+# Prepare data for modeling
 features = [
     "adr", "survival_rate", "kd_ratio",
     "first_kills", "first_deaths",
@@ -61,11 +58,11 @@ preds = model.predict(X_test)
 print("Accuracy:", accuracy_score(y_test, preds))
 print(classification_report(y_test, preds))
 
-import numpy as np
-
+# Feature importances
 importances = model.feature_importances_
 indices = np.argsort(importances)[::-1]
 
+print("Feature importances:")
 for idx in indices:
     print(f"{features[idx]}: {importances[idx]:.4f}")
 

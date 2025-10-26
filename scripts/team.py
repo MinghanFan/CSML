@@ -19,6 +19,7 @@ winrate_by_comp = (
     .sort_values("won_match", ascending=False)
 )
 
+print("\nBest 20 Compositions:")
 print(winrate_by_comp.head(20))
 print("\nWorst 10 Compositions:")
 print(winrate_by_comp.tail(10))
