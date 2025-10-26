@@ -24,6 +24,19 @@ sns.set_style("whitegrid")
 plt.rcParams['figure.figsize'] = (14, 8)
 
 
+def team_on_ct(round_num: int) -> int:
+    """Return 1 if Team1 is on CT side this round, else 2."""
+    if round_num <= REGULATION_HALF_ROUNDS:
+        return 1
+    if round_num <= REGULATION_TOTAL_ROUNDS:
+        return 2
+
+    # Overtime: alternate every overtime half (MR3)
+    ot_round_index = round_num - REGULATION_TOTAL_ROUNDS - 1  # zero-based OT rounds
+    block = ot_round_index // OVERTIME_HALF_ROUNDS
+    return 1 if block % 2 == 0 else 2
+
+
 class WinProbabilityCalculator:
     """
     Calculate match win probability based on round outcomes and state.
@@ -49,20 +62,19 @@ class WinProbabilityCalculator:
                 weights[r] = 1.0
         return weights
     
-    def calculate_base_probability(self, ct_rounds, t_rounds, rounds_played):
+    def calculate_base_probability(self, team1_rounds, team2_rounds):
         """
         Calculate base win probability using Beta distribution.
         This provides a Bayesian estimate with uncertainty.
         """
         # Add pseudo-counts for Bayesian prior (prevents 0/1 extremes)
-        alpha = ct_rounds + 1
-        beta_param = t_rounds + 1
+        alpha = team1_rounds + 1
+        beta_param = team2_rounds + 1
         
         # Expected win probability
         p_win = alpha / (alpha + beta_param)
         
-        # Adjust for rounds remaining
-        rounds_remaining = max(ROUNDS_TO_WIN - max(ct_rounds, t_rounds), 0)
+        rounds_remaining = max(ROUNDS_TO_WIN - max(team1_rounds, team2_rounds), 0)
         if rounds_remaining > 0:
             # More uncertainty with more rounds to play
             uncertainty_factor = rounds_remaining / REGULATION_TOTAL_ROUNDS
@@ -95,32 +107,32 @@ class WinProbabilityCalculator:
         for idx, row in round_data.iterrows():
             # Base probability from score
             base_prob = self.calculate_base_probability(
-                row['ct_score'], row['t_score'], row['round_num']
+                row['team1_score'], row['team2_score']
             )
             
             # Momentum adjustments
-            if 'ct_streak' in row:
+            if 'team1_streak' in row:
                 adjusted_prob = self.adjust_for_momentum(
                     base_prob,
-                    row.get('ct_streak', 0),
-                    row.get('recent_perf', 0)
+                    row.get('team1_streak', 0),
+                    row.get('team_recent_perf', 0)
                 )
             else:
                 adjusted_prob = base_prob
             
             probabilities.append({
                 'round': row['round_num'],
-                'ct_win_prob': adjusted_prob,
-                't_win_prob': 1 - adjusted_prob,
-                'ct_score': row['ct_score'],
-                't_score': row['t_score'],
-                'round_winner': row.get('round_winner', 'unknown')
+                'team1_win_prob': adjusted_prob,
+                'team2_win_prob': 1 - adjusted_prob,
+                'team1_score': row['team1_score'],
+                'team2_score': row['team2_score'],
+                'team_round_winner': row.get('team_round_winner', 'unknown')
             })
         
         return pd.DataFrame(probabilities)
 
 
-def plot_single_match_probability(match_df, match_id, save_path=None):
+def plot_single_match_probability(match_df, match_id, team1_label="Team 1", team2_label="Team 2", save_path=None):
     """
     Plot win probability curve for a single match.
     """
@@ -128,21 +140,21 @@ def plot_single_match_probability(match_df, match_id, save_path=None):
     
     # Win probability curve
     rounds = match_df['round']
-    ct_prob = match_df['ct_win_prob'] * 100
-    t_prob = match_df['t_win_prob'] * 100
+    team1_prob = match_df['team1_win_prob'] * 100
+    team2_prob = match_df['team2_win_prob'] * 100
     
     # Main probability lines
-    ax1.plot(rounds, ct_prob, 'b-', linewidth=2.5, label='CT Win Probability', alpha=0.8)
-    ax1.plot(rounds, t_prob, 'r-', linewidth=2.5, label='T Win Probability', alpha=0.8)
+    ax1.plot(rounds, team1_prob, 'b-', linewidth=2.5, label=f'{team1_label} Win %', alpha=0.8)
+    ax1.plot(rounds, team2_prob, 'r-', linewidth=2.5, label=f'{team2_label} Win %', alpha=0.8)
     
     # 50% line
     ax1.axhline(y=50, color='gray', linestyle='--', alpha=0.5)
     
     # Shade regions
-    ax1.fill_between(rounds, 50, ct_prob, where=(ct_prob >= 50), 
-                     alpha=0.2, color='blue', label='CT Favored')
-    ax1.fill_between(rounds, 50, t_prob, where=(t_prob >= 50), 
-                     alpha=0.2, color='red', label='T Favored')
+    ax1.fill_between(rounds, 50, team1_prob, where=(team1_prob >= 50), 
+                     alpha=0.2, color='blue', label=f'{team1_label} Favored')
+    ax1.fill_between(rounds, 50, team2_prob, where=(team2_prob >= 50), 
+                     alpha=0.2, color='red', label=f'{team2_label} Favored')
     
     # Mark important rounds
     for idx, row in match_df.iterrows():
@@ -163,15 +175,14 @@ def plot_single_match_probability(match_df, match_id, save_path=None):
     
     # Score progression bar
     for idx, row in match_df.iterrows():
-        winner = row['round_winner']
-        ct_win = winner == 1 or str(winner).lower() == 'ct'
-        color = 'blue' if ct_win else 'red'
+        winner = row.get('team_round_winner', 1)
+        color = 'blue' if winner == 1 else 'red'
         ax2.barh(0, 1, left=row['round']-1, height=0.8, color=color, alpha=0.7)
     
     # Score annotations
-    final_ct = match_df.iloc[-1]['ct_score']
-    final_t = match_df.iloc[-1]['t_score']
-    ax2.text(len(rounds)/2, 0, f'Final: CT {final_ct} - {final_t} T', 
+    final_team1 = match_df.iloc[-1]['team1_score']
+    final_team2 = match_df.iloc[-1]['team2_score']
+    ax2.text(len(rounds)/2, 0, f'Final: {team1_label} {final_team1} - {final_team2} {team2_label}', 
             ha='center', va='center', fontsize=12, fontweight='bold', color='white')
     
     ax2.set_xlim(0.5, len(rounds) + 0.5)
@@ -199,27 +210,27 @@ def plot_multiple_matches_comparison(matches_data, title="Match Win Probability 
     if n_matches == 1:
         axes = [axes]
     
-    for idx, (match_id, match_df) in enumerate(matches_data.items()):
+    for idx, (match_id, (match_df, team1_label, team2_label)) in enumerate(matches_data.items()):
         ax = axes[idx]
         
         rounds = match_df['round']
-        ct_prob = match_df['ct_win_prob'] * 100
+        team1_prob = match_df['team1_win_prob'] * 100
         
         # Plot probability
-        ax.plot(rounds, ct_prob, 'b-', linewidth=2, alpha=0.8)
-        ax.fill_between(rounds, 50, ct_prob, where=(ct_prob >= 50), 
+        ax.plot(rounds, team1_prob, 'b-', linewidth=2, alpha=0.8)
+        ax.fill_between(rounds, 50, team1_prob, where=(team1_prob >= 50), 
                         alpha=0.2, color='blue')
-        ax.fill_between(rounds, 50, ct_prob, where=(ct_prob < 50), 
+        ax.fill_between(rounds, 50, team1_prob, where=(team1_prob < 50), 
                         alpha=0.2, color='red')
         
         # 50% line
         ax.axhline(y=50, color='gray', linestyle='--', alpha=0.5)
         
         # Format
-        final_ct = match_df.iloc[-1]['ct_score']
-        final_t = match_df.iloc[-1]['t_score']
-        ax.set_ylabel('CT Win %', fontsize=10)
-        ax.set_title(f'Match {match_id} (CT {final_ct}-{final_t} T)', fontsize=11)
+        final_team1 = match_df.iloc[-1]['team1_score']
+        final_team2 = match_df.iloc[-1]['team2_score']
+        ax.set_ylabel(f'{team1_label} Win %', fontsize=10)
+        ax.set_title(f'Match {match_id} ({team1_label} {final_team1}-{final_team2} {team2_label})', fontsize=11)
         ax.grid(True, alpha=0.3)
         ax.set_ylim(0, 100)
     
@@ -242,11 +253,11 @@ def analyze_comeback_matches(all_probs_df, threshold=0.8):
         match_df = all_probs_df[all_probs_df['match_id'] == match_id]
         
         # Find maximum probability difference
-        ct_probs = match_df['ct_win_prob'].values
+        team1_probs = match_df['team1_win_prob'].values
         
         # Check for CT comeback (low to high)
-        min_prob_early = ct_probs[:10].min() if len(ct_probs) > 10 else ct_probs.min()
-        max_prob_late = ct_probs[-5:].max() if len(ct_probs) > 5 else ct_probs.max()
+        min_prob_early = team1_probs[:10].min() if len(team1_probs) > 10 else team1_probs.min()
+        max_prob_late = team1_probs[-5:].max() if len(team1_probs) > 5 else team1_probs.max()
         
         if min_prob_early < (1 - threshold) and max_prob_late > 0.5:
             comebacks.append({
@@ -254,17 +265,17 @@ def analyze_comeback_matches(all_probs_df, threshold=0.8):
                 'type': 'CT Comeback',
                 'swing': max_prob_late - min_prob_early,
                 'low_point': min_prob_early,
-                'final_prob': ct_probs[-1]
+                'final_prob': team1_probs[-1]
             })
         
         # Check for T comeback
         elif max_prob_late < threshold and min_prob_early > 0.5:
             comebacks.append({
                 'match_id': match_id,
-                'type': 'T Comeback',
+                'type': 'Team2 Comeback',
                 'swing': min_prob_early - max_prob_late,
                 'low_point': 1 - max_prob_late,
-                'final_prob': 1 - ct_probs[-1]
+                'final_prob': 1 - team1_probs[-1]
             })
     
     return pd.DataFrame(comebacks)
@@ -300,30 +311,51 @@ def main():
             .reset_index(drop=True)
         )
         
-        # Calculate cumulative scores
-        match_rounds['ct_won'] = (match_rounds['round_winner'] == 'ct').astype(int)
-        match_rounds['ct_score'] = match_rounds['ct_won'].cumsum()
-        match_rounds['t_score'] = match_rounds.index + 1 - match_rounds['ct_score']
-        
-        # Calculate streak
+        match_meta = matches_df[matches_df['match_id'] == match_id].iloc[0]
+        team1_label = match_meta.get('team1_name', 'Team 1')
+        team2_label = match_meta.get('team2_name', 'Team 2')
+
+        team1_scores = []
+        team2_scores = []
+        team1_wins = []
+        team1_streaks = []
+        team_round_winners = []
         streak = 0
-        streaks = []
-        for won in match_rounds['ct_won']:
-            if won:
+        team1_score = 0
+        team2_score = 0
+
+        for _, row in match_rounds.iterrows():
+            ct_team = team_on_ct(int(row['round_num']))
+            team1_on_ct = ct_team == 1
+            winner_side = row['round_winner']
+            team1_won = (winner_side == 'ct' and team1_on_ct) or (winner_side == 't' and not team1_on_ct)
+
+            if team1_won:
+                team1_score += 1
                 streak = max(0, streak) + 1
             else:
+                team2_score += 1
                 streak = min(0, streak) - 1
-            streaks.append(streak)
-        match_rounds['ct_streak'] = streaks
-        
-        # Recent performance (last 5 rounds)
-        match_rounds['recent_perf'] = (
-            match_rounds['ct_won'].rolling(5, min_periods=1).mean() - 0.5
+
+            team1_scores.append(team1_score)
+            team2_scores.append(team2_score)
+            team1_wins.append(1 if team1_won else 0)
+            team1_streaks.append(streak)
+            team_round_winners.append(1 if team1_won else 2)
+
+        match_rounds['team1_score'] = team1_scores
+        match_rounds['team2_score'] = team2_scores
+        match_rounds['team1_streak'] = team1_streaks
+        match_rounds['team1_win'] = team1_wins
+        match_rounds['team_round_winner'] = team_round_winners
+        match_rounds['team_recent_perf'] = (
+            match_rounds['team1_win'].rolling(5, min_periods=1).mean() - 0.5
         ) * 2
-        
-        # Calculate probabilities
+
         prob_df = calc.calculate_match_win_probability(match_rounds)
         prob_df['match_id'] = match_id
+        prob_df['team1_label'] = team1_label
+        prob_df['team2_label'] = team2_label
         all_probabilities.append(prob_df)
     
     all_probs_df = pd.concat(all_probabilities, ignore_index=True)
@@ -334,12 +366,25 @@ def main():
     # Single match detailed view
     sample_match = all_probs_df['match_id'].iloc[0]
     sample_df = all_probs_df[all_probs_df['match_id'] == sample_match]
-    plot_single_match_probability(sample_df, sample_match, 'win_probability_single.png')
+    sample_team1 = sample_df['team1_label'].iloc[0]
+    sample_team2 = sample_df['team2_label'].iloc[0]
+    plot_single_match_probability(
+        sample_df,
+        sample_match,
+        sample_team1,
+        sample_team2,
+        'win_probability_single.png'
+    )
     
     # Multiple matches comparison
     sample_matches = {}
     for match_id in all_probs_df['match_id'].unique()[:3]:
-        sample_matches[match_id] = all_probs_df[all_probs_df['match_id'] == match_id]
+        df_match = all_probs_df[all_probs_df['match_id'] == match_id]
+        sample_matches[match_id] = (
+            df_match,
+            df_match['team1_label'].iloc[0],
+            df_match['team2_label'].iloc[0],
+        )
     
     plot_multiple_matches_comparison(sample_matches)
     
@@ -355,7 +400,15 @@ def main():
         if len(comebacks_df) > 0:
             comeback_match = comebacks_df.iloc[0]['match_id']
             comeback_df = all_probs_df[all_probs_df['match_id'] == comeback_match]
-            plot_single_match_probability(comeback_df, comeback_match, 'comeback_example.png')
+            team1_label = comeback_df['team1_label'].iloc[0]
+            team2_label = comeback_df['team2_label'].iloc[0]
+            plot_single_match_probability(
+                comeback_df,
+                comeback_match,
+                team1_label,
+                team2_label,
+                'comeback_example.png'
+            )
     
     # Statistical summary
     print("\n" + "="*50)
@@ -365,7 +418,7 @@ def main():
     # Average probability swing per match
     for match_id in all_probs_df['match_id'].unique():
         match_df = all_probs_df[all_probs_df['match_id'] == match_id]
-        prob_range = match_df['ct_win_prob'].max() - match_df['ct_win_prob'].min()
+        prob_range = match_df['team1_win_prob'].max() - match_df['team1_win_prob'].min()
         print(f"Match {match_id}: Probability range = {prob_range:.1%}")
     
     # Save results
