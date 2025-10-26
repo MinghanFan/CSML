@@ -1,8 +1,11 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.inspection import PartialDependenceDisplay
 
 # Load player+cluster dataset
 mp = pd.read_csv("clean_dataset/match_players_with_clusters.csv")
@@ -66,3 +69,23 @@ print("Feature importances:")
 for idx in indices:
     print(f"{features[idx]}: {importances[idx]:.4f}")
 
+# Baselines using a single feature
+def evaluate_single_feature(feature_name: str) -> None:
+    clf = LogisticRegression()
+    clf.fit(X_train[[feature_name]], y_train)
+    preds = clf.predict(X_test[[feature_name]])
+    print(f"{feature_name} only accuracy: {accuracy_score(y_test, preds):.4f}")
+
+evaluate_single_feature("kd_ratio")
+evaluate_single_feature("performance_score")
+
+# Partial dependence of the three most important features
+top_features = [features[idx] for idx in indices[:3]]
+PartialDependenceDisplay.from_estimator(
+    model,
+    X_test,
+    top_features,
+    kind="average",
+)
+plt.tight_layout()
+plt.show()
