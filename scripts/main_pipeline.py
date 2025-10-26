@@ -12,7 +12,6 @@ from config import (
     RAW_DEMOS_FOLDER,
     PARSED_DEMOS_FOLDER, 
     CLEAN_DATASET_FOLDER,
-    MIN_ROUNDS,
     VALID_MAPS,
     NUM_WORKERS
 )
@@ -36,7 +35,6 @@ def main():
     print(f"\nConfiguration:")
     print(f"  Parsed demos folder: {PARSED_DEMOS_FOLDER}")
     print(f"  Output folder: {CLEAN_DATASET_FOLDER}")
-    print(f"  Min rounds per match: {MIN_ROUNDS}")
     
     # Step 1: Validate
     print(f"\n{'='*80}")

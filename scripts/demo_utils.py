@@ -61,22 +61,7 @@ def parse_demo_to_zip(
     other_props: Optional[Iterable[str]] = None,
 ) -> Path:
     """
-    Parse a demo file and compress the parsed artefacts into a zip archive.
-
-    Parameters
-    ----------
-    demo_path:
-        Path to the `.dem` file to parse.
-    output_folder:
-        Directory where the compressed artefact should be written.
-    player_props / other_props:
-        Optional overrides for the parsing configuration. When omitted, the
-        defaults defined above are used.
-
-    Returns
-    -------
-    Path
-        Path to the generated `.zip` archive.
+    Parse a CS2 demo file and save compressed parsed data as a zip file.
     """
     output_folder.mkdir(parents=True, exist_ok=True)
 

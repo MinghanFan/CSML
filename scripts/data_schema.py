@@ -76,7 +76,7 @@ class CS2DataSchema:
         'he_thrown': pl.Int32,
         'molotovs_thrown': pl.Int32,
         
-        # Economy - FIXED: Changed to averages
+        # Economy
         'avg_cash_spent_per_round': pl.Float32,
         'avg_equipment_value_per_round': pl.Float32,
         

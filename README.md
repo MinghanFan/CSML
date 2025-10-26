@@ -33,3 +33,29 @@ Requires `requests` in addition to the existing AWPy/Polars dependencies.
 `match_players.performance_score` is now a per-round normalized composite that blends
 impact, survival, utility, and clutch contributions. This keeps scores comparable
 across matches of different lengths while rewarding high-impact play.
+
+## Player Style Clustering
+
+Run the full clustering workflow (feature engineering → PCA → KMeans) with:
+
+```bash
+python scripts/cluster.py --clusters 6
+```
+
+Outputs land in `clean_dataset/`:
+
+- `match_players_with_clusters.csv` – original rows plus `cluster` label
+- `player_cluster_profiles.csv` – feature means + win rate per cluster
+- `player_clusters_pca.png` – PCA scatter plot for the paper
+
+### Choosing the Right Number of Clusters
+
+Use the evaluation helper to sweep through multiple K values, inspect inertia,
+silhouette scores, and cluster profiles:
+
+```bash
+python scripts/profile.py --k-min 3 --k-max 8
+```
+
+Artifacts land in `clean_dataset/cluster_eval/` (metrics CSV, elbow/silhouette
+plots, and per-K profile tables) so you can justify the final cluster count.

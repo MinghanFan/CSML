@@ -1,11 +1,5 @@
 """
-FIXED Data Extractor for CS2 demos.
-
-FINAL FIXES:
-1. Team is "None" for match level (players switch sides)
-2. won_match based on actual team membership across the match
-3. Grenade counts fixed - count unique throws, not all rows
-4. avg_cash_spent fixed
+Data Extractor for CS2 demos.
 """
 
 import zipfile
@@ -19,9 +13,8 @@ from datetime import datetime
 import polars as pl
 from data_schema import CS2DataSchema
 
-class CS2DataExtractor:
-    """Extracts clean, structured data from parsed CS2 demos."""
-    
+class CS2DataExtractor:    
+    """Extract structured data from parsed CS2 demo data."""
     def __init__(self, parsed_demos_folder: Path, output_folder: Path):
         self.parsed_demos_folder = parsed_demos_folder
         self.output_folder = output_folder
@@ -42,7 +35,7 @@ class CS2DataExtractor:
         self.round_players_data = []
 
     def generate_match_id(self, demo_path: Path, header: dict) -> str:
-        """Generate unique match ID"""
+        """Generate a unique match ID based on demo metadata."""
         unique_string = f"{demo_path.stem}_{header.get('map_name', '')}_{header.get('demo_file_stamp', '')}"
         return hashlib.md5(unique_string.encode()).hexdigest()[:16]
 
@@ -60,11 +53,7 @@ class CS2DataExtractor:
         utility_damage_per_round: float,
         flash_assists_per_round: float,
     ) -> float:
-        """
-        Compute a holistic performance score using per-round rates so different
-        match lengths remain comparable.
-        """
-
+        """Compute a composite performance score for a player."""
         score = (
             (kills_per_round * 120.0)
             + (assists_per_round * 40.0)
@@ -81,16 +70,7 @@ class CS2DataExtractor:
         return float(max(score, 0.0))
     
     def determine_player_team(self, player_id: str, ticks_df: pl.DataFrame, rounds_df: pl.DataFrame) -> tuple:
-        """
-        FIXED: Determine which actual team a player was on (not side).
-        
-        Returns: (team_name, starting_side, won_match)
-        
-        Since we don't have team names in the data:
-        - Team 1 = players who started on CT
-        - Team 2 = players who started on T
-        """
-        
+        """Determine player's team and whether they won the match."""
         # Get player's side in first round
         first_round = rounds_df['round_num'].min()
         first_round_ticks = ticks_df.filter(
@@ -137,8 +117,7 @@ class CS2DataExtractor:
         return team_name, starting_side, won_match
     
     def extract_all_players(self, data: dict) -> pl.DataFrame:
-        """Extract ALL players from multiple sources."""
-        
+        """Extract all unique players from various data sources."""
         # Source 1: Players who dealt damage
         damage_attackers = (
             data['damages']
@@ -217,7 +196,6 @@ class CS2DataExtractor:
         kills_df: pl.DataFrame,
         ticks_df: pl.DataFrame
     ) -> tuple:
-        """Calculate clutches correctly."""
         clutches_attempted = 0
         clutches_won = 0
         
@@ -267,13 +245,7 @@ class CS2DataExtractor:
         return clutches_attempted, clutches_won
     
     def count_grenades(self, player_id: str, grenades_df: pl.DataFrame) -> dict:
-        """
-        FIXED: Count grenade throws correctly.
-        
-        Problem: Was counting all rows, not unique throws.
-        Solution: Count distinct grenade events.
-        """
-        
+        """Count unique grenade throws by type for a player."""
         player_grenades = grenades_df.filter(pl.col('thrower_steamid') == int(player_id))
         
         if len(player_grenades) == 0:
@@ -284,7 +256,7 @@ class CS2DataExtractor:
                 'molotovs': 0
             }
         
-        # Group by unique grenade entity (fallback to round/tick/type if needed)
+        # Group by unique grenade entity
         if 'entity_id' in player_grenades.columns:
             unique_subset = ['entity_id']
         else:
@@ -345,7 +317,7 @@ class CS2DataExtractor:
             if player_name:
                 team_players[team_name].add(player_name)
         
-        # Fallbacks if we couldn't infer a starting side for a team
+        # Fallbacks if couldn't infer a starting side for a team
         if 'Team1' not in team_starting_side:
             team_starting_side['Team1'] = 'ct'
         if 'Team2' not in team_starting_side:
@@ -422,7 +394,7 @@ class CS2DataExtractor:
         grenades_df = data['grenades']
         match_meta = data.get('match_data', {})
         
-        # Get ALL players
+        # Get All players
         players = self.extract_all_players(data)
         
         match_players = []
@@ -431,7 +403,6 @@ class CS2DataExtractor:
             player_id = str(player_row['steamid'])
             player_name = player_row['name']
             
-            # FIXED: Determine actual team and won_match
             team_name, starting_side, won_match = self.determine_player_team(
                 player_id, ticks_df, rounds_df
             )
@@ -492,7 +463,7 @@ class CS2DataExtractor:
                 player_id, starting_side, rounds_df, kills_df, ticks_df
             )
             
-            # === UTILITY - FIXED ===
+            # === UTILITY ===
             grenade_counts = self.count_grenades(player_id, grenades_df)
             
             # === CALCULATE METRICS ===
@@ -510,7 +481,7 @@ class CS2DataExtractor:
                 .filter(pl.col('kills') >= 2)
             )
             
-            # === ECONOMY - FIXED ===
+            # === ECONOMY ===
             player_economy = ticks_df.filter(pl.col('steamid') == int(player_id))
             
             if len(player_economy) > 0:
@@ -590,21 +561,20 @@ class CS2DataExtractor:
                 'clutches_won': clutches_won,
                 'multi_kill_rounds': multi_kill_rounds,
                 
-                # Utility - FIXED
+                # Utility
                 'smokes_thrown': grenade_counts['smokes'],
                 'flashes_thrown': grenade_counts['flashes'],
                 'he_thrown': grenade_counts['he_nades'],
                 'molotovs_thrown': grenade_counts['molotovs'],
                 
-                # Economy - FIXED
+                # Economy
                 'avg_cash_spent_per_round': avg_cash_spent,
                 'avg_equipment_value_per_round': avg_equipment_value,
                 
-                # Performance score (normalized per-round composite)
+                # Performance score
                 'performance_score': performance_score,
-                #'performance_score': 0.0,
                 
-                # Outcome - FIXED: Based on team, not side
+                # Outcome
                 'won_match': won_match,
             }
             
@@ -684,7 +654,7 @@ class CS2DataExtractor:
         for round_row in rounds_df.iter_rows(named=True):
             round_num = round_row['round_num']
             
-            # Get ALL players in round
+            # Get All players in round
             round_ticks = ticks_df.filter(pl.col('round_num') == round_num)
             players_in_round = round_ticks.select(['steamid', 'name', 'side']).unique()
             
