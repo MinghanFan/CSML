@@ -7,7 +7,12 @@ import numpy as np
 from pathlib import Path
 import lightgbm as lgb
 from sklearn.model_selection import GroupKFold
-from sklearn.metrics import roc_auc_score, log_loss, brier_score_loss
+from sklearn.metrics import (
+    roc_auc_score,
+    log_loss,
+    brier_score_loss,
+    accuracy_score,
+)
 import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
@@ -20,11 +25,12 @@ OVERTIME_HALF_ROUNDS = 3
 OVERTIME_BLOCK_ROUNDS = OVERTIME_HALF_ROUNDS * 2
 
 
-def prepare_round_features(rounds_df, round_players_df):
+def prepare_round_features(rounds_df, round_players_df, matches_df):
     """Prepare features from existing round data"""
     
     print("Preparing round features...")
     
+    match_to_map = matches_df.set_index('match_id')['map_name'].to_dict()
     features_list = []
     
     for match_id in rounds_df['match_id'].unique():
@@ -73,7 +79,9 @@ def prepare_round_features(rounds_df, round_players_df):
             
             features_list.append(features)
     
-    return pd.DataFrame(features_list)
+    df = pd.DataFrame(features_list)
+    df['map_name'] = df['match_id'].map(match_to_map).fillna('unknown')
+    return df
 
 
 def add_temporal_features(df, lag_rounds=[1, 2, 3, 5], window_sizes=[3, 5]):
@@ -142,7 +150,7 @@ def add_temporal_features(df, lag_rounds=[1, 2, 3, 5], window_sizes=[3, 5]):
     return df
 
 
-def train_temporal_model(df, min_round=3):
+def train_temporal_model(df, map_odds_ratio, min_round=3):
     """Train LightGBM model with temporal features"""
     
     print("\nTraining temporal model...")
@@ -151,12 +159,13 @@ def train_temporal_model(df, min_round=3):
     df_model = df[df['round_in_half'] >= min_round].copy()
     
     # Prepare features
-    exclude_cols = ['match_id', 'round_num', 'round_winner', 'ct_won']
+    exclude_cols = ['match_id', 'round_num', 'round_winner', 'ct_won', 'map_name']
     feature_cols = [col for col in df_model.columns if col not in exclude_cols]
     
-    X = df_model[feature_cols].fillna(0)
-    y = df_model['round_winner']
-    groups = df_model['match_id']
+    X = df_model[feature_cols].fillna(0).reset_index(drop=True)
+    y = df_model['round_winner'].reset_index(drop=True)
+    groups = df_model['match_id'].reset_index(drop=True)
+    map_names = df_model['map_name'].reset_index(drop=True)
     
     print(f"Dataset: {len(X)} rounds, {len(X.columns)} features")
     print(f"CT win rate: {y.mean():.2%}")
@@ -198,19 +207,33 @@ def train_temporal_model(df, min_round=3):
         # Evaluate
         val_pred = model.predict(X_val, num_iteration=model.best_iteration)
         
+        val_maps = map_names.iloc[val_idx].values
+        ratios = np.array([map_odds_ratio.get(m, 1.0) for m in val_maps])
+        odds = val_pred / np.clip(1 - val_pred, 1e-9, None)
+        adjusted_odds = odds * ratios
+        val_pred = adjusted_odds / (1 + adjusted_odds)
+        val_pred = np.clip(val_pred, 1e-6, 1 - 1e-6)
+        val_pred_labels = (val_pred >= 0.5).astype(int)
+        
         fold_scores = {
             'fold': fold,
             'logloss': log_loss(y_val, val_pred),
             'auc': roc_auc_score(y_val, val_pred),
-            'brier': brier_score_loss(y_val, val_pred)
+            'brier': brier_score_loss(y_val, val_pred),
+            'accuracy': accuracy_score(y_val, val_pred_labels),
         }
         scores.append(fold_scores)
         
         # Accumulate feature importance
         feature_importance += model.feature_importance(importance_type='gain')
         
-        print(f"Fold {fold}: LogLoss={fold_scores['logloss']:.4f}, "
-              f"AUC={fold_scores['auc']:.4f}, Brier={fold_scores['brier']:.4f}")
+        print(
+            f"Fold {fold}: "
+            f"LogLoss={fold_scores['logloss']:.4f}, "
+            f"AUC={fold_scores['auc']:.4f}, "
+            f"Brier={fold_scores['brier']:.4f}, "
+            f"Accuracy={fold_scores['accuracy']:.3f}"
+        )
     
     # Average feature importance
     feature_importance /= 5
@@ -223,8 +246,13 @@ def train_temporal_model(df, min_round=3):
     
     # Summary
     scores_df = pd.DataFrame(scores)
-    print(f"\nMean scores: LogLoss={scores_df['logloss'].mean():.4f}, "
-          f"AUC={scores_df['auc'].mean():.4f}, Brier={scores_df['brier'].mean():.4f}")
+    print(
+        f"\nMean scores: "
+        f"LogLoss={scores_df['logloss'].mean():.4f}, "
+        f"AUC={scores_df['auc'].mean():.4f}, "
+        f"Brier={scores_df['brier'].mean():.4f}, "
+        f"Accuracy={scores_df['accuracy'].mean():.3f}"
+    )
     
     return model, importance_df, scores_df
 
@@ -295,19 +323,32 @@ def main():
     print("\nLoading data...")
     rounds_df = pd.read_csv(data_dir / "rounds.csv")
     round_players_df = pd.read_csv(data_dir / "round_players.csv")
+    matches_df = pd.read_csv(data_dir / "matches.csv")
     
     print(f"Loaded {len(rounds_df)} rounds from {rounds_df['match_id'].nunique()} matches")
     
     # Prepare features
-    df = prepare_round_features(rounds_df, round_players_df)
+    df = prepare_round_features(rounds_df, round_players_df, matches_df)
     
     # Add temporal features
     df = add_temporal_features(df)
     
     print(f"\nCreated {len(df.columns)} features")
     
+    # Map-based CT advantage ratios
+    rounds_with_map = rounds_df.merge(
+        matches_df[['match_id', 'map_name']],
+        on='match_id',
+        how='left'
+    )
+    rounds_with_map['ct_win'] = (rounds_with_map['round_winner'] == 'ct').astype(int)
+    map_ct_rate = rounds_with_map.groupby('map_name')['ct_win'].mean()
+    eps = 1e-6
+    map_odds_ratio = ((map_ct_rate + eps) / (1 - map_ct_rate + eps)).to_dict()
+    map_odds_ratio['unknown'] = 1.0
+
     # Train model
-    model, importance_df, scores_df = train_temporal_model(df)
+    model, importance_df, scores_df = train_temporal_model(df, map_odds_ratio)
     
     # Plot results
     print("\nGenerating visualizations...")
@@ -327,6 +368,8 @@ def main():
     print(f"- Temporal features account for {importance_df[importance_df['feature'].str.contains('lag|roll|streak')]['importance'].sum():.1%} of total importance")
     print(f"- Best lag window appears to be lag{importance_df[importance_df['feature'].str.contains('lag')].iloc[0]['feature'].split('lag')[1] if len(importance_df[importance_df['feature'].str.contains('lag')]) > 0 else 'N/A'}")
     print(f"- Model achieves {scores_df['auc'].mean():.1%} AUC in predicting round outcomes")
+    if 'accuracy' in scores_df:
+        print(f"- Cross-validated accuracy: {scores_df['accuracy'].mean():.1%}")
 
 
 if __name__ == "__main__":
