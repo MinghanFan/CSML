@@ -2,18 +2,15 @@
 Win Probability Curve Visualization
 """
 
+import argparse
 import warnings
 from pathlib import Path
 
-import lightgbm as lgb
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 import seaborn as sns
 
 from round_temporal_model import (
-    prepare_round_features,
-    add_temporal_features,
     REGULATION_HALF_ROUNDS,
     REGULATION_TOTAL_ROUNDS,
     OVERTIME_HALF_ROUNDS,
@@ -42,52 +39,6 @@ def team_on_ct(round_num: int) -> int:
     return 1 if block % 2 == 0 else 2
 
 
-def compute_map_odds_ratio(rounds_df: pd.DataFrame, matches_df: pd.DataFrame) -> dict:
-    """Compute CT odds ratio per map based on historical outcomes."""
-    merged = rounds_df.merge(
-        matches_df[['match_id', 'map_name']],
-        on='match_id',
-        how='left'
-    )
-    merged['ct_win'] = (merged['round_winner'] == 'ct').astype(int)
-    map_ct_rate = merged.groupby('map_name')['ct_win'].mean()
-    eps = 1e-6
-    odds_ratio = ((map_ct_rate + eps) / (1 - map_ct_rate + eps)).to_dict()
-    odds_ratio['unknown'] = 1.0
-    return odds_ratio
-
-
-def train_model_probabilities(features_df: pd.DataFrame, map_odds_ratio: dict) -> pd.DataFrame:
-    """Train LightGBM on temporal features and return probabilities per round."""
-    df = features_df.reset_index(drop=True).copy()
-    exclude_cols = ['match_id', 'round_num', 'round_winner', 'map_name']
-    feature_cols = [col for col in df.columns if col not in exclude_cols]
-
-    X = df[feature_cols].fillna(0)
-    y = df['round_winner'].astype(int)
-
-    model = lgb.LGBMClassifier(
-        n_estimators=300,
-        learning_rate=0.05,
-        num_leaves=31,
-        subsample=0.8,
-        colsample_bytree=0.8,
-        min_child_samples=20,
-        objective='binary',
-        random_state=42,
-        n_jobs=-1,
-    )
-    model.fit(X, y)
-
-    probs = model.predict_proba(X)[:, 1]
-    ratios = df['map_name'].map(map_odds_ratio).fillna(1.0).values
-    odds = probs / np.clip(1 - probs, 1e-6, None)
-    adjusted_odds = odds * ratios
-    adjusted_probs = adjusted_odds / (1 + adjusted_odds)
-    df['ct_win_prob'] = np.clip(adjusted_probs, 1e-6, 1 - 1e-6)
-    return df
-
-
 def build_match_probability_frames(
     df_with_probs: pd.DataFrame,
     matches_df: pd.DataFrame,
@@ -99,10 +50,14 @@ def build_match_probability_frames(
 
     for match_id, match_rows in df_with_probs.groupby('match_id'):
         match_rows = match_rows.sort_values('round_num').reset_index(drop=True)
-        team1_label = team_lookup.get('team1_name', pd.Series(dtype=str)).get(match_id, 'Team 1')
-        team2_label = team_lookup.get('team2_name', pd.Series(dtype=str)).get(match_id, 'Team 2')
-        team1_label = str(team1_label) if str(team1_label).strip() else 'Team 1'
-        team2_label = str(team2_label) if str(team2_label).strip() else 'Team 2'
+        if match_id in team_lookup.index:
+            team1_label = str(team_lookup.loc[match_id, 'team1_name'])
+            team2_label = str(team_lookup.loc[match_id, 'team2_name'])
+        else:
+            team1_label = 'Team 1'
+            team2_label = 'Team 2'
+        team1_label = team1_label if team1_label.strip() else 'Team 1'
+        team2_label = team2_label if team2_label.strip() else 'Team 2'
 
         team1_probs = []
         team2_probs = []
@@ -132,6 +87,8 @@ def build_match_probability_frames(
             team2_scores.append(t2_score)
             team_round_winners.append(winner_team)
 
+        map_value = match_rows['map_name'].iloc[0] if 'map_name' in match_rows.columns else 'unknown'
+
         result_df = pd.DataFrame({
             'round': match_rows['round_num'].values,
             'team1_win_prob': team1_probs,
@@ -142,7 +99,7 @@ def build_match_probability_frames(
             'match_id': match_id,
             'team1_label': team1_label,
             'team2_label': team2_label,
-            'map_name': match_rows['map_name'].iloc[0],
+            'map_name': map_value,
         })
 
         results[match_id] = (result_df, team1_label, team2_label)
@@ -310,31 +267,58 @@ def main():
     print("WIN PROBABILITY VISUALIZATION")
     print("="*80)
     
-    data_dir = Path("clean_dataset")
-    
-    print("\nLoading match data...")
-    rounds_df = pd.read_csv(data_dir / "rounds.csv")
-    round_players_df = pd.read_csv(data_dir / "round_players.csv")
-    matches_df = pd.read_csv(data_dir / "matches.csv")
-    
-    print("Preparing temporal features...")
-    features_df = prepare_round_features(rounds_df, round_players_df, matches_df)
-    features_df = add_temporal_features(features_df)
-    
-    print("Training LightGBM round model...")
-    map_odds_ratio = compute_map_odds_ratio(rounds_df, matches_df)
-    features_with_probs = train_model_probabilities(features_df, map_odds_ratio)
-    
-    print("Building probability curves...")
-    match_frames, all_probs_df = build_match_probability_frames(features_with_probs, matches_df)
-    
+    parser = argparse.ArgumentParser(description="Visualize temporal round win probabilities.")
+    parser.add_argument(
+        "--artifacts-dir",
+        type=Path,
+        default=Path("."),
+        help="Directory containing temporal_predictions.csv (default: current directory).",
+    )
+    parser.add_argument(
+        "--match-id",
+        help="Specific match_id to visualize. Defaults to the first available.",
+    )
+    parser.add_argument(
+        "--max-matches",
+        type=int,
+        default=3,
+        help="Number of matches to include in the comparison plot (default: 3).",
+    )
+    args = parser.parse_args()
+
+    clean_dir = Path("clean_dataset")
+    matches_df = pd.read_csv(clean_dir / "matches.csv")
+
+    preds_path = args.artifacts_dir / "temporal_predictions.csv"
+    if not preds_path.exists():
+        print(f"Missing {preds_path}. Run scripts/round_temporal_model.py first.")
+        return
+    preds_df = pd.read_csv(preds_path)
+
+    required_cols = {"match_id", "round_num", "ct_win_prob", "round_winner"}
+    missing = required_cols - set(preds_df.columns)
+    if missing:
+        print(f"temporal_predictions.csv missing columns: {sorted(missing)}")
+        return
+
+    if preds_df['round_winner'].dtype == object:
+        preds_df['round_winner'] = (preds_df['round_winner'].astype(str).str.lower() == 'ct').astype(int)
+
+    match_frames, all_probs_df = build_match_probability_frames(preds_df, matches_df)
+
     if all_probs_df.empty:
         print("No rounds available. Exiting.")
         return
-    
-    # Visualize sample matches
+
+    display_ids = list(match_frames.keys())
+    if args.match_id:
+        if args.match_id not in match_frames:
+            print(f"Match {args.match_id} not found in predictions.")
+            return
+        display_ids = [args.match_id] + [mid for mid in display_ids if mid != args.match_id]
+
     print("\nGenerating visualizations...")
-    first_match_id = next(iter(match_frames))
+    first_match_id = display_ids[0]
     sample_df, sample_team1, sample_team2 = match_frames[first_match_id]
     plot_single_match_probability(
         sample_df,
@@ -346,7 +330,7 @@ def main():
     
     sample_matches = {
         match_id: match_frames[match_id]
-        for match_id in list(match_frames.keys())[:3]
+        for match_id in display_ids[: args.max_matches]
     }
     plot_multiple_matches_comparison(sample_matches)
     

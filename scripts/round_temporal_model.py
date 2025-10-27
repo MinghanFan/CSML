@@ -156,16 +156,21 @@ def train_temporal_model(df, map_odds_ratio, min_round=3):
     print("\nTraining temporal model...")
     
     # Filter out early rounds (no history)
-    df_model = df[df['round_in_half'] >= min_round].copy()
-    
     # Prepare features
     exclude_cols = ['match_id', 'round_num', 'round_winner', 'ct_won', 'map_name']
-    feature_cols = [col for col in df_model.columns if col not in exclude_cols]
+    feature_cols = [col for col in df.columns if col not in exclude_cols]
     
-    X = df_model[feature_cols].fillna(0).reset_index(drop=True)
-    y = df_model['round_winner'].reset_index(drop=True)
-    groups = df_model['match_id'].reset_index(drop=True)
-    map_names = df_model['map_name'].reset_index(drop=True)
+    X_full = df[feature_cols]
+    y_full = df['round_winner'].astype(int)
+    map_names_full = df['map_name'].fillna('unknown')
+    match_ids_full = df['match_id']
+    round_nums_full = df['round_num']
+    
+    train_mask = df['round_in_half'] >= min_round
+    X = X_full[train_mask].reset_index(drop=True)
+    y = y_full[train_mask].reset_index(drop=True)
+    groups = match_ids_full[train_mask].reset_index(drop=True)
+    map_names_train = map_names_full[train_mask].reset_index(drop=True)
     
     print(f"Dataset: {len(X)} rounds, {len(X.columns)} features")
     print(f"CT win rate: {y.mean():.2%}")
@@ -188,6 +193,8 @@ def train_temporal_model(df, map_odds_ratio, min_round=3):
     scores = []
     feature_importance = np.zeros(len(feature_cols))
     
+    best_iterations = []
+
     for fold, (train_idx, val_idx) in enumerate(gkf.split(X, y, groups), 1):
         X_train, X_val = X.iloc[train_idx], X.iloc[val_idx]
         y_train, y_val = y.iloc[train_idx], y.iloc[val_idx]
@@ -203,11 +210,12 @@ def train_temporal_model(df, map_odds_ratio, min_round=3):
             num_boost_round=300,
             callbacks=[lgb.early_stopping(50), lgb.log_evaluation(0)]
         )
+        best_iterations.append(model.best_iteration or 300)
         
         # Evaluate
         val_pred = model.predict(X_val, num_iteration=model.best_iteration)
         
-        val_maps = map_names.iloc[val_idx].values
+        val_maps = map_names_train.iloc[val_idx].values
         ratios = np.array([map_odds_ratio.get(m, 1.0) for m in val_maps])
         odds = val_pred / np.clip(1 - val_pred, 1e-9, None)
         adjusted_odds = odds * ratios
@@ -253,8 +261,34 @@ def train_temporal_model(df, map_odds_ratio, min_round=3):
         f"Brier={scores_df['brier'].mean():.4f}, "
         f"Accuracy={scores_df['accuracy'].mean():.3f}"
     )
+
+    # Train final model on full dataset for inference
+    final_num_boost_round = int(np.mean(best_iterations)) if best_iterations else 300
+    X_train = X.fillna(0)
+    X_full_filled = X_full.fillna(0)
     
-    return model, importance_df, scores_df
+    final_train_data = lgb.Dataset(X_train, label=y)
+    final_model = lgb.train(
+        params,
+        final_train_data,
+        num_boost_round=final_num_boost_round,
+    )
+    final_model.save_model("temporal_model.lgb.txt")
+    full_probs = final_model.predict(X_full_filled, num_iteration=final_num_boost_round)
+    map_ratios_full = map_names_full.map(map_odds_ratio).fillna(1.0).values
+    full_odds = full_probs / np.clip(1 - full_probs, 1e-6, None)
+    adjusted_full_odds = full_odds * map_ratios_full
+    full_probs = adjusted_full_odds / (1 + adjusted_full_odds)
+    preds_df = pd.DataFrame({
+        'match_id': match_ids_full.values,
+        'round_num': round_nums_full.values,
+        'map_name': map_names_full.values,
+        'round_winner': y_full.values,
+        'ct_win_prob': full_probs,
+    })
+    preds_df.to_csv('temporal_predictions.csv', index=False)
+    
+    return final_model, importance_df, scores_df
 
 
 def plot_results(importance_df, scores_df):
@@ -359,8 +393,13 @@ def main():
     importance_df.to_csv('temporal_feature_importance.csv', index=False)
     scores_df.to_csv('temporal_cv_scores.csv', index=False)
     df.to_csv('temporal_features.csv', index=False)
+    print("  - temporal_model.lgb.txt")
+    print("  - temporal_predictions.csv")
+    print("  - temporal_feature_importance.csv")
+    print("  - temporal_cv_scores.csv")
+    print("  - temporal_features.csv")
     
-    print("\n Temporal model complete")
+    print("\nTemporal model complete")
     print("\nTop 10 most important features:")
     print(importance_df.head(10).to_string())
     
