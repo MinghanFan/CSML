@@ -165,7 +165,18 @@ def train_temporal_model(df, map_odds_ratio, min_round=3):
     map_names_full = df['map_name'].fillna('unknown')
     match_ids_full = df['match_id']
     round_nums_full = df['round_num']
-    
+
+    baseline_rate = y_full.mean()
+    baseline_accuracy = max(baseline_rate, 1 - baseline_rate)
+    try:
+        baseline_auc = roc_auc_score(y_full, np.full(len(y_full), baseline_rate, dtype=float))
+    except ValueError:
+        baseline_auc = float("nan")
+    print(
+        f"Baseline constant prediction -> "
+        f"Accuracy={baseline_accuracy:.3f}, AUC={baseline_auc:.3f}"
+    )
+
     train_mask = df['round_in_half'] >= min_round
     X = X_full[train_mask].reset_index(drop=True)
     y = y_full[train_mask].reset_index(drop=True)
