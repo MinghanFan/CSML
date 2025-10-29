@@ -25,6 +25,15 @@ from demo_utils import parse_demo_to_zip
 MB = 1024 * 1024
 
 
+def normalize_prefix(prefix: str) -> str:
+    trimmed = prefix.strip()
+    if not trimmed:
+        return ""
+    if trimmed.endswith(("_", "-", ".")):
+        return trimmed
+    return f"{trimmed}_"
+
+
 def normalize_directory_url(url: str) -> str:
     return url if url.endswith("/") else f"{url}/"
 
@@ -149,9 +158,19 @@ def process_remote_demos(
     demo_sources: Iterable[DemoSource],
     *,
     progress_file: Path,
+    output_folder: Path,
+    filename_prefix: str = "",
     limit: Optional[int] = None,
     resume: bool = True,
 ) -> None:
+    output_folder = output_folder.expanduser()
+    progress_file = progress_file.expanduser()
+    file_prefix = normalize_prefix(filename_prefix)
+
+    print(f"\nOutputs will be written to: {output_folder}")
+    if file_prefix:
+        print(f"Filename prefix: {file_prefix}")
+
     if not resume and progress_file.exists():
         progress_file.unlink()
     processed_urls = load_processed(progress_file) if resume else set()
@@ -162,10 +181,8 @@ def process_remote_demos(
     with tempfile.TemporaryDirectory(prefix="parsed_cache_") as parsed_cache_dir:
         extractor = CS2DataExtractor(
             parsed_demos_folder=Path(parsed_cache_dir),
-            output_folder=CLEAN_DATASET_FOLDER,
+            output_folder=output_folder,
         )
-
-        CLEAN_DATASET_FOLDER.mkdir(parents=True, exist_ok=True)
 
         for idx, source in enumerate(demo_sources, start=1):
             if limit and successes >= limit:
@@ -223,9 +240,10 @@ def process_remote_demos(
 
         print(f"\nSaving aggregated dataset ({successes} demos processed)...")
         dataframes = extractor.create_dataframes()
-        extractor.save_dataframes(dataframes)
+        extractor.save_dataframes(dataframes, prefix=file_prefix)
         summary = extractor.generate_summary(dataframes)
-        extractor.save_summary(summary)
+        summary_filename = f"{file_prefix}dataset_summary.json" if file_prefix else "dataset_summary.json"
+        extractor.save_summary(summary, filename=summary_filename)
 
     print(f"\nDone. Successes: {successes}, Skipped: {skipped}, Failures: {failures}")
     if failures:
@@ -248,10 +266,21 @@ def build_arg_parser() -> argparse.ArgumentParser:
         help="Path to a folder containing .dem files (recursive). Can be used multiple times."
     )
     parser.add_argument(
+        "--output-folder",
+        type=Path,
+        default=CLEAN_DATASET_FOLDER,
+        help="Destination folder for generated CSV/Parquet outputs (defaults to CLEAN_DATASET_FOLDER)."
+    )
+    parser.add_argument(
+        "--output-prefix",
+        default="",
+        help="Optional prefix to prepend to output filenames (e.g., 'remote_')."
+    )
+    parser.add_argument(
         "--progress-file",
         type=Path,
         default=CLEAN_DATASET_FOLDER / "processed_remote_demos.txt",
-        help="File used to track processed demo URLs for resumable runs."
+        help="File used to track processed demo URLs for resumable runs (default: clean_dataset/processed_remote_demos.txt)."
     )
     parser.add_argument("--limit", type=int, help="Stop after processing N demos (useful for smoke tests).")
     parser.add_argument(
@@ -269,11 +298,16 @@ def main(argv: Optional[List[str]] = None) -> None:
     if not args.root_url and not args.manifest and not args.local_folder:
         parser.error("You must provide --root-url, --manifest, --local-folder, or a combination.")
 
+    output_folder = args.output_folder.expanduser()
+    progress_file = args.progress_file.expanduser()
+
     try:
         demo_iter = iter_demo_sources(args.root_url, args.manifest, args.local_folder)
         process_remote_demos(
             demo_iter,
-            progress_file=args.progress_file,
+            progress_file=progress_file,
+            output_folder=output_folder,
+            filename_prefix=args.output_prefix,
             limit=args.limit,
             resume=not args.no_resume,
         )

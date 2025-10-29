@@ -22,9 +22,30 @@ python scripts/remote_pipeline.py --local-folder "/Volumes/TOSHIBA EXT/Demo_2025
 ```
 
 The script keeps track of processed URLs in
-`clean_dataset/processed_remote_demos.txt`, so re-running it will resume where
-it left off. Pass `--no-resume` to start from scratch. The aggregated parquet
-and CSV outputs are written to `clean_dataset/` just like the local pipeline.
+`<output-folder>/processed_remote_demos.txt`, so re-running it will resume
+where it left off. Pass `--no-resume` to start from scratch.
+
+Use `--output-folder` to send the generated CSV/Parquet files to a separate
+directory (e.g., `clean_dataset/remote_run/`) and add `--output-prefix` to
+prepend a label like `remote_` to each filename. Both options make it easy to
+process fresh demos without overwriting your existing dataset and merge the
+results later on.
+
+Progress is still tracked in `clean_dataset/processed_remote_demos.txt` by
+default. Pass `--progress-file "<output-folder>/processed_remote_demos.txt"`
+if you prefer to keep separate logs per run.
+
+To merge a prefixed batch back into the main dataset, use
+`scripts/merge_datasets.py`:
+
+```bash
+python scripts/merge_datasets.py \
+  --base-folder clean_dataset \
+  --new-folder clean_dataset/remote_run \
+  --new-prefix remote_ \
+  --output-folder clean_dataset \
+  --output-prefix combined_
+```
 
 Requires `requests` in addition to the existing AWPy/Polars dependencies.
 

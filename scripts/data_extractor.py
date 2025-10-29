@@ -839,18 +839,19 @@ class CS2DataExtractor:
         
         return pl.DataFrame(players_list, schema=CS2DataSchema.players_schema)
     
-    def save_dataframes(self, dataframes: Dict[str, pl.DataFrame]):
-        """Save all DataFrames"""
+    def save_dataframes(self, dataframes: Dict[str, pl.DataFrame], *, prefix: str = ""):
+        """Save all DataFrames to CSV and Parquet with an optional filename prefix."""
         print("\nSaving DataFrames...")
         
         for name, df in dataframes.items():
-            parquet_path = self.output_folder / f"{name}.parquet"
+            filename = f"{prefix}{name}" if prefix else name
+            parquet_path = self.output_folder / f"{filename}.parquet"
             df.write_parquet(parquet_path)
-            print(f"  ✓ Saved {name}.parquet")
+            print(f"  ✓ Saved {filename}.parquet")
             
-            csv_path = self.output_folder / f"{name}.csv"
+            csv_path = self.output_folder / f"{filename}.csv"
             df.write_csv(csv_path)
-            print(f"  ✓ Saved {name}.csv")
+            print(f"  ✓ Saved {filename}.csv")
         
         print(f"\n✓ All data saved to {self.output_folder}")
     
@@ -896,9 +897,9 @@ class CS2DataExtractor:
         
         return summary
     
-    def save_summary(self, summary: dict):
-        """Save summary"""
-        summary_path = self.output_folder / "dataset_summary.json"
+    def save_summary(self, summary: dict, *, filename: str = "dataset_summary.json"):
+        """Save summary to a JSON file, optionally using a custom filename."""
+        summary_path = self.output_folder / filename
         with open(summary_path, 'w') as f:
             json.dump(summary, f, indent=2)
         
