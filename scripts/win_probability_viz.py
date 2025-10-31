@@ -6,6 +6,8 @@ import argparse
 import warnings
 from pathlib import Path
 
+import joblib
+import lightgbm as lgb
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
@@ -16,6 +18,7 @@ from round_temporal_model import (
     OVERTIME_HALF_ROUNDS,
     OVERTIME_BLOCK_ROUNDS,
 )
+from advanced_temporal_model import build_advanced_dataset
 
 warnings.filterwarnings('ignore')
 
@@ -269,12 +272,6 @@ def main():
     
     parser = argparse.ArgumentParser(description="Visualize temporal round win probabilities.")
     parser.add_argument(
-        "--artifacts-dir",
-        type=Path,
-        default=Path("."),
-        help="Directory containing temporal_predictions.csv (default: current directory).",
-    )
-    parser.add_argument(
         "--match-id",
         help="Specific match_id to visualize. Defaults to the first available.",
     )
@@ -288,23 +285,63 @@ def main():
 
     clean_dir = Path("clean_dataset")
     matches_df = pd.read_csv(clean_dir / "matches.csv")
+    rounds_df = pd.read_csv(clean_dir / "rounds.csv")
+    rounds_df["round_winner"] = (
+        rounds_df["round_winner"]
+        .astype(str)
+        .str.lower()
+        .map({"ct": 1, "t": 0, "1": 1, "0": 0})
+        .fillna(0)
+        .astype(int)
+    )
+    model_path = clean_dir / "advanced_temporal_model.lgb.txt"
+    calibrator_path = clean_dir / "advanced_temporal_model_calibrator.pkl"
 
-    preds_path = args.artifacts_dir / "temporal_predictions.csv"
-    if not preds_path.exists():
-        print(f"Missing {preds_path}. Run scripts/round_temporal_model.py first.")
+    if not model_path.exists():
+        print("Missing advanced model artifact. Run scripts/advanced_temporal_model.py first.")
         return
-    preds_df = pd.read_csv(preds_path)
-
-    required_cols = {"match_id", "round_num", "ct_win_prob", "round_winner"}
-    missing = required_cols - set(preds_df.columns)
-    if missing:
-        print(f"temporal_predictions.csv missing columns: {sorted(missing)}")
+    if not calibrator_path.exists():
+        print("Missing calibrator artifact. Run scripts/advanced_temporal_model.py first.")
         return
 
-    if preds_df['round_winner'].dtype == object:
-        preds_df['round_winner'] = (preds_df['round_winner'].astype(str).str.lower() == 'ct').astype(int)
+    print("\nLoading advanced model artifacts...")
+    booster = lgb.Booster(model_file=str(model_path))
+    calibrator_bundle = joblib.load(calibrator_path)
+    feature_cols = calibrator_bundle.get("feature_columns")
+    calibrator = calibrator_bundle.get("calibrator")
 
-    match_frames, all_probs_df = build_match_probability_frames(preds_df, matches_df)
+    if not feature_cols:
+        print("Calibrator bundle missing feature list.")
+        return
+
+    print("Building feature dataset (no retraining)...")
+    advanced_df = build_advanced_dataset(clean_dir)
+    merge_cols = ["match_id", "round_num"]
+    preds_df = advanced_df[merge_cols + ["round_winner"]].copy()
+
+    X = advanced_df[feature_cols].fillna(0.0)
+    raw_probs = booster.predict(X)
+    if calibrator is not None:
+        ct_probs = calibrator.predict(raw_probs)
+    else:
+        ct_probs = raw_probs
+    ct_probs = ct_probs.clip(1e-6, 1 - 1e-6)
+
+    preds_df["ct_win_prob"] = ct_probs
+
+    viz_df = rounds_df.merge(
+        preds_df[["match_id", "round_num", "ct_win_prob"]],
+        on=["match_id", "round_num"],
+        how="left",
+    )
+    viz_df["ct_win_prob"] = viz_df["ct_win_prob"].fillna(0.5)
+    viz_df = viz_df.merge(
+        matches_df[["match_id", "map_name"]],
+        on="match_id",
+        how="left",
+    )
+
+    match_frames, all_probs_df = build_match_probability_frames(viz_df, matches_df)
 
     if all_probs_df.empty:
         print("No rounds available. Exiting.")
