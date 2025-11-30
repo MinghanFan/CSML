@@ -133,10 +133,10 @@ def build_features(rounds: pd.DataFrame, players: pd.DataFrame, matches: pd.Data
     df["headshot_pct_ct_actual"] = safe_divide(df["headshots_ct"], df["kills_ct"].clip(lower=1))
     df["headshot_pct_t_actual"] = safe_divide(df["headshots_t"], df["kills_t"].clip(lower=1))
     
-    # Economy (from previous round)
-    df["equipment_value_ct_prev"] = df.groupby("match_id")["ct_equipment_value"].shift(1)
-    df["equipment_value_t_prev"] = df.groupby("match_id")["t_equipment_value"].shift(1)
-    df["equipment_diff_prev"] = df["equipment_value_ct_prev"] - df["equipment_value_t_prev"]
+    # Economy (current round)
+    df["equipment_value_ct"] = df["ct_equipment_value"].fillna(0)
+    df["equipment_value_t"] = df["t_equipment_value"].fillna(0)
+    df["equipment_diff"] = df["equipment_value_ct"] - df["equipment_value_t"]
     
     # Create lag features (shift by 1 to avoid leakage)
     lag_features = [
