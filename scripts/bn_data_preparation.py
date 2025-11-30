@@ -508,7 +508,8 @@ def test_conditional_independence(df_disc: pd.DataFrame) -> pd.DataFrame:
     # Visualize dependency matrix
     fig, ax = plt.subplots(figsize=(12, 10))
     
-    mask = np.triu(np.ones_like(dependency_matrix.astype(float), dtype=bool))
+    # We populated only the upper triangle; mask the lower to reveal values
+    mask = np.tril(np.ones_like(dependency_matrix.astype(float), dtype=bool))
     
     sns.heatmap(
         dependency_matrix.astype(float),
