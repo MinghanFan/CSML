@@ -1,77 +1,122 @@
 {
-  "CT Full Buy Advantage": {
+  "Top-1 support (n=271)": {
     "evidence": {
       "equip_advantage": "CT_strong",
-      "momentum": "neutral",
-      "recent_performance": "even",
-      "map_side_bias": "balanced",
-      "round_phase": "first_half",
-      "buy_phase": "both_full",
-      "score_pressure": "close"
-    },
-    "ct_win_prob": 0.5,
-    "t_win_prob": 0.5,
-    "prediction": "T_win",
-    "confidence": 0.5
-  },
-  "T Full Buy Advantage": {
-    "evidence": {
-      "equip_advantage": "T_strong",
-      "momentum": "neutral",
-      "recent_performance": "even",
-      "map_side_bias": "balanced",
-      "round_phase": "first_half",
-      "buy_phase": "both_full",
-      "score_pressure": "close"
-    },
-    "ct_win_prob": 0.5,
-    "t_win_prob": 0.5,
-    "prediction": "T_win",
-    "confidence": 0.5
-  },
-  "Even Match with CT Momentum": {
-    "evidence": {
-      "equip_advantage": "even",
       "momentum": "CT_streak",
       "recent_performance": "CT_performing",
       "map_side_bias": "balanced",
+      "score_pressure": "blowout",
       "round_phase": "second_half",
-      "buy_phase": "both_full",
-      "score_pressure": "moderate"
+      "buy_phase": "semi_situation"
     },
-    "ct_win_prob": 0.6726993617193181,
-    "t_win_prob": 0.3273006382806819,
+    "ct_win_prob": 0.770253571252039,
+    "t_win_prob": 0.22974642874796103,
     "prediction": "CT_win",
-    "confidence": 0.6726993617193181
+    "support": 271
   },
-  "T Comeback Pressure": {
+  "Top-2 support (n=260)": {
+    "evidence": {
+      "equip_advantage": "CT_strong",
+      "momentum": "CT_streak",
+      "recent_performance": "CT_performing",
+      "map_side_bias": "balanced",
+      "score_pressure": "moderate",
+      "round_phase": "first_half",
+      "buy_phase": "both_full"
+    },
+    "ct_win_prob": 0.6982059637024969,
+    "t_win_prob": 0.3017940362975031,
+    "prediction": "CT_win",
+    "support": 260
+  },
+  "Top-3 support (n=256)": {
+    "evidence": {
+      "equip_advantage": "CT_strong",
+      "momentum": "CT_slight",
+      "recent_performance": "even",
+      "map_side_bias": "balanced",
+      "score_pressure": "close",
+      "round_phase": "first_half",
+      "buy_phase": "semi_situation"
+    },
+    "ct_win_prob": 0.7137729607994933,
+    "t_win_prob": 0.28622703920050674,
+    "prediction": "CT_win",
+    "support": 256
+  },
+  "Top-4 support (n=247)": {
+    "evidence": {
+      "equip_advantage": "CT_strong",
+      "momentum": "CT_streak",
+      "recent_performance": "CT_performing",
+      "map_side_bias": "balanced",
+      "score_pressure": "blowout",
+      "round_phase": "second_half",
+      "buy_phase": "both_full"
+    },
+    "ct_win_prob": 0.770253571252039,
+    "t_win_prob": 0.22974642874796103,
+    "prediction": "CT_win",
+    "support": 247
+  },
+  "Top-5 support (n=242)": {
+    "evidence": {
+      "equip_advantage": "CT_strong",
+      "momentum": "CT_streak",
+      "recent_performance": "CT_performing",
+      "map_side_bias": "balanced",
+      "score_pressure": "moderate",
+      "round_phase": "first_half",
+      "buy_phase": "semi_situation"
+    },
+    "ct_win_prob": 0.6982059637024969,
+    "t_win_prob": 0.3017940362975031,
+    "prediction": "CT_win",
+    "support": 242
+  },
+  "Low-1 support (n=1)": {
+    "evidence": {
+      "equip_advantage": "T_moderate",
+      "momentum": "T_slight",
+      "recent_performance": "even",
+      "map_side_bias": "balanced",
+      "score_pressure": "moderate",
+      "round_phase": "overtime",
+      "buy_phase": "both_full"
+    },
+    "ct_win_prob": 0.4146444270488348,
+    "t_win_prob": 0.5853555729511652,
+    "prediction": "T_win",
+    "support": 1
+  },
+  "Low-2 support (n=1)": {
     "evidence": {
       "equip_advantage": "even",
       "momentum": "T_streak",
-      "recent_performance": "T_performing",
-      "map_side_bias": "balanced",
-      "round_phase": "second_half",
-      "buy_phase": "both_full",
-      "score_pressure": "blowout"
-    },
-    "ct_win_prob": 0.4074137576297922,
-    "t_win_prob": 0.5925862423702077,
-    "prediction": "T_win",
-    "confidence": 0.5925862423702077
-  },
-  "Overtime - CT Favored Map": {
-    "evidence": {
-      "equip_advantage": "CT_moderate",
-      "momentum": "neutral",
       "recent_performance": "even",
-      "map_side_bias": "CT_favored",
-      "round_phase": "overtime",
-      "buy_phase": "both_full",
-      "score_pressure": "moderate"
+      "map_side_bias": "T_favored",
+      "score_pressure": "close",
+      "round_phase": "second_half",
+      "buy_phase": "both_eco"
     },
-    "ct_win_prob": 0.5,
-    "t_win_prob": 0.5,
+    "ct_win_prob": 0.3336072308956451,
+    "t_win_prob": 0.666392769104355,
     "prediction": "T_win",
-    "confidence": 0.5
+    "support": 1
+  },
+  "Low-3 support (n=1)": {
+    "evidence": {
+      "equip_advantage": "CT_strong",
+      "momentum": "T_slight",
+      "recent_performance": "CT_performing",
+      "map_side_bias": "T_favored",
+      "score_pressure": "moderate",
+      "round_phase": "second_half",
+      "buy_phase": "both_full"
+    },
+    "ct_win_prob": 0.6658476658476659,
+    "t_win_prob": 0.33415233415233414,
+    "prediction": "CT_win",
+    "support": 1
   }
 }

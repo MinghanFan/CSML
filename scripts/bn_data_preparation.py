@@ -404,7 +404,7 @@ def create_discretized_features(
     def simplify_buy_situation(situation):
         """Map detailed buy situations to main categories"""
         if pd.isna(situation):
-            return 'unknown'
+            return np.nan
         
         # Major advantages (eco vs full_buy)
         if 'full_buy_vs_eco' in situation or 'eco_vs_full_buy' in situation:
@@ -424,7 +424,7 @@ def create_discretized_features(
         
         # Mixed/other
         else:
-            return 'mixed'
+            return np.nan
     
     df_disc['buy_phase'] = df['buy_situation'].apply(simplify_buy_situation)
     

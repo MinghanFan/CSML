@@ -1,226 +1,676 @@
 evidence,CT_win,T_win
-"('T_strong', 'T_favored', 'T_streak', 'T_performing')",0.1565664198277165,0.8434335801722835
-"('T_strong', 'T_favored', 'T_streak', 'even')",0.26021314387211364,0.7397868561278863
-"('T_strong', 'T_favored', 'T_streak', 'CT_performing')",0.5,0.5
-"('T_strong', 'T_favored', 'T_slight', 'T_performing')",0.22267871815940837,0.7773212818405916
-"('T_strong', 'T_favored', 'T_slight', 'even')",0.2020356791069279,0.7979643208930721
-"('T_strong', 'T_favored', 'T_slight', 'CT_performing')",0.3357664233576642,0.6642335766423357
-"('T_strong', 'T_favored', 'neutral', 'T_performing')",0.5,0.5
-"('T_strong', 'T_favored', 'neutral', 'even')",0.5,0.5
-"('T_strong', 'T_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('T_strong', 'T_favored', 'CT_slight', 'T_performing')",0.9945054945054945,0.005494505494505495
-"('T_strong', 'T_favored', 'CT_slight', 'even')",0.44471744471744473,0.5552825552825553
-"('T_strong', 'T_favored', 'CT_slight', 'CT_performing')",0.6642335766423357,0.3357664233576642
-"('T_strong', 'T_favored', 'CT_streak', 'T_performing')",0.5,0.5
-"('T_strong', 'T_favored', 'CT_streak', 'even')",0.9787234042553192,0.021276595744680854
-"('T_strong', 'T_favored', 'CT_streak', 'CT_performing')",0.9891304347826088,0.010869565217391306
-"('T_strong', 'balanced', 'T_streak', 'T_performing')",0.20001346740887052,0.7999865325911295
-"('T_strong', 'balanced', 'T_streak', 'even')",0.288782332680489,0.7112176673195111
-"('T_strong', 'balanced', 'T_streak', 'CT_performing')",0.23598435462842243,0.7640156453715776
-"('T_strong', 'balanced', 'T_slight', 'T_performing')",0.12061098988295973,0.8793890101170403
-"('T_strong', 'balanced', 'T_slight', 'even')",0.209104819124893,0.790895180875107
-"('T_strong', 'balanced', 'T_slight', 'CT_performing')",0.09884266499843603,0.9011573350015639
-"('T_strong', 'balanced', 'neutral', 'T_performing')",0.5,0.5
-"('T_strong', 'balanced', 'neutral', 'even')",0.5,0.5
-"('T_strong', 'balanced', 'neutral', 'CT_performing')",0.5,0.5
-"('T_strong', 'balanced', 'CT_slight', 'T_performing')",0.5440888308295232,0.45591116917047675
-"('T_strong', 'balanced', 'CT_slight', 'even')",0.39425336466566974,0.6057466353343303
-"('T_strong', 'balanced', 'CT_slight', 'CT_performing')",0.6249132546842471,0.3750867453157529
-"('T_strong', 'balanced', 'CT_streak', 'T_performing')",0.003154574132492114,0.9968454258675079
-"('T_strong', 'balanced', 'CT_streak', 'even')",0.7171814671814671,0.28281853281853275
-"('T_strong', 'balanced', 'CT_streak', 'CT_performing')",0.8044421751340312,0.19555782486596884
-"('T_strong', 'CT_favored', 'T_streak', 'T_performing')",0.24756178045024568,0.7524382195497543
-"('T_strong', 'CT_favored', 'T_streak', 'even')",0.3483903169453456,0.6516096830546544
-"('T_strong', 'CT_favored', 'T_streak', 'CT_performing')",0.3756906077348066,0.6243093922651933
-"('T_strong', 'CT_favored', 'T_slight', 'T_performing')",0.0809961857751851,0.9190038142248149
-"('T_strong', 'CT_favored', 'T_slight', 'even')",0.2753547031003678,0.7246452968996322
-"('T_strong', 'CT_favored', 'T_slight', 'CT_performing')",0.11175020542317173,0.8882497945768283
-"('T_strong', 'CT_favored', 'neutral', 'T_performing')",0.5,0.5
-"('T_strong', 'CT_favored', 'neutral', 'even')",0.5,0.5
-"('T_strong', 'CT_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('T_strong', 'CT_favored', 'CT_slight', 'T_performing')",0.6661742983751846,0.33382570162481534
-"('T_strong', 'CT_favored', 'CT_slight', 'even')",0.486119679210364,0.5138803207896361
-"('T_strong', 'CT_favored', 'CT_slight', 'CT_performing')",0.6837806301050176,0.3162193698949825
-"('T_strong', 'CT_favored', 'CT_streak', 'T_performing')",0.12707182320441987,0.8729281767955801
-"('T_strong', 'CT_favored', 'CT_streak', 'even')",0.5,0.5
-"('T_strong', 'CT_favored', 'CT_streak', 'CT_performing')",0.8177538668459987,0.18224613315400134
-"('T_moderate', 'T_favored', 'T_streak', 'T_performing')",0.43758668515950067,0.5624133148404993
-"('T_moderate', 'T_favored', 'T_streak', 'even')",0.3850085178875639,0.6149914821124361
-"('T_moderate', 'T_favored', 'T_streak', 'CT_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'T_slight', 'T_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'T_slight', 'even')",0.3848122866894198,0.6151877133105802
-"('T_moderate', 'T_favored', 'T_slight', 'CT_performing')",0.3357664233576642,0.6642335766423357
-"('T_moderate', 'T_favored', 'neutral', 'T_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'neutral', 'even')",0.5,0.5
-"('T_moderate', 'T_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'CT_slight', 'T_performing')",0.25274725274725274,0.7472527472527473
-"('T_moderate', 'T_favored', 'CT_slight', 'even')",0.6424050632911392,0.3575949367088608
-"('T_moderate', 'T_favored', 'CT_slight', 'CT_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'CT_streak', 'T_performing')",0.5,0.5
-"('T_moderate', 'T_favored', 'CT_streak', 'even')",0.9787234042553192,0.021276595744680854
-"('T_moderate', 'T_favored', 'CT_streak', 'CT_performing')",0.7472527472527473,0.25274725274725274
-"('T_moderate', 'balanced', 'T_streak', 'T_performing')",0.3789980186810077,0.6210019813189923
-"('T_moderate', 'balanced', 'T_streak', 'even')",0.45391523554435165,0.5460847644556484
-"('T_moderate', 'balanced', 'T_streak', 'CT_performing')",0.2870662460567823,0.7129337539432177
-"('T_moderate', 'balanced', 'T_slight', 'T_performing')",0.27318548387096775,0.7268145161290323
-"('T_moderate', 'balanced', 'T_slight', 'even')",0.3727146019512995,0.6272853980487005
-"('T_moderate', 'balanced', 'T_slight', 'CT_performing')",0.13114754098360656,0.8688524590163934
-"('T_moderate', 'balanced', 'neutral', 'T_performing')",0.5,0.5
-"('T_moderate', 'balanced', 'neutral', 'even')",0.5,0.5
-"('T_moderate', 'balanced', 'neutral', 'CT_performing')",0.5,0.5
-"('T_moderate', 'balanced', 'CT_slight', 'T_performing')",0.5587467362924282,0.4412532637075718
-"('T_moderate', 'balanced', 'CT_slight', 'even')",0.5,0.5
-"('T_moderate', 'balanced', 'CT_slight', 'CT_performing')",0.7403451109285127,0.25965488907148726
-"('T_moderate', 'balanced', 'CT_streak', 'T_performing')",0.021276595744680854,0.9787234042553192
-"('T_moderate', 'balanced', 'CT_streak', 'even')",0.839396628216504,0.160603371783496
-"('T_moderate', 'balanced', 'CT_streak', 'CT_performing')",0.8299120234604105,0.17008797653958943
-"('T_moderate', 'CT_favored', 'T_streak', 'T_performing')",0.36270441786673174,0.6372955821332682
-"('T_moderate', 'CT_favored', 'T_streak', 'even')",0.38474672737620946,0.6152532726237906
-"('T_moderate', 'CT_favored', 'T_streak', 'CT_performing')",0.5,0.5
-"('T_moderate', 'CT_favored', 'T_slight', 'T_performing')",0.2013274336283186,0.7986725663716814
-"('T_moderate', 'CT_favored', 'T_slight', 'even')",0.4762005500317326,0.5237994499682674
-"('T_moderate', 'CT_favored', 'T_slight', 'CT_performing')",0.1451104100946372,0.8548895899053628
-"('T_moderate', 'CT_favored', 'neutral', 'T_performing')",0.5,0.5
-"('T_moderate', 'CT_favored', 'neutral', 'even')",0.5,0.5
-"('T_moderate', 'CT_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('T_moderate', 'CT_favored', 'CT_slight', 'T_performing')",0.45472837022132795,0.545271629778672
-"('T_moderate', 'CT_favored', 'CT_slight', 'even')",0.5161059413027917,0.4838940586972083
-"('T_moderate', 'CT_favored', 'CT_slight', 'CT_performing')",0.8729281767955801,0.12707182320441987
-"('T_moderate', 'CT_favored', 'CT_streak', 'T_performing')",0.010869565217391306,0.9891304347826088
-"('T_moderate', 'CT_favored', 'CT_streak', 'even')",0.8869778869778869,0.11302211302211301
-"('T_moderate', 'CT_favored', 'CT_streak', 'CT_performing')",0.9591836734693877,0.04081632653061224
-"('even', 'T_favored', 'T_streak', 'T_performing')",0.3617674858223062,0.6382325141776938
-"('even', 'T_favored', 'T_streak', 'even')",0.3462852263023057,0.6537147736976943
-"('even', 'T_favored', 'T_streak', 'CT_performing')",0.5,0.5
-"('even', 'T_favored', 'T_slight', 'T_performing')",0.5623268698060941,0.4376731301939058
-"('even', 'T_favored', 'T_slight', 'even')",0.40004038772213246,0.5999596122778675
-"('even', 'T_favored', 'T_slight', 'CT_performing')",0.005494505494505495,0.9945054945054945
-"('even', 'T_favored', 'neutral', 'T_performing')",0.5,0.5
-"('even', 'T_favored', 'neutral', 'even')",0.5,0.5
-"('even', 'T_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('even', 'T_favored', 'CT_slight', 'T_performing')",0.25138121546961323,0.7486187845303868
-"('even', 'T_favored', 'CT_slight', 'even')",0.520535442652875,0.47946455734712506
-"('even', 'T_favored', 'CT_slight', 'CT_performing')",0.25274725274725274,0.7472527472527473
-"('even', 'T_favored', 'CT_streak', 'T_performing')",0.5,0.5
-"('even', 'T_favored', 'CT_streak', 'even')",0.8548895899053628,0.1451104100946372
-"('even', 'T_favored', 'CT_streak', 'CT_performing')",0.41199478487614083,0.5880052151238592
-"('even', 'balanced', 'T_streak', 'T_performing')",0.4074137576297922,0.5925862423702078
-"('even', 'balanced', 'T_streak', 'even')",0.4122920997920998,0.5877079002079002
-"('even', 'balanced', 'T_streak', 'CT_performing')",0.5262543757292882,0.47374562427071176
-"('even', 'balanced', 'T_slight', 'T_performing')",0.3049837486457205,0.6950162513542795
-"('even', 'balanced', 'T_slight', 'even')",0.43045025078735566,0.5695497492126443
-"('even', 'balanced', 'T_slight', 'CT_performing')",0.2326962809917355,0.7673037190082644
-"('even', 'balanced', 'neutral', 'T_performing')",0.5,0.5
-"('even', 'balanced', 'neutral', 'even')",0.5,0.5
-"('even', 'balanced', 'neutral', 'CT_performing')",0.5,0.5
-"('even', 'balanced', 'CT_slight', 'T_performing')",0.7367036820572764,0.2632963179427235
-"('even', 'balanced', 'CT_slight', 'even')",0.519925931889542,0.4800740681104581
-"('even', 'balanced', 'CT_slight', 'CT_performing')",0.6090468497576736,0.39095315024232635
-"('even', 'balanced', 'CT_streak', 'T_performing')",0.5,0.5
-"('even', 'balanced', 'CT_streak', 'even')",0.5479160328567082,0.45208396714329174
-"('even', 'balanced', 'CT_streak', 'CT_performing')",0.6726993617193181,0.32730063828068195
-"('even', 'CT_favored', 'T_streak', 'T_performing')",0.4450122195067763,0.5549877804932237
-"('even', 'CT_favored', 'T_streak', 'even')",0.5131502045587376,0.48684979544126245
-"('even', 'CT_favored', 'T_streak', 'CT_performing')",0.12707182320441987,0.8729281767955801
-"('even', 'CT_favored', 'T_slight', 'T_performing')",0.4445812807881773,0.5554187192118226
-"('even', 'CT_favored', 'T_slight', 'even')",0.4609442805068565,0.5390557194931436
-"('even', 'CT_favored', 'T_slight', 'CT_performing')",0.2705458908218356,0.7294541091781643
-"('even', 'CT_favored', 'neutral', 'T_performing')",0.5,0.5
-"('even', 'CT_favored', 'neutral', 'even')",0.5,0.5
-"('even', 'CT_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('even', 'CT_favored', 'CT_slight', 'T_performing')",0.7362893815635939,0.2637106184364061
-"('even', 'CT_favored', 'CT_slight', 'even')",0.588497927075582,0.411502072924418
-"('even', 'CT_favored', 'CT_slight', 'CT_performing')",0.7024595080983803,0.2975404919016197
-"('even', 'CT_favored', 'CT_streak', 'T_performing')",0.9945054945054945,0.005494505494505495
-"('even', 'CT_favored', 'CT_streak', 'even')",0.5404919016196761,0.4595080983803239
-"('even', 'CT_favored', 'CT_streak', 'CT_performing')",0.6836909056388836,0.31630909436111637
-"('CT_moderate', 'T_favored', 'T_streak', 'T_performing')",0.48573240329740014,0.5142675967025999
-"('CT_moderate', 'T_favored', 'T_streak', 'even')",0.5712777191129884,0.42872228088701164
-"('CT_moderate', 'T_favored', 'T_streak', 'CT_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'T_slight', 'T_performing')",0.23168654173764905,0.768313458262351
-"('CT_moderate', 'T_favored', 'T_slight', 'even')",0.39140926640926643,0.6085907335907336
-"('CT_moderate', 'T_favored', 'T_slight', 'CT_performing')",0.3357664233576642,0.6642335766423357
-"('CT_moderate', 'T_favored', 'neutral', 'T_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'neutral', 'even')",0.5,0.5
-"('CT_moderate', 'T_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'CT_slight', 'T_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'CT_slight', 'even')",0.42671009771986973,0.5732899022801303
-"('CT_moderate', 'T_favored', 'CT_slight', 'CT_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'CT_streak', 'T_performing')",0.5,0.5
-"('CT_moderate', 'T_favored', 'CT_streak', 'even')",0.5709779179810726,0.42902208201892744
-"('CT_moderate', 'T_favored', 'CT_streak', 'CT_performing')",0.5237592397043295,0.47624076029567053
-"('CT_moderate', 'balanced', 'T_streak', 'T_performing')",0.37869629145564454,0.6213037085443555
-"('CT_moderate', 'balanced', 'T_streak', 'even')",0.4204225990749978,0.5795774009250023
-"('CT_moderate', 'balanced', 'T_streak', 'CT_performing')",0.37534626038781166,0.6246537396121884
-"('CT_moderate', 'balanced', 'T_slight', 'T_performing')",0.4871940808195788,0.5128059191804212
-"('CT_moderate', 'balanced', 'T_slight', 'even')",0.4535938047242869,0.5464061952757131
-"('CT_moderate', 'balanced', 'T_slight', 'CT_performing')",0.2831098072087175,0.7168901927912825
-"('CT_moderate', 'balanced', 'neutral', 'T_performing')",0.5,0.5
-"('CT_moderate', 'balanced', 'neutral', 'even')",0.5,0.5
-"('CT_moderate', 'balanced', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_moderate', 'balanced', 'CT_slight', 'T_performing')",0.7705827937095282,0.22941720629047174
-"('CT_moderate', 'balanced', 'CT_slight', 'even')",0.5634549229863328,0.43654507701366724
-"('CT_moderate', 'balanced', 'CT_slight', 'CT_performing')",0.622759158222915,0.37724084177708495
-"('CT_moderate', 'balanced', 'CT_streak', 'T_performing')",0.25274725274725274,0.7472527472527473
-"('CT_moderate', 'balanced', 'CT_streak', 'even')",0.6371951219512195,0.3628048780487805
-"('CT_moderate', 'balanced', 'CT_streak', 'CT_performing')",0.6763095749248604,0.3236904250751395
-"('CT_moderate', 'CT_favored', 'T_streak', 'T_performing')",0.40313414844153606,0.596865851558464
-"('CT_moderate', 'CT_favored', 'T_streak', 'even')",0.4821570182394925,0.5178429817605076
-"('CT_moderate', 'CT_favored', 'T_streak', 'CT_performing')",0.08487084870848707,0.915129151291513
-"('CT_moderate', 'CT_favored', 'T_slight', 'T_performing')",0.20088626292466766,0.7991137370753324
-"('CT_moderate', 'CT_favored', 'T_slight', 'even')",0.48077333903012176,0.5192266609698782
-"('CT_moderate', 'CT_favored', 'T_slight', 'CT_performing')",0.4375578168362627,0.5624421831637373
-"('CT_moderate', 'CT_favored', 'neutral', 'T_performing')",0.5,0.5
-"('CT_moderate', 'CT_favored', 'neutral', 'even')",0.5,0.5
-"('CT_moderate', 'CT_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_moderate', 'CT_favored', 'CT_slight', 'T_performing')",0.9979879275653923,0.002012072434607646
-"('CT_moderate', 'CT_favored', 'CT_slight', 'even')",0.5866495507060334,0.4133504492939667
-"('CT_moderate', 'CT_favored', 'CT_slight', 'CT_performing')",0.5509741730856366,0.4490258269143634
-"('CT_moderate', 'CT_favored', 'CT_streak', 'T_performing')",0.9787234042553192,0.021276595744680854
-"('CT_moderate', 'CT_favored', 'CT_streak', 'even')",0.5365457498646453,0.46345425013535463
-"('CT_moderate', 'CT_favored', 'CT_streak', 'CT_performing')",0.6801623999097779,0.3198376000902222
-"('CT_strong', 'T_favored', 'T_streak', 'T_performing')",0.2673559822747415,0.7326440177252584
-"('CT_strong', 'T_favored', 'T_streak', 'even')",0.33415233415233414,0.6658476658476659
-"('CT_strong', 'T_favored', 'T_streak', 'CT_performing')",0.021276595744680854,0.9787234042553192
-"('CT_strong', 'T_favored', 'T_slight', 'T_performing')",0.007299270072992701,0.9927007299270073
-"('CT_strong', 'T_favored', 'T_slight', 'even')",0.5587467362924282,0.4412532637075718
-"('CT_strong', 'T_favored', 'T_slight', 'CT_performing')",0.45472837022132795,0.545271629778672
-"('CT_strong', 'T_favored', 'neutral', 'T_performing')",0.5,0.5
-"('CT_strong', 'T_favored', 'neutral', 'even')",0.5,0.5
-"('CT_strong', 'T_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_strong', 'T_favored', 'CT_slight', 'T_performing')",0.5,0.5
-"('CT_strong', 'T_favored', 'CT_slight', 'even')",0.6624167994750164,0.33758320052498364
-"('CT_strong', 'T_favored', 'CT_slight', 'CT_performing')",0.6127415891195419,0.38725841088045815
-"('CT_strong', 'T_favored', 'CT_streak', 'T_performing')",0.5,0.5
-"('CT_strong', 'T_favored', 'CT_streak', 'even')",0.5756556825823806,0.42434431741761935
-"('CT_strong', 'T_favored', 'CT_streak', 'CT_performing')",0.6226072376694145,0.37739276233058544
-"('CT_strong', 'balanced', 'T_streak', 'T_performing')",0.24731445312500006,0.752685546875
-"('CT_strong', 'balanced', 'T_streak', 'even')",0.31255785251465595,0.687442147485344
-"('CT_strong', 'balanced', 'T_streak', 'CT_performing')",0.7093772369362921,0.29062276306370793
-"('CT_strong', 'balanced', 'T_slight', 'T_performing')",0.28583790020190364,0.7141620997980963
-"('CT_strong', 'balanced', 'T_slight', 'even')",0.48608649049758834,0.5139135095024117
-"('CT_strong', 'balanced', 'T_slight', 'CT_performing')",0.44215938303341906,0.5578406169665809
-"('CT_strong', 'balanced', 'neutral', 'T_performing')",0.5,0.5
-"('CT_strong', 'balanced', 'neutral', 'even')",0.5,0.5
-"('CT_strong', 'balanced', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_strong', 'balanced', 'CT_slight', 'T_performing')",0.8820200261210274,0.11797997387897255
-"('CT_strong', 'balanced', 'CT_slight', 'even')",0.708172343936008,0.291827656063992
-"('CT_strong', 'balanced', 'CT_slight', 'CT_performing')",0.7999700404453987,0.2000299595546013
-"('CT_strong', 'balanced', 'CT_streak', 'T_performing')",0.45472837022132795,0.545271629778672
-"('CT_strong', 'balanced', 'CT_streak', 'even')",0.6066508665382906,0.3933491334617094
-"('CT_strong', 'balanced', 'CT_streak', 'CT_performing')",0.7269137039213232,0.27308629607867696
-"('CT_strong', 'CT_favored', 'T_streak', 'T_performing')",0.17668190725016328,0.8233180927498367
-"('CT_strong', 'CT_favored', 'T_streak', 'even')",0.4151654796816087,0.5848345203183913
-"('CT_strong', 'CT_favored', 'T_streak', 'CT_performing')",0.7326440177252584,0.2673559822747415
-"('CT_strong', 'CT_favored', 'T_slight', 'T_performing')",0.3752310536044362,0.6247689463955638
-"('CT_strong', 'CT_favored', 'T_slight', 'even')",0.5360742098030233,0.46392579019697666
-"('CT_strong', 'CT_favored', 'T_slight', 'CT_performing')",0.43140243902439024,0.5685975609756098
-"('CT_strong', 'CT_favored', 'neutral', 'T_performing')",0.5,0.5
-"('CT_strong', 'CT_favored', 'neutral', 'even')",0.5,0.5
-"('CT_strong', 'CT_favored', 'neutral', 'CT_performing')",0.5,0.5
-"('CT_strong', 'CT_favored', 'CT_slight', 'T_performing')",0.9490022172949002,0.050997782705099776
-"('CT_strong', 'CT_favored', 'CT_slight', 'even')",0.701725633857129,0.29827436614287095
-"('CT_strong', 'CT_favored', 'CT_slight', 'CT_performing')",0.8728366269792562,0.12716337302074385
-"('CT_strong', 'CT_favored', 'CT_streak', 'T_performing')",0.9963235294117647,0.0036764705882352945
-"('CT_strong', 'CT_favored', 'CT_streak', 'even')",0.6298758089907294,0.37012419100927063
-"('CT_strong', 'CT_favored', 'CT_streak', 'CT_performing')",0.738648316970547,0.261351683029453
+"('T_strong', 'T_favored', 'T_streak', 'T_performing', 'close')",0.16020136215575956,0.8397986378442405
+"('T_strong', 'T_favored', 'T_streak', 'T_performing', 'moderate')",0.1834115033325105,0.8165884966674896
+"('T_strong', 'T_favored', 'T_streak', 'T_performing', 'blowout')",0.12912087912087913,0.8708791208791209
+"('T_strong', 'T_favored', 'T_streak', 'even', 'close')",0.15424018212862833,0.8457598178713717
+"('T_strong', 'T_favored', 'T_streak', 'even', 'moderate')",0.2942969090117544,0.7057030909882456
+"('T_strong', 'T_favored', 'T_streak', 'even', 'blowout')",0.3001480384900074,0.6998519615099926
+"('T_strong', 'T_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'T_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('T_strong', 'T_favored', 'T_slight', 'T_performing', 'close')",0.1114309210526316,0.8885690789473685
+"('T_strong', 'T_favored', 'T_slight', 'T_performing', 'moderate')",0.25092250922509224,0.7490774907749077
+"('T_strong', 'T_favored', 'T_slight', 'T_performing', 'blowout')",0.5997045790251108,0.40029542097488924
+"('T_strong', 'T_favored', 'T_slight', 'even', 'close')",0.19545415850855533,0.8045458414914446
+"('T_strong', 'T_favored', 'T_slight', 'even', 'moderate')",0.22227936638551737,0.7777206336144826
+"('T_strong', 'T_favored', 'T_slight', 'even', 'blowout')",0.1819252776842814,0.8180747223157186
+"('T_strong', 'T_favored', 'T_slight', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'T_slight', 'CT_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('T_strong', 'T_favored', 'T_slight', 'CT_performing', 'blowout')",0.0036764705882352936,0.9963235294117646
+"('T_strong', 'T_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_slight', 'T_performing', 'close')",0.9963235294117646,0.0036764705882352936
+"('T_strong', 'T_favored', 'CT_slight', 'T_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('T_strong', 'T_favored', 'CT_slight', 'T_performing', 'blowout')",0.9927007299270074,0.007299270072992702
+"('T_strong', 'T_favored', 'CT_slight', 'even', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_slight', 'even', 'moderate')",0.6658476658476659,0.3341523341523341
+"('T_strong', 'T_favored', 'CT_slight', 'even', 'blowout')",0.3337438423645321,0.666256157635468
+"('T_strong', 'T_favored', 'CT_slight', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_slight', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_slight', 'CT_performing', 'blowout')",0.6658476658476659,0.3341523341523341
+"('T_strong', 'T_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'even', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'even', 'moderate')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'even', 'blowout')",0.9927007299270074,0.007299270072992702
+"('T_strong', 'T_favored', 'CT_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'T_favored', 'CT_streak', 'CT_performing', 'moderate')",0.9963235294117646,0.0036764705882352936
+"('T_strong', 'T_favored', 'CT_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('T_strong', 'balanced', 'T_streak', 'T_performing', 'close')",0.1911988962312105,0.8088011037687894
+"('T_strong', 'balanced', 'T_streak', 'T_performing', 'moderate')",0.23751215221517524,0.7624878477848248
+"('T_strong', 'balanced', 'T_streak', 'T_performing', 'blowout')",0.17812182095625637,0.8218781790437436
+"('T_strong', 'balanced', 'T_streak', 'even', 'close')",0.26586669166588545,0.7341333083341146
+"('T_strong', 'balanced', 'T_streak', 'even', 'moderate')",0.2631886694386694,0.7368113305613305
+"('T_strong', 'balanced', 'T_streak', 'even', 'blowout')",0.32354863304650905,0.6764513669534908
+"('T_strong', 'balanced', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'balanced', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'balanced', 'T_streak', 'CT_performing', 'blowout')",0.2002960039467193,0.7997039960532807
+"('T_strong', 'balanced', 'T_slight', 'T_performing', 'close')",0.10208091903058396,0.897919080969416
+"('T_strong', 'balanced', 'T_slight', 'T_performing', 'moderate')",0.264808362369338,0.7351916376306621
+"('T_strong', 'balanced', 'T_slight', 'T_performing', 'blowout')",0.06991561908042018,0.9300843809195798
+"('T_strong', 'balanced', 'T_slight', 'even', 'close')",0.2158118695965418,0.7841881304034583
+"('T_strong', 'balanced', 'T_slight', 'even', 'moderate')",0.20423306643019223,0.7957669335698078
+"('T_strong', 'balanced', 'T_slight', 'even', 'blowout')",0.20449405564661702,0.795505944353383
+"('T_strong', 'balanced', 'T_slight', 'CT_performing', 'close')",0.33349777997039953,0.6665022200296004
+"('T_strong', 'balanced', 'T_slight', 'CT_performing', 'moderate')",0.06290471785383903,0.9370952821461609
+"('T_strong', 'balanced', 'T_slight', 'CT_performing', 'blowout')",0.025175860792299148,0.9748241392077008
+"('T_strong', 'balanced', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'even', 'close')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'balanced', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_strong', 'balanced', 'CT_slight', 'T_performing', 'close')",0.37523105360443626,0.6247689463955638
+"('T_strong', 'balanced', 'CT_slight', 'T_performing', 'moderate')",0.6361802286482852,0.36381977135171484
+"('T_strong', 'balanced', 'CT_slight', 'T_performing', 'blowout')",0.5510049871542996,0.4489950128457005
+"('T_strong', 'balanced', 'CT_slight', 'even', 'close')",0.2667434589435577,0.7332565410564423
+"('T_strong', 'balanced', 'CT_slight', 'even', 'moderate')",0.6206280316568803,0.37937196834311976
+"('T_strong', 'balanced', 'CT_slight', 'even', 'blowout')",0.3880720760557152,0.6119279239442847
+"('T_strong', 'balanced', 'CT_slight', 'CT_performing', 'close')",0.8743068391866914,0.1256931608133087
+"('T_strong', 'balanced', 'CT_slight', 'CT_performing', 'moderate')",0.2504621072088725,0.7495378927911276
+"('T_strong', 'balanced', 'CT_slight', 'CT_performing', 'blowout')",0.6457883369330454,0.3542116630669546
+"('T_strong', 'balanced', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'balanced', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('T_strong', 'balanced', 'CT_streak', 'T_performing', 'blowout')",0.0010559662090813095,0.9989440337909188
+"('T_strong', 'balanced', 'CT_streak', 'even', 'close')",0.9963235294117646,0.0036764705882352936
+"('T_strong', 'balanced', 'CT_streak', 'even', 'moderate')",0.8743068391866914,0.1256931608133087
+"('T_strong', 'balanced', 'CT_streak', 'even', 'blowout')",0.6665981077745784,0.33340189222542166
+"('T_strong', 'balanced', 'CT_streak', 'CT_performing', 'close')",0.9993834771886559,0.0006165228113440197
+"('T_strong', 'balanced', 'CT_streak', 'CT_performing', 'moderate')",0.9085406859448554,0.09145931405514457
+"('T_strong', 'balanced', 'CT_streak', 'CT_performing', 'blowout')",0.7499421430224485,0.2500578569775515
+"('T_strong', 'CT_favored', 'T_streak', 'T_performing', 'close')",0.2881887787121878,0.7118112212878123
+"('T_strong', 'CT_favored', 'T_streak', 'T_performing', 'moderate')",0.2385676428619963,0.7614323571380036
+"('T_strong', 'CT_favored', 'T_streak', 'T_performing', 'blowout')",0.23706589126021832,0.7629341087397816
+"('T_strong', 'CT_favored', 'T_streak', 'even', 'close')",0.3501110288675055,0.6498889711324944
+"('T_strong', 'CT_favored', 'T_streak', 'even', 'moderate')",0.33340189222542166,0.6665981077745784
+"('T_strong', 'CT_favored', 'T_streak', 'even', 'blowout')",0.3636975544087952,0.6363024455912049
+"('T_strong', 'CT_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'T_streak', 'CT_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('T_strong', 'CT_favored', 'T_streak', 'CT_performing', 'blowout')",0.28616684266103487,0.7138331573389651
+"('T_strong', 'CT_favored', 'T_slight', 'T_performing', 'close')",0.09240059245755954,0.9075994075424405
+"('T_strong', 'CT_favored', 'T_slight', 'T_performing', 'moderate')",0.13369511593487912,0.8663048840651209
+"('T_strong', 'CT_favored', 'T_slight', 'T_performing', 'blowout')",0.0003895597974289054,0.9996104402025712
+"('T_strong', 'CT_favored', 'T_slight', 'even', 'close')",0.2812612519932102,0.7187387480067897
+"('T_strong', 'CT_favored', 'T_slight', 'even', 'moderate')",0.2887867865488969,0.7112132134511031
+"('T_strong', 'CT_favored', 'T_slight', 'even', 'blowout')",0.23934924352725198,0.7606507564727479
+"('T_strong', 'CT_favored', 'T_slight', 'CT_performing', 'close')",0.1256931608133087,0.8743068391866914
+"('T_strong', 'CT_favored', 'T_slight', 'CT_performing', 'moderate')",0.2226787181594084,0.7773212818405917
+"('T_strong', 'CT_favored', 'T_slight', 'CT_performing', 'blowout')",0.0007396449704142012,0.9992603550295858
+"('T_strong', 'CT_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_strong', 'CT_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_strong', 'CT_favored', 'CT_slight', 'T_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('T_strong', 'CT_favored', 'CT_slight', 'T_performing', 'moderate')",0.9975429975429975,0.002457002457002457
+"('T_strong', 'CT_favored', 'CT_slight', 'T_performing', 'blowout')",0.6361802286482852,0.36381977135171484
+"('T_strong', 'CT_favored', 'CT_slight', 'even', 'close')",0.23107569721115537,0.7689243027888446
+"('T_strong', 'CT_favored', 'CT_slight', 'even', 'moderate')",0.7331031080414405,0.2668968919585594
+"('T_strong', 'CT_favored', 'CT_slight', 'even', 'blowout')",0.4772803769774487,0.5227196230225514
+"('T_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'close')",0.8325123152709359,0.16748768472906403
+"('T_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'moderate')",0.0036764705882352936,0.9963235294117646
+"('T_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'blowout')",0.7269670477471418,0.27303295225285806
+"('T_strong', 'CT_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'CT_streak', 'T_performing', 'moderate')",0.3341523341523341,0.6658476658476659
+"('T_strong', 'CT_favored', 'CT_streak', 'T_performing', 'blowout')",0.001477104874446086,0.998522895125554
+"('T_strong', 'CT_favored', 'CT_streak', 'even', 'close')",0.998522895125554,0.001477104874446086
+"('T_strong', 'CT_favored', 'CT_streak', 'even', 'moderate')",0.5,0.5
+"('T_strong', 'CT_favored', 'CT_streak', 'even', 'blowout')",0.2226787181594084,0.7773212818405917
+"('T_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'moderate')",0.7991137370753324,0.20088626292466766
+"('T_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'blowout')",0.8212585933368588,0.1787414066631412
+"('T_moderate', 'T_favored', 'T_streak', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_streak', 'T_performing', 'moderate')",0.40014792899408286,0.5998520710059172
+"('T_moderate', 'T_favored', 'T_streak', 'T_performing', 'blowout')",0.4167694204685573,0.5832305795314426
+"('T_moderate', 'T_favored', 'T_streak', 'even', 'close')",0.7490774907749077,0.25092250922509224
+"('T_moderate', 'T_favored', 'T_streak', 'even', 'moderate')",0.001477104874446086,0.998522895125554
+"('T_moderate', 'T_favored', 'T_streak', 'even', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_slight', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_slight', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_slight', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'T_slight', 'even', 'close')",0.08384710234278667,0.9161528976572133
+"('T_moderate', 'T_favored', 'T_slight', 'even', 'moderate')",0.666256157635468,0.3337438423645321
+"('T_moderate', 'T_favored', 'T_slight', 'even', 'blowout')",0.6247689463955638,0.37523105360443626
+"('T_moderate', 'T_favored', 'T_slight', 'CT_performing', 'close')",0.9927007299270074,0.007299270072992702
+"('T_moderate', 'T_favored', 'T_slight', 'CT_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'T_favored', 'T_slight', 'CT_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'T_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_slight', 'T_performing', 'close')",0.3341523341523341,0.6658476658476659
+"('T_moderate', 'T_favored', 'CT_slight', 'T_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'T_favored', 'CT_slight', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_slight', 'even', 'close')",0.6658476658476659,0.3341523341523341
+"('T_moderate', 'T_favored', 'CT_slight', 'even', 'moderate')",0.5997045790251108,0.40029542097488924
+"('T_moderate', 'T_favored', 'CT_slight', 'even', 'blowout')",0.666256157635468,0.3337438423645321
+"('T_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'even', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'even', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'even', 'blowout')",0.9927007299270074,0.007299270072992702
+"('T_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'blowout')",0.7490774907749077,0.25092250922509224
+"('T_moderate', 'balanced', 'T_streak', 'T_performing', 'close')",0.41415426049225706,0.585845739507743
+"('T_moderate', 'balanced', 'T_streak', 'T_performing', 'moderate')",0.4500074063101763,0.5499925936898238
+"('T_moderate', 'balanced', 'T_streak', 'T_performing', 'blowout')",0.2869839634185612,0.7130160365814388
+"('T_moderate', 'balanced', 'T_streak', 'even', 'close')",0.5121907169947625,0.4878092830052375
+"('T_moderate', 'balanced', 'T_streak', 'even', 'moderate')",0.4054432659595758,0.5945567340404243
+"('T_moderate', 'balanced', 'T_streak', 'even', 'blowout')",0.444457505583637,0.5555424944163629
+"('T_moderate', 'balanced', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'balanced', 'T_streak', 'CT_performing', 'blowout')",0.28616684266103487,0.7138331573389651
+"('T_moderate', 'balanced', 'T_slight', 'T_performing', 'close')",0.40029542097488924,0.5997045790251108
+"('T_moderate', 'balanced', 'T_slight', 'T_performing', 'moderate')",0.40029542097488924,0.5997045790251108
+"('T_moderate', 'balanced', 'T_slight', 'T_performing', 'blowout')",0.16707768187422933,0.8329223181257707
+"('T_moderate', 'balanced', 'T_slight', 'even', 'close')",0.3671135277022593,0.6328864722977408
+"('T_moderate', 'balanced', 'T_slight', 'even', 'moderate')",0.41464442704883475,0.5853555729511651
+"('T_moderate', 'balanced', 'T_slight', 'even', 'blowout')",0.30438982505098205,0.6956101749490179
+"('T_moderate', 'balanced', 'T_slight', 'CT_performing', 'close')",0.2226787181594084,0.7773212818405917
+"('T_moderate', 'balanced', 'T_slight', 'CT_performing', 'moderate')",0.16748768472906403,0.8325123152709359
+"('T_moderate', 'balanced', 'T_slight', 'CT_performing', 'blowout')",0.0009242144177449167,0.999075785582255
+"('T_moderate', 'balanced', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'even', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'balanced', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'balanced', 'CT_slight', 'T_performing', 'close')",0.40014792899408286,0.5998520710059172
+"('T_moderate', 'balanced', 'CT_slight', 'T_performing', 'moderate')",0.7995562130177515,0.20044378698224852
+"('T_moderate', 'balanced', 'CT_slight', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'balanced', 'CT_slight', 'even', 'close')",0.32152300370174514,0.6784769962982549
+"('T_moderate', 'balanced', 'CT_slight', 'even', 'moderate')",0.41671807526218385,0.5832819247378161
+"('T_moderate', 'balanced', 'CT_slight', 'even', 'blowout')",0.6749352091817845,0.3250647908182155
+"('T_moderate', 'balanced', 'CT_slight', 'CT_performing', 'close')",0.3336072308956451,0.666392769104355
+"('T_moderate', 'balanced', 'CT_slight', 'CT_performing', 'moderate')",0.9975429975429975,0.002457002457002457
+"('T_moderate', 'balanced', 'CT_slight', 'CT_performing', 'blowout')",0.932905772076961,0.06709422792303896
+"('T_moderate', 'balanced', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'balanced', 'CT_streak', 'T_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'balanced', 'CT_streak', 'even', 'close')",0.5,0.5
+"('T_moderate', 'balanced', 'CT_streak', 'even', 'moderate')",0.998522895125554,0.001477104874446086
+"('T_moderate', 'balanced', 'CT_streak', 'even', 'blowout')",0.8330592105263158,0.1669407894736842
+"('T_moderate', 'balanced', 'CT_streak', 'CT_performing', 'close')",0.666256157635468,0.3337438423645321
+"('T_moderate', 'balanced', 'CT_streak', 'CT_performing', 'moderate')",0.999075785582255,0.0009242144177449167
+"('T_moderate', 'balanced', 'CT_streak', 'CT_performing', 'blowout')",0.8203911144864249,0.1796088855135751
+"('T_moderate', 'CT_favored', 'T_streak', 'T_performing', 'close')",0.4210833982852689,0.5789166017147311
+"('T_moderate', 'CT_favored', 'T_streak', 'T_performing', 'moderate')",0.3438223044886627,0.6561776955113373
+"('T_moderate', 'CT_favored', 'T_streak', 'T_performing', 'blowout')",0.2858653507225943,0.7141346492774057
+"('T_moderate', 'CT_favored', 'T_streak', 'even', 'close')",0.40029542097488924,0.5997045790251108
+"('T_moderate', 'CT_favored', 'T_streak', 'even', 'moderate')",0.3334703947368421,0.6665296052631579
+"('T_moderate', 'CT_favored', 'T_streak', 'even', 'blowout')",0.43755781683626266,0.5624421831637373
+"('T_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'CT_favored', 'T_slight', 'T_performing', 'close')",0.9927007299270074,0.007299270072992702
+"('T_moderate', 'CT_favored', 'T_slight', 'T_performing', 'moderate')",0.16748768472906403,0.8325123152709359
+"('T_moderate', 'CT_favored', 'T_slight', 'T_performing', 'blowout')",0.002457002457002457,0.9975429975429975
+"('T_moderate', 'CT_favored', 'T_slight', 'even', 'close')",0.534871706561047,0.465128293438953
+"('T_moderate', 'CT_favored', 'T_slight', 'even', 'moderate')",0.4634278490157125,0.5365721509842876
+"('T_moderate', 'CT_favored', 'T_slight', 'even', 'blowout')",0.38103630595699683,0.6189636940430032
+"('T_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'close')",0.20088626292466766,0.7991137370753324
+"('T_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'blowout')",0.0036764705882352936,0.9963235294117646
+"('T_moderate', 'CT_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'close')",0.40029542097488924,0.5997045790251108
+"('T_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'moderate')",0.5,0.5
+"('T_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'blowout')",0.5,0.5
+"('T_moderate', 'CT_favored', 'CT_slight', 'even', 'close')",0.14361140443505807,0.856388595564942
+"('T_moderate', 'CT_favored', 'CT_slight', 'even', 'moderate')",0.6664611590628853,0.3335388409371146
+"('T_moderate', 'CT_favored', 'CT_slight', 'even', 'blowout')",0.5832305795314426,0.4167694204685573
+"('T_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'close')",0.9927007299270074,0.007299270072992702
+"('T_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('T_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'blowout')",0.8325123152709359,0.16748768472906403
+"('T_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('T_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('T_moderate', 'CT_favored', 'CT_streak', 'even', 'close')",0.9963235294117646,0.0036764705882352936
+"('T_moderate', 'CT_favored', 'CT_streak', 'even', 'moderate')",0.7490774907749077,0.25092250922509224
+"('T_moderate', 'CT_favored', 'CT_streak', 'even', 'blowout')",0.9975429975429975,0.002457002457002457
+"('T_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'close')",0.9981549815498155,0.0018450184501845022
+"('T_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'moderate')",0.9981549815498155,0.0018450184501845022
+"('T_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'blowout')",0.9407923378319548,0.05920766216804528
+"('even', 'T_favored', 'T_streak', 'T_performing', 'close')",0.2942969090117544,0.7057030909882456
+"('even', 'T_favored', 'T_streak', 'T_performing', 'moderate')",0.40004231013327696,0.599957689866723
+"('even', 'T_favored', 'T_streak', 'T_performing', 'blowout')",0.35719322990126945,0.6428067700987307
+"('even', 'T_favored', 'T_streak', 'even', 'close')",0.3336072308956451,0.666392769104355
+"('even', 'T_favored', 'T_streak', 'even', 'moderate')",0.13369511593487912,0.8663048840651209
+"('even', 'T_favored', 'T_streak', 'even', 'blowout')",0.464304600740349,0.5356953992596509
+"('even', 'T_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'T_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('even', 'T_favored', 'T_slight', 'T_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'T_slight', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'T_slight', 'T_performing', 'blowout')",0.9963235294117646,0.0036764705882352936
+"('even', 'T_favored', 'T_slight', 'even', 'close')",0.3929138022210471,0.6070861977789529
+"('even', 'T_favored', 'T_slight', 'even', 'moderate')",0.4363807728557964,0.5636192271442035
+"('even', 'T_favored', 'T_slight', 'even', 'blowout')",0.33342473265697836,0.6665752673430216
+"('even', 'T_favored', 'T_slight', 'CT_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('even', 'T_favored', 'T_slight', 'CT_performing', 'moderate')",0.0036764705882352936,0.9963235294117646
+"('even', 'T_favored', 'T_slight', 'CT_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('even', 'T_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('even', 'T_favored', 'CT_slight', 'T_performing', 'close')",0.0036764705882352936,0.9963235294117646
+"('even', 'T_favored', 'CT_slight', 'T_performing', 'moderate')",0.0018450184501845022,0.9981549815498155
+"('even', 'T_favored', 'CT_slight', 'T_performing', 'blowout')",0.9963235294117646,0.0036764705882352936
+"('even', 'T_favored', 'CT_slight', 'even', 'close')",0.4800118448326917,0.5199881551673082
+"('even', 'T_favored', 'CT_slight', 'even', 'moderate')",0.5333168805528135,0.46668311944718666
+"('even', 'T_favored', 'CT_slight', 'even', 'blowout')",0.5555098684210527,0.44449013157894735
+"('even', 'T_favored', 'CT_slight', 'CT_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'CT_slight', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'CT_slight', 'CT_performing', 'blowout')",0.0036764705882352936,0.9963235294117646
+"('even', 'T_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('even', 'T_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'T_favored', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('even', 'T_favored', 'CT_streak', 'even', 'close')",0.5,0.5
+"('even', 'T_favored', 'CT_streak', 'even', 'moderate')",0.9963235294117646,0.0036764705882352936
+"('even', 'T_favored', 'CT_streak', 'even', 'blowout')",0.7991137370753324,0.20088626292466766
+"('even', 'T_favored', 'CT_streak', 'CT_performing', 'close')",0.5997045790251108,0.40029542097488924
+"('even', 'T_favored', 'CT_streak', 'CT_performing', 'moderate')",0.20088626292466766,0.7991137370753324
+"('even', 'T_favored', 'CT_streak', 'CT_performing', 'blowout')",0.4287222808870117,0.5712777191129884
+"('even', 'balanced', 'T_streak', 'T_performing', 'close')",0.49230856882406565,0.5076914311759344
+"('even', 'balanced', 'T_streak', 'T_performing', 'moderate')",0.4524918725072896,0.5475081274927104
+"('even', 'balanced', 'T_streak', 'T_performing', 'blowout')",0.3367084819313166,0.6632915180686835
+"('even', 'balanced', 'T_streak', 'even', 'close')",0.5,0.5
+"('even', 'balanced', 'T_streak', 'even', 'moderate')",0.4365154008934869,0.563484599106513
+"('even', 'balanced', 'T_streak', 'even', 'blowout')",0.35334781749950617,0.6466521825004937
+"('even', 'balanced', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('even', 'balanced', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'balanced', 'T_streak', 'CT_performing', 'blowout')",0.5262952863264511,0.4737047136735489
+"('even', 'balanced', 'T_slight', 'T_performing', 'close')",0.25589805407267097,0.7441019459273291
+"('even', 'balanced', 'T_slight', 'T_performing', 'moderate')",0.3847467273762094,0.6152532726237906
+"('even', 'balanced', 'T_slight', 'T_performing', 'blowout')",0.34624145785877,0.6537585421412301
+"('even', 'balanced', 'T_slight', 'even', 'close')",0.3990894264745855,0.6009105735254145
+"('even', 'balanced', 'T_slight', 'even', 'moderate')",0.4964287603830485,0.5035712396169515
+"('even', 'balanced', 'T_slight', 'even', 'blowout')",0.386370012906122,0.613629987093878
+"('even', 'balanced', 'T_slight', 'CT_performing', 'close')",0.34624145785877,0.6537585421412301
+"('even', 'balanced', 'T_slight', 'CT_performing', 'moderate')",0.2175732217573222,0.7824267782426778
+"('even', 'balanced', 'T_slight', 'CT_performing', 'blowout')",0.16229737842705624,0.8377026215729438
+"('even', 'balanced', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('even', 'balanced', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'balanced', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('even', 'balanced', 'neutral', 'even', 'close')",0.5,0.5
+"('even', 'balanced', 'neutral', 'even', 'moderate')",0.5,0.5
+"('even', 'balanced', 'neutral', 'even', 'blowout')",0.5,0.5
+"('even', 'balanced', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('even', 'balanced', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'balanced', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('even', 'balanced', 'CT_slight', 'T_performing', 'close')",0.44449013157894735,0.5555098684210527
+"('even', 'balanced', 'CT_slight', 'T_performing', 'moderate')",0.8122109158186864,0.1877890841813136
+"('even', 'balanced', 'CT_slight', 'T_performing', 'blowout')",0.8332157968970381,0.1667842031029619
+"('even', 'balanced', 'CT_slight', 'even', 'close')",0.4594627056892341,0.5405372943107659
+"('even', 'balanced', 'CT_slight', 'even', 'moderate')",0.5320482385338524,0.4679517614661476
+"('even', 'balanced', 'CT_slight', 'even', 'blowout')",0.5639765507073402,0.4360234492926598
+"('even', 'balanced', 'CT_slight', 'CT_performing', 'close')",0.46939700770742027,0.5306029922925797
+"('even', 'balanced', 'CT_slight', 'CT_performing', 'moderate')",0.6664611590628853,0.3335388409371146
+"('even', 'balanced', 'CT_slight', 'CT_performing', 'blowout')",0.7346229409097779,0.2653770590902222
+"('even', 'balanced', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('even', 'balanced', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'balanced', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('even', 'balanced', 'CT_streak', 'even', 'close')",0.20044378698224852,0.7995562130177515
+"('even', 'balanced', 'CT_streak', 'even', 'moderate')",0.642706131078224,0.35729386892177584
+"('even', 'balanced', 'CT_streak', 'even', 'blowout')",0.5918089768777391,0.40819102312226085
+"('even', 'balanced', 'CT_streak', 'CT_performing', 'close')",0.6110806363137685,0.3889193636862315
+"('even', 'balanced', 'CT_streak', 'CT_performing', 'moderate')",0.6527463484879654,0.3472536515120346
+"('even', 'balanced', 'CT_streak', 'CT_performing', 'blowout')",0.7046776358303922,0.2953223641696078
+"('even', 'CT_favored', 'T_streak', 'T_performing', 'close')",0.5789166017147311,0.4210833982852689
+"('even', 'CT_favored', 'T_streak', 'T_performing', 'moderate')",0.43530539339548663,0.5646946066045134
+"('even', 'CT_favored', 'T_streak', 'T_performing', 'blowout')",0.38963162450706934,0.6103683754929307
+"('even', 'CT_favored', 'T_streak', 'even', 'close')",0.4348245896363051,0.5651754103636949
+"('even', 'CT_favored', 'T_streak', 'even', 'moderate')",0.5199881551673082,0.4800118448326917
+"('even', 'CT_favored', 'T_streak', 'even', 'blowout')",0.571390798519302,0.4286092014806981
+"('even', 'CT_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('even', 'CT_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'CT_favored', 'T_streak', 'CT_performing', 'blowout')",0.1256931608133087,0.8743068391866914
+"('even', 'CT_favored', 'T_slight', 'T_performing', 'close')",0.4286469344608879,0.571353065539112
+"('even', 'CT_favored', 'T_slight', 'T_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('even', 'CT_favored', 'T_slight', 'T_performing', 'blowout')",0.6658476658476659,0.3341523341523341
+"('even', 'CT_favored', 'T_slight', 'even', 'close')",0.5185151321203255,0.4814848678796745
+"('even', 'CT_favored', 'T_slight', 'even', 'moderate')",0.46392303580972744,0.5360769641902726
+"('even', 'CT_favored', 'T_slight', 'even', 'blowout')",0.3974553740979871,0.602544625902013
+"('even', 'CT_favored', 'T_slight', 'CT_performing', 'close')",0.37523105360443626,0.6247689463955638
+"('even', 'CT_favored', 'T_slight', 'CT_performing', 'moderate')",0.40014792899408286,0.5998520710059172
+"('even', 'CT_favored', 'T_slight', 'CT_performing', 'blowout')",0.1581612777561356,0.8418387222438645
+"('even', 'CT_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('even', 'CT_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('even', 'CT_favored', 'CT_slight', 'T_performing', 'close')",0.5712777191129884,0.4287222808870117
+"('even', 'CT_favored', 'CT_slight', 'T_performing', 'moderate')",0.5,0.5
+"('even', 'CT_favored', 'CT_slight', 'T_performing', 'blowout')",0.999075785582255,0.0009242144177449167
+"('even', 'CT_favored', 'CT_slight', 'even', 'close')",0.5416580950421724,0.4583419049578276
+"('even', 'CT_favored', 'CT_slight', 'even', 'moderate')",0.6315533034496199,0.36844669655038004
+"('even', 'CT_favored', 'CT_slight', 'even', 'blowout')",0.5901420420055845,0.40985795799441543
+"('even', 'CT_favored', 'CT_slight', 'CT_performing', 'close')",0.7271197846567968,0.2728802153432032
+"('even', 'CT_favored', 'CT_slight', 'CT_performing', 'moderate')",0.9963235294117646,0.0036764705882352936
+"('even', 'CT_favored', 'CT_slight', 'CT_performing', 'blowout')",0.6152532726237906,0.3847467273762094
+"('even', 'CT_favored', 'CT_streak', 'T_performing', 'close')",0.9963235294117646,0.0036764705882352936
+"('even', 'CT_favored', 'CT_streak', 'T_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('even', 'CT_favored', 'CT_streak', 'T_performing', 'blowout')",0.9927007299270074,0.007299270072992702
+"('even', 'CT_favored', 'CT_streak', 'even', 'close')",0.36381977135171484,0.6361802286482852
+"('even', 'CT_favored', 'CT_streak', 'even', 'moderate')",0.8743068391866914,0.1256931608133087
+"('even', 'CT_favored', 'CT_streak', 'even', 'blowout')",0.5,0.5
+"('even', 'CT_favored', 'CT_streak', 'CT_performing', 'close')",0.5,0.5
+"('even', 'CT_favored', 'CT_streak', 'CT_performing', 'moderate')",0.580606639598758,0.419393360401242
+"('even', 'CT_favored', 'CT_streak', 'CT_performing', 'blowout')",0.787814183123878,0.2121858168761221
+"('CT_moderate', 'T_favored', 'T_streak', 'T_performing', 'close')",0.7490774907749077,0.25092250922509224
+"('CT_moderate', 'T_favored', 'T_streak', 'T_performing', 'moderate')",0.3751156336725254,0.6248843663274746
+"('CT_moderate', 'T_favored', 'T_streak', 'T_performing', 'blowout')",0.53330044400592,0.46669955599407986
+"('CT_moderate', 'T_favored', 'T_streak', 'even', 'close')",0.7490774907749077,0.25092250922509224
+"('CT_moderate', 'T_favored', 'T_streak', 'even', 'moderate')",0.37523105360443626,0.6247689463955638
+"('CT_moderate', 'T_favored', 'T_streak', 'even', 'blowout')",0.666392769104355,0.3336072308956451
+"('CT_moderate', 'T_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'T_streak', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'T_slight', 'T_performing', 'close')",0.27303295225285806,0.7269670477471418
+"('CT_moderate', 'T_favored', 'T_slight', 'T_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'T_favored', 'T_slight', 'T_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'T_favored', 'T_slight', 'even', 'close')",0.46669955599407986,0.53330044400592
+"('CT_moderate', 'T_favored', 'T_slight', 'even', 'moderate')",0.3847467273762094,0.6152532726237906
+"('CT_moderate', 'T_favored', 'T_slight', 'even', 'blowout')",0.3334703947368421,0.6665296052631579
+"('CT_moderate', 'T_favored', 'T_slight', 'CT_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'T_favored', 'T_slight', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'T_slight', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_slight', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_slight', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_slight', 'T_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_slight', 'even', 'close')",0.3479240424847119,0.652075957515288
+"('CT_moderate', 'T_favored', 'CT_slight', 'even', 'moderate')",0.3104416645391882,0.6895583354608119
+"('CT_moderate', 'T_favored', 'CT_slight', 'even', 'blowout')",0.652075957515288,0.3479240424847119
+"('CT_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'close')",0.5998520710059172,0.40014792899408286
+"('CT_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'T_favored', 'CT_slight', 'CT_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'T_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'T_favored', 'CT_streak', 'even', 'close')",0.9963235294117646,0.0036764705882352936
+"('CT_moderate', 'T_favored', 'CT_streak', 'even', 'moderate')",0.6658476658476659,0.3341523341523341
+"('CT_moderate', 'T_favored', 'CT_streak', 'even', 'blowout')",0.0036764705882352936,0.9963235294117646
+"('CT_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'close')",0.9927007299270074,0.007299270072992702
+"('CT_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'moderate')",0.5453934095494284,0.4546065904505716
+"('CT_moderate', 'T_favored', 'CT_streak', 'CT_performing', 'blowout')",0.4445357436318817,0.5554642563681184
+"('CT_moderate', 'balanced', 'T_streak', 'T_performing', 'close')",0.2500841467519354,0.7499158532480646
+"('CT_moderate', 'balanced', 'T_streak', 'T_performing', 'moderate')",0.5044241987284526,0.4955758012715475
+"('CT_moderate', 'balanced', 'T_streak', 'T_performing', 'blowout')",0.30437302762929086,0.695626972370709
+"('CT_moderate', 'balanced', 'T_streak', 'even', 'close')",0.41670094611271086,0.5832990538872892
+"('CT_moderate', 'balanced', 'T_streak', 'even', 'moderate')",0.35167249938959877,0.6483275006104012
+"('CT_moderate', 'balanced', 'T_streak', 'even', 'blowout')",0.47457946271654533,0.5254205372834547
+"('CT_moderate', 'balanced', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'balanced', 'T_streak', 'CT_performing', 'moderate')",0.0036764705882352936,0.9963235294117646
+"('CT_moderate', 'balanced', 'T_streak', 'CT_performing', 'blowout')",0.4167694204685573,0.5832305795314426
+"('CT_moderate', 'balanced', 'T_slight', 'T_performing', 'close')",0.571353065539112,0.4286469344608879
+"('CT_moderate', 'balanced', 'T_slight', 'T_performing', 'moderate')",0.666256157635468,0.3337438423645321
+"('CT_moderate', 'balanced', 'T_slight', 'T_performing', 'blowout')",0.3685235683677444,0.6314764316322555
+"('CT_moderate', 'balanced', 'T_slight', 'even', 'close')",0.503758979785042,0.496241020214958
+"('CT_moderate', 'balanced', 'T_slight', 'even', 'moderate')",0.48743812111512264,0.5125618788848774
+"('CT_moderate', 'balanced', 'T_slight', 'even', 'blowout')",0.3974958936374624,0.6025041063625376
+"('CT_moderate', 'balanced', 'T_slight', 'CT_performing', 'close')",0.42427641911599734,0.5757235808840027
+"('CT_moderate', 'balanced', 'T_slight', 'CT_performing', 'moderate')",0.3750578435909302,0.6249421564090699
+"('CT_moderate', 'balanced', 'T_slight', 'CT_performing', 'blowout')",0.09770633917283728,0.9022936608271628
+"('CT_moderate', 'balanced', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'balanced', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'balanced', 'CT_slight', 'T_performing', 'close')",0.7138331573389651,0.28616684266103487
+"('CT_moderate', 'balanced', 'CT_slight', 'T_performing', 'moderate')",0.666392769104355,0.3336072308956451
+"('CT_moderate', 'balanced', 'CT_slight', 'T_performing', 'blowout')",0.8123553910226747,0.18764460897732532
+"('CT_moderate', 'balanced', 'CT_slight', 'even', 'close')",0.4502656377244348,0.5497343622755652
+"('CT_moderate', 'balanced', 'CT_slight', 'even', 'moderate')",0.5603078075914344,0.4396921924085656
+"('CT_moderate', 'balanced', 'CT_slight', 'even', 'blowout')",0.6468320621196685,0.3531679378803315
+"('CT_moderate', 'balanced', 'CT_slight', 'CT_performing', 'close')",0.5072448212944081,0.49275517870559193
+"('CT_moderate', 'balanced', 'CT_slight', 'CT_performing', 'moderate')",0.9994308480364257,0.0005691519635742744
+"('CT_moderate', 'balanced', 'CT_slight', 'CT_performing', 'blowout')",0.7186487737158723,0.28135122628412773
+"('CT_moderate', 'balanced', 'CT_streak', 'T_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'balanced', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'balanced', 'CT_streak', 'T_performing', 'blowout')",0.3341523341523341,0.6658476658476659
+"('CT_moderate', 'balanced', 'CT_streak', 'even', 'close')",0.6498889711324944,0.3501110288675055
+"('CT_moderate', 'balanced', 'CT_streak', 'even', 'moderate')",0.6665022200296004,0.33349777997039953
+"('CT_moderate', 'balanced', 'CT_streak', 'even', 'blowout')",0.626837625732287,0.37316237426771304
+"('CT_moderate', 'balanced', 'CT_streak', 'CT_performing', 'close')",0.6723697650663942,0.3276302349336057
+"('CT_moderate', 'balanced', 'CT_streak', 'CT_performing', 'moderate')",0.6713109234992489,0.32868907650075097
+"('CT_moderate', 'balanced', 'CT_streak', 'CT_performing', 'blowout')",0.6807386027749766,0.3192613972250235
+"('CT_moderate', 'CT_favored', 'T_streak', 'T_performing', 'close')",0.3334703947368421,0.6665296052631579
+"('CT_moderate', 'CT_favored', 'T_streak', 'T_performing', 'moderate')",0.5384527742964567,0.46154722570354334
+"('CT_moderate', 'CT_favored', 'T_streak', 'T_performing', 'blowout')",0.23921442369607215,0.7607855763039278
+"('CT_moderate', 'CT_favored', 'T_streak', 'even', 'close')",0.4167694204685573,0.5832305795314426
+"('CT_moderate', 'CT_favored', 'T_streak', 'even', 'moderate')",0.4348245896363051,0.5651754103636949
+"('CT_moderate', 'CT_favored', 'T_streak', 'even', 'blowout')",0.5713782164258019,0.4286217835741981
+"('CT_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('CT_moderate', 'CT_favored', 'T_streak', 'CT_performing', 'blowout')",0.09145931405514457,0.9085406859448554
+"('CT_moderate', 'CT_favored', 'T_slight', 'T_performing', 'close')",0.4287222808870117,0.5712777191129884
+"('CT_moderate', 'CT_favored', 'T_slight', 'T_performing', 'moderate')",0.0036764705882352936,0.9963235294117646
+"('CT_moderate', 'CT_favored', 'T_slight', 'T_performing', 'blowout')",0.0012315270935960593,0.998768472906404
+"('CT_moderate', 'CT_favored', 'T_slight', 'even', 'close')",0.39438823406696566,0.6056117659330343
+"('CT_moderate', 'CT_favored', 'T_slight', 'even', 'moderate')",0.5555441267228965,0.44445587327710345
+"('CT_moderate', 'CT_favored', 'T_slight', 'even', 'blowout')",0.4923094451407087,0.5076905548592914
+"('CT_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'close')",0.5262952863264511,0.4737047136735489
+"('CT_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'moderate')",0.28616684266103487,0.7138331573389651
+"('CT_moderate', 'CT_favored', 'T_slight', 'CT_performing', 'blowout')",0.4091520861372813,0.5908479138627187
+"('CT_moderate', 'CT_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'close')",0.9981549815498155,0.0018450184501845022
+"('CT_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'moderate')",0.9975429975429975,0.002457002457002457
+"('CT_moderate', 'CT_favored', 'CT_slight', 'T_performing', 'blowout')",0.9981549815498155,0.0018450184501845022
+"('CT_moderate', 'CT_favored', 'CT_slight', 'even', 'close')",0.5522272576544711,0.4477727423455289
+"('CT_moderate', 'CT_favored', 'CT_slight', 'even', 'moderate')",0.5975433526011561,0.4024566473988439
+"('CT_moderate', 'CT_favored', 'CT_slight', 'even', 'blowout')",0.605242642759696,0.39475735724030403
+"('CT_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'close')",0.47500925583117365,0.5249907441688264
+"('CT_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'moderate')",0.7490774907749077,0.25092250922509224
+"('CT_moderate', 'CT_favored', 'CT_slight', 'CT_performing', 'blowout')",0.998522895125554,0.001477104874446086
+"('CT_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('CT_moderate', 'CT_favored', 'CT_streak', 'T_performing', 'blowout')",0.9927007299270074,0.007299270072992702
+"('CT_moderate', 'CT_favored', 'CT_streak', 'even', 'close')",0.3335388409371146,0.6664611590628853
+"('CT_moderate', 'CT_favored', 'CT_streak', 'even', 'moderate')",0.8325123152709359,0.16748768472906403
+"('CT_moderate', 'CT_favored', 'CT_streak', 'even', 'blowout')",0.5651754103636949,0.4348245896363051
+"('CT_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'close')",0.5861628797549144,0.41383712024508557
+"('CT_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'moderate')",0.626837625732287,0.37316237426771304
+"('CT_moderate', 'CT_favored', 'CT_streak', 'CT_performing', 'blowout')",0.7425386815281954,0.2574613184718046
+"('CT_strong', 'T_favored', 'T_streak', 'T_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'T_favored', 'T_streak', 'T_performing', 'moderate')",0.40029542097488924,0.5997045790251108
+"('CT_strong', 'T_favored', 'T_streak', 'T_performing', 'blowout')",0.2226787181594084,0.7773212818405917
+"('CT_strong', 'T_favored', 'T_streak', 'even', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_streak', 'even', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_streak', 'even', 'blowout')",0.3336072308956451,0.666392769104355
+"('CT_strong', 'T_favored', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_streak', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_streak', 'CT_performing', 'blowout')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'T_favored', 'T_slight', 'T_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'T_favored', 'T_slight', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_slight', 'T_performing', 'blowout')",0.0036764705882352936,0.9963235294117646
+"('CT_strong', 'T_favored', 'T_slight', 'even', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_slight', 'even', 'moderate')",0.6469307792773182,0.3530692207226817
+"('CT_strong', 'T_favored', 'T_slight', 'even', 'blowout')",0.4546065904505716,0.5453934095494284
+"('CT_strong', 'T_favored', 'T_slight', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'T_slight', 'CT_performing', 'moderate')",0.6658476658476659,0.3341523341523341
+"('CT_strong', 'T_favored', 'T_slight', 'CT_performing', 'blowout')",0.25092250922509224,0.7490774907749077
+"('CT_strong', 'T_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'T_favored', 'CT_slight', 'T_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'T_favored', 'CT_slight', 'T_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('CT_strong', 'T_favored', 'CT_slight', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'T_favored', 'CT_slight', 'even', 'close')",0.6391540047339085,0.36084599526609146
+"('CT_strong', 'T_favored', 'CT_slight', 'even', 'moderate')",0.6521494123329576,0.34785058766704235
+"('CT_strong', 'T_favored', 'CT_slight', 'even', 'blowout')",0.7290959580376427,0.27090404196235734
+"('CT_strong', 'T_favored', 'CT_slight', 'CT_performing', 'close')",0.5788858589793533,0.42111414102064665
+"('CT_strong', 'T_favored', 'CT_slight', 'CT_performing', 'moderate')",0.7773212818405917,0.2226787181594084
+"('CT_strong', 'T_favored', 'CT_slight', 'CT_performing', 'blowout')",0.3341523341523341,0.6658476658476659
+"('CT_strong', 'T_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'T_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'T_favored', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'T_favored', 'CT_streak', 'even', 'close')",0.37523105360443626,0.6247689463955638
+"('CT_strong', 'T_favored', 'CT_streak', 'even', 'moderate')",0.5999013320177602,0.4000986679822397
+"('CT_strong', 'T_favored', 'CT_streak', 'even', 'blowout')",0.6997041420118343,0.3002958579881657
+"('CT_strong', 'T_favored', 'CT_streak', 'CT_performing', 'close')",0.5217321313586607,0.47826786864133936
+"('CT_strong', 'T_favored', 'CT_streak', 'CT_performing', 'moderate')",0.5624855357556121,0.4375144642443879
+"('CT_strong', 'T_favored', 'CT_streak', 'CT_performing', 'blowout')",0.7958289254949373,0.20417107450506275
+"('CT_strong', 'balanced', 'T_streak', 'T_performing', 'close')",0.19069439548819175,0.8093056045118083
+"('CT_strong', 'balanced', 'T_streak', 'T_performing', 'moderate')",0.3859945433285696,0.6140054566714305
+"('CT_strong', 'balanced', 'T_streak', 'T_performing', 'blowout')",0.18273750178037312,0.8172624982196268
+"('CT_strong', 'balanced', 'T_streak', 'even', 'close')",0.25023126734505086,0.7497687326549491
+"('CT_strong', 'balanced', 'T_streak', 'even', 'moderate')",0.2188801480795928,0.7811198519204072
+"('CT_strong', 'balanced', 'T_streak', 'even', 'blowout')",0.3541891683382194,0.6458108316617805
+"('CT_strong', 'balanced', 'T_streak', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'T_streak', 'CT_performing', 'moderate')",0.9927007299270074,0.007299270072992702
+"('CT_strong', 'balanced', 'T_streak', 'CT_performing', 'blowout')",0.7141723955579059,0.28582760444209415
+"('CT_strong', 'balanced', 'T_slight', 'T_performing', 'close')",0.18224613315400134,0.8177538668459986
+"('CT_strong', 'balanced', 'T_slight', 'T_performing', 'moderate')",0.571353065539112,0.4286469344608879
+"('CT_strong', 'balanced', 'T_slight', 'T_performing', 'blowout')",0.23084591284534323,0.7691540871546568
+"('CT_strong', 'balanced', 'T_slight', 'even', 'close')",0.5204050785973398,0.4795949214026602
+"('CT_strong', 'balanced', 'T_slight', 'even', 'moderate')",0.4598583554089852,0.5401416445910148
+"('CT_strong', 'balanced', 'T_slight', 'even', 'blowout')",0.48684274645485115,0.5131572535451489
+"('CT_strong', 'balanced', 'T_slight', 'CT_performing', 'close')",0.5714117785353239,0.4285882214646761
+"('CT_strong', 'balanced', 'T_slight', 'CT_performing', 'moderate')",0.40002692877339435,0.5999730712266056
+"('CT_strong', 'balanced', 'T_slight', 'CT_performing', 'blowout')",0.3951738143590968,0.6048261856409031
+"('CT_strong', 'balanced', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'balanced', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'balanced', 'CT_slight', 'T_performing', 'close')",0.5554642563681184,0.4445357436318817
+"('CT_strong', 'balanced', 'CT_slight', 'T_performing', 'moderate')",0.8325123152709359,0.16748768472906403
+"('CT_strong', 'balanced', 'CT_slight', 'T_performing', 'blowout')",0.9720279720279721,0.027972027972027972
+"('CT_strong', 'balanced', 'CT_slight', 'even', 'close')",0.7137729607994933,0.28622703920050674
+"('CT_strong', 'balanced', 'CT_slight', 'even', 'moderate')",0.6991717710262306,0.3008282289737694
+"('CT_strong', 'balanced', 'CT_slight', 'even', 'blowout')",0.7114639197153931,0.2885360802846068
+"('CT_strong', 'balanced', 'CT_slight', 'CT_performing', 'close')",0.7427009923773911,0.25729900762260893
+"('CT_strong', 'balanced', 'CT_slight', 'CT_performing', 'moderate')",0.784446430851743,0.2155535691482569
+"('CT_strong', 'balanced', 'CT_slight', 'CT_performing', 'blowout')",0.9105196603841753,0.08948033961582465
+"('CT_strong', 'balanced', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'CT_streak', 'T_performing', 'moderate')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'balanced', 'CT_streak', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'balanced', 'CT_streak', 'even', 'close')",0.5,0.5
+"('CT_strong', 'balanced', 'CT_streak', 'even', 'moderate')",0.6022555125399764,0.39774448746002355
+"('CT_strong', 'balanced', 'CT_streak', 'even', 'blowout')",0.6455559722482656,0.35444402775173445
+"('CT_strong', 'balanced', 'CT_streak', 'CT_performing', 'close')",0.6785658709657341,0.321434129034266
+"('CT_strong', 'balanced', 'CT_streak', 'CT_performing', 'moderate')",0.6982059637024969,0.3017940362975031
+"('CT_strong', 'balanced', 'CT_streak', 'CT_performing', 'blowout')",0.770253571252039,0.22974642874796106
+"('CT_strong', 'CT_favored', 'T_streak', 'T_performing', 'close')",0.0010559662090813095,0.9989440337909188
+"('CT_strong', 'CT_favored', 'T_streak', 'T_performing', 'moderate')",0.3479240424847119,0.652075957515288
+"('CT_strong', 'CT_favored', 'T_streak', 'T_performing', 'blowout')",0.1054169914263445,0.8945830085736555
+"('CT_strong', 'CT_favored', 'T_streak', 'even', 'close')",0.16748768472906403,0.8325123152709359
+"('CT_strong', 'CT_favored', 'T_streak', 'even', 'moderate')",0.5624421831637373,0.43755781683626266
+"('CT_strong', 'CT_favored', 'T_streak', 'even', 'blowout')",0.3871507045617388,0.6128492954382613
+"('CT_strong', 'CT_favored', 'T_streak', 'CT_performing', 'close')",0.007299270072992702,0.9927007299270074
+"('CT_strong', 'CT_favored', 'T_streak', 'CT_performing', 'moderate')",0.3341523341523341,0.6658476658476659
+"('CT_strong', 'CT_favored', 'T_streak', 'CT_performing', 'blowout')",0.9085406859448554,0.09145931405514457
+"('CT_strong', 'CT_favored', 'T_slight', 'T_performing', 'close')",0.25092250922509224,0.7490774907749077
+"('CT_strong', 'CT_favored', 'T_slight', 'T_performing', 'moderate')",0.7490774907749077,0.25092250922509224
+"('CT_strong', 'CT_favored', 'T_slight', 'T_performing', 'blowout')",0.31267345050878814,0.6873265494912119
+"('CT_strong', 'CT_favored', 'T_slight', 'even', 'close')",0.6340978869423876,0.36590211305761244
+"('CT_strong', 'CT_favored', 'T_slight', 'even', 'moderate')",0.61535175163771,0.38464824836228995
+"('CT_strong', 'CT_favored', 'T_slight', 'even', 'blowout')",0.4554520789029845,0.5445479210970154
+"('CT_strong', 'CT_favored', 'T_slight', 'CT_performing', 'close')",0.464304600740349,0.5356953992596509
+"('CT_strong', 'CT_favored', 'T_slight', 'CT_performing', 'moderate')",0.4762072611913994,0.5237927388086007
+"('CT_strong', 'CT_favored', 'T_slight', 'CT_performing', 'blowout')",0.39625541427972616,0.6037445857202739
+"('CT_strong', 'CT_favored', 'neutral', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'T_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'even', 'close')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'even', 'moderate')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'even', 'blowout')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'CT_performing', 'close')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'CT_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'CT_favored', 'neutral', 'CT_performing', 'blowout')",0.5,0.5
+"('CT_strong', 'CT_favored', 'CT_slight', 'T_performing', 'close')",0.9991783073130649,0.0008216926869350862
+"('CT_strong', 'CT_favored', 'CT_slight', 'T_performing', 'moderate')",0.6658476658476659,0.3341523341523341
+"('CT_strong', 'CT_favored', 'CT_slight', 'T_performing', 'blowout')",0.999075785582255,0.0009242144177449167
+"('CT_strong', 'CT_favored', 'CT_slight', 'even', 'close')",0.6997163670496052,0.30028363295039484
+"('CT_strong', 'CT_favored', 'CT_slight', 'even', 'moderate')",0.6946021467222567,0.30539785327774327
+"('CT_strong', 'CT_favored', 'CT_slight', 'even', 'blowout')",0.7155413635316193,0.2844586364683807
+"('CT_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'close')",0.852213432082141,0.14778656791785894
+"('CT_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'moderate')",0.8156664068589244,0.1843335931410756
+"('CT_strong', 'CT_favored', 'CT_slight', 'CT_performing', 'blowout')",0.9453345900094251,0.05466540999057493
+"('CT_strong', 'CT_favored', 'CT_streak', 'T_performing', 'close')",0.5,0.5
+"('CT_strong', 'CT_favored', 'CT_streak', 'T_performing', 'moderate')",0.5,0.5
+"('CT_strong', 'CT_favored', 'CT_streak', 'T_performing', 'blowout')",0.998768472906404,0.0012315270935960593
+"('CT_strong', 'CT_favored', 'CT_streak', 'even', 'close')",0.6362718707940781,0.36372812920592196
+"('CT_strong', 'CT_favored', 'CT_streak', 'even', 'moderate')",0.6409720903740269,0.3590279096259731
+"('CT_strong', 'CT_favored', 'CT_streak', 'even', 'blowout')",0.6211849192100538,0.37881508078994613
+"('CT_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'close')",0.7142682728308644,0.2857317271691356
+"('CT_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'moderate')",0.7207109015281269,0.2792890984718731
+"('CT_strong', 'CT_favored', 'CT_streak', 'CT_performing', 'blowout')",0.7595113334421898,0.2404886665578102
