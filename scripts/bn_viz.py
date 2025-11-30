@@ -12,8 +12,8 @@ import pandas as pd
 import seaborn as sns
 
 # Configuration
-BN_DIR = Path("clean_dataset/bn_analysis")
-OUTPUT_DIR = Path("clean_dataset/bn_analysis")
+BN_DIR = Path("bn_analysis")
+OUTPUT_DIR = Path("bn_analysis")
 
 # Plot style
 plt.style.use('seaborn-v0_8-darkgrid')

@@ -1,5 +1,5 @@
 """
-Temporal Round Prediction Model
+LightGBM Temporal Round Prediction Model
 """
 
 from __future__ import annotations
@@ -18,7 +18,7 @@ from sklearn.model_selection import GroupKFold
 
 # Constants
 DATA_DIR = Path("clean_dataset")
-OUTPUT_DIR = Path("clean_dataset")
+OUTPUT_DIR = Path("lgb_analysis")
 REGULATION_HALF_ROUNDS = 12
 REGULATION_TOTAL_ROUNDS = 24
 OVERTIME_HALF_ROUNDS = 3
@@ -352,7 +352,7 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
     # Save model and artifacts
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    model_path = OUTPUT_DIR / "round_prediction_model.txt"
+    model_path = OUTPUT_DIR / "lgb_model.txt"
     final_model.save_model(str(model_path))
     
     joblib.dump(
@@ -361,11 +361,11 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
             "feature_columns": feature_cols,
             "min_round": min_round,
         },
-        OUTPUT_DIR / "model_artifacts.pkl",
+        OUTPUT_DIR / "lgb_model.pkl",
     )
     
-    importance_df.to_csv(OUTPUT_DIR / "feature_importance.csv", index=False)
-    cv_scores_df.to_csv(OUTPUT_DIR / "cv_scores.csv", index=False)
+    importance_df.to_csv(OUTPUT_DIR / "lgb_feature_importance.csv", index=False)
+    cv_scores_df.to_csv(OUTPUT_DIR / "lgb_cv_scores.csv", index=False)
     
     metrics = {
         "cv_mean": cv_scores_df.mean().to_dict(),
@@ -374,7 +374,7 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
         "best_iteration": avg_best_iter,
     }
     
-    with open(OUTPUT_DIR / "model_metrics.json", "w") as f:
+    with open(OUTPUT_DIR / "lgb_metrics.json", "w") as f:
         json.dump(metrics, f, indent=2)
     
     return {
@@ -429,7 +429,7 @@ def main():
     """Main execution."""
     
     print("=" * 80)
-    print("TEMPORAL ROUND PREDICTION MODEL")
+    print("LGB ROUND PREDICTION MODEL")
     print("=" * 80)
     
     # Load data
@@ -449,11 +449,11 @@ def main():
     print(f"\n{'='*60}")
     print("SAVED FILES")
     print(f"{'='*60}")
-    print("  round_prediction_model.txt")
-    print("  model_artifacts.pkl")
-    print("  feature_importance.csv")
-    print("  cv_scores.csv")
-    print("  model_metrics.json")
+    print("  lgb_model.txt")
+    print("  lgb_model.pkl")
+    print("  lgb_feature_importance.csv")
+    print("  lgb_cv_scores.csv")
+    print("  lgb_metrics.json")
     
     print(f"\n{'='*60}")
     print("MODEL COMPLETE")

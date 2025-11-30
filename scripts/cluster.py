@@ -125,7 +125,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("clean_dataset"),
+        default=Path("cluster_eval"),
         help="Directory to save clustering outputs.",
     )
     parser.add_argument(

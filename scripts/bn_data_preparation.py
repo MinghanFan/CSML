@@ -17,7 +17,7 @@ from sklearn.metrics import mutual_info_score
 
 # Configuration
 DATA_DIR = Path("clean_dataset")
-OUTPUT_DIR = Path("clean_dataset/bn_analysis")
+OUTPUT_DIR = Path("bn_analysis")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 # CS2 Domain Knowledge Constants

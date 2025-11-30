@@ -119,7 +119,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-dir",
         type=Path,
-        default=Path("clean_dataset/cluster_eval"),
+        default=Path("cluster_eval"),
         help="Directory to store evaluation artifacts.",
     )
     parser.add_argument(

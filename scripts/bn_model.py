@@ -19,8 +19,8 @@ from sklearn.model_selection import GroupKFold
 import logging
 logging.getLogger("pgmpy").setLevel(logging.WARNING)
 
-DATA_DIR = Path("clean_dataset/bn_analysis")
-OUTPUT_DIR = Path("clean_dataset/bn_analysis")
+DATA_DIR = Path("bn_analysis")
+OUTPUT_DIR = Path("bn_analysis")
 CPD_DIR = OUTPUT_DIR / "bn_cpd_tables"
 CPD_DIR.mkdir(parents=True, exist_ok=True)
 
