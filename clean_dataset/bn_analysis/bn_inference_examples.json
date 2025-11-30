@@ -9,8 +9,8 @@
       "round_phase": "second_half",
       "buy_phase": "semi_situation"
     },
-    "ct_win_prob": 0.770253571252039,
-    "t_win_prob": 0.22974642874796103,
+    "ct_win_prob": 0.7269137039213232,
+    "t_win_prob": 0.27308629607867685,
     "prediction": "CT_win",
     "support": 271
   },
@@ -24,8 +24,8 @@
       "round_phase": "first_half",
       "buy_phase": "both_full"
     },
-    "ct_win_prob": 0.6982059637024969,
-    "t_win_prob": 0.3017940362975031,
+    "ct_win_prob": 0.7269137039213232,
+    "t_win_prob": 0.27308629607867685,
     "prediction": "CT_win",
     "support": 260
   },
@@ -39,8 +39,8 @@
       "round_phase": "first_half",
       "buy_phase": "semi_situation"
     },
-    "ct_win_prob": 0.7137729607994933,
-    "t_win_prob": 0.28622703920050674,
+    "ct_win_prob": 0.708172343936008,
+    "t_win_prob": 0.29182765606399197,
     "prediction": "CT_win",
     "support": 256
   },
@@ -54,8 +54,8 @@
       "round_phase": "second_half",
       "buy_phase": "both_full"
     },
-    "ct_win_prob": 0.770253571252039,
-    "t_win_prob": 0.22974642874796103,
+    "ct_win_prob": 0.7269137039213232,
+    "t_win_prob": 0.27308629607867685,
     "prediction": "CT_win",
     "support": 247
   },
@@ -69,8 +69,8 @@
       "round_phase": "first_half",
       "buy_phase": "semi_situation"
     },
-    "ct_win_prob": 0.6982059637024969,
-    "t_win_prob": 0.3017940362975031,
+    "ct_win_prob": 0.7269137039213232,
+    "t_win_prob": 0.27308629607867685,
     "prediction": "CT_win",
     "support": 242
   },
@@ -84,8 +84,8 @@
       "round_phase": "overtime",
       "buy_phase": "both_full"
     },
-    "ct_win_prob": 0.4146444270488348,
-    "t_win_prob": 0.5853555729511652,
+    "ct_win_prob": 0.3727146019512995,
+    "t_win_prob": 0.6272853980487005,
     "prediction": "T_win",
     "support": 1
   },
@@ -99,8 +99,8 @@
       "round_phase": "second_half",
       "buy_phase": "both_eco"
     },
-    "ct_win_prob": 0.3336072308956451,
-    "t_win_prob": 0.666392769104355,
+    "ct_win_prob": 0.3462852263023057,
+    "t_win_prob": 0.6537147736976943,
     "prediction": "T_win",
     "support": 1
   },
@@ -114,9 +114,9 @@
       "round_phase": "second_half",
       "buy_phase": "both_full"
     },
-    "ct_win_prob": 0.6658476658476659,
-    "t_win_prob": 0.33415233415233414,
-    "prediction": "CT_win",
+    "ct_win_prob": 0.45472837022132795,
+    "t_win_prob": 0.545271629778672,
+    "prediction": "T_win",
     "support": 1
   }
 }

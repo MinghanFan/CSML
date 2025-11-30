@@ -1,11 +1,5 @@
 """
 Bayesian Network Model Training
-- Uses Session 1 recommended structure and discretized data
-- Features: equip_advantage, momentum, recent_performance, map_side_bias,
-            round_phase, buy_phase, score_pressure
-- Target: outcome (CT_win/T_win)
-
-Run: python scripts/bn_model.py
 """
 from __future__ import annotations
 
@@ -22,13 +16,16 @@ from pgmpy.models import DiscreteBayesianNetwork
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import GroupKFold
 
+import logging
+logging.getLogger("pgmpy").setLevel(logging.WARNING)
+
 DATA_DIR = Path("clean_dataset/bn_analysis")
 OUTPUT_DIR = Path("clean_dataset/bn_analysis")
 CPD_DIR = OUTPUT_DIR / "bn_cpd_tables"
 CPD_DIR.mkdir(parents=True, exist_ok=True)
 
 N_FOLDS = 5
-RANDOM_STATE = 42
+RANDOM_STATE = 13
 
 STATE_NAMES = {
     'equip_advantage': ['T_strong', 'T_moderate', 'even', 'CT_moderate', 'CT_strong'],
@@ -72,11 +69,13 @@ def prepare_data(df: pd.DataFrame) -> Tuple[pd.DataFrame, List[str]]:
 
 def build_structure() -> DiscreteBayesianNetwork:
     edges = [
+        # Primary predictors → outcome
         ('equip_advantage', 'outcome'),
         ('momentum', 'outcome'),
         ('recent_performance', 'outcome'),
         ('map_side_bias', 'outcome'),
-        ('score_pressure', 'outcome'),
+        
+        # Supporting structure
         ('recent_performance', 'momentum'),
         ('score_pressure', 'momentum'),
         ('round_phase', 'buy_phase'),

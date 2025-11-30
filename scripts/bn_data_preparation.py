@@ -1,13 +1,5 @@
 """
-Bayesian Network Data Preparation - Session 1
-==============================================
-
-This script prepares features for Bayesian Network round prediction by:
-1. Loading and merging round-level data
-2. Engineering features with domain knowledge (pistol, eco, force buy detection)
-3. Analyzing feature distributions for optimal discretization
-4. Testing conditional independence to validate BN structure
-5. Generating visualizations and recommendations
+Bayesian Network Data Preparation
 """
 
 from __future__ import annotations
@@ -28,8 +20,8 @@ DATA_DIR = Path("clean_dataset")
 OUTPUT_DIR = Path("clean_dataset/bn_analysis")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-# CS:GO Domain Knowledge Constants
-PISTOL_ROUNDS = [1, 13, 25]  # First round of each half + overtime
+# CS2 Domain Knowledge Constants
+PISTOL_ROUNDS = [1, 13]
 REGULATION_HALF_ROUNDS = 12
 REGULATION_TOTAL_ROUNDS = 24
 
@@ -43,9 +35,6 @@ SEMI_BUY_THRESHOLD = 20000  # 10000-20000 = semi-buy
 def load_and_prepare_data() -> pd.DataFrame:
     """
     Load rounds and round_players data, merge, and engineer basic features.
-    
-    Returns:
-        DataFrame with round-level features ready for analysis
     """
     print("="*80)
     print("LOADING DATA")
@@ -56,8 +45,8 @@ def load_and_prepare_data() -> pd.DataFrame:
     round_players = pd.read_csv(DATA_DIR / "round_players.csv")
     matches = pd.read_csv(DATA_DIR / "matches.csv")
     
-    print(f"✓ Loaded {len(rounds):,} rounds from {rounds['match_id'].nunique()} matches")
-    print(f"✓ Loaded {len(round_players):,} player-round records")
+    print(f"Loaded {len(rounds):,} rounds from {rounds['match_id'].nunique()} matches")
+    print(f"Loaded {len(round_players):,} player-round records")
     
     # Aggregate player stats by team
     round_players['survived'] = (
@@ -94,14 +83,14 @@ def load_and_prepare_data() -> pd.DataFrame:
     # Sort by match and round
     df = df.sort_values(['match_id', 'round_num']).reset_index(drop=True)
     
-    print(f"✓ Created dataset with {len(df):,} rounds and {len(df.columns)} columns")
+    print(f"Created dataset with {len(df):,} rounds and {len(df.columns)} columns")
     
     return df
 
 
 def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Engineer features with CS:GO domain knowledge.
+    Engineer features with CS2 domain knowledge.
     
     Key features:
     - Round type detection (pistol, eco, force buy, full buy)
@@ -179,13 +168,11 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     # represent the STARTING equipment (measured at freeze time end).
     # This is BEFORE the round outcome, so it's a valid predictor.
     # 
-    # In CS:GO, at the start of each round (freeze time):
+    # In CS2, at the start of each round (freeze time):
     # - Players buy weapons/utility
     # - Freeze time ends (round officially starts)  
     # - Equipment values are recorded ← THIS is what we have
     # - Round plays out → outcome
-    # 
-    # Therefore: equipment_value → outcome (causal, no leakage)
     
     df['ct_equipment'] = df['ct_equipment_value'].fillna(0)
     df['t_equipment'] = df['t_equipment_value'].fillna(0)
@@ -252,7 +239,7 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     df[numeric_cols] = df[numeric_cols].fillna(0.0)
     
-    print(f"✓ Engineered {len(df.columns)} total features")
+    print(f"Engineered {len(df.columns)} total features")
     print(f"\nRound type distribution (previous round):")
     print(df['buy_situation'].value_counts().head(10))
     
@@ -265,9 +252,6 @@ def engineer_features(df: pd.DataFrame) -> pd.DataFrame:
 def analyze_feature_distributions(df: pd.DataFrame) -> Dict[str, Dict]:
     """
     Analyze continuous feature distributions to determine optimal discretization bins.
-    
-    Returns:
-        Dictionary mapping feature names to bin recommendations
     """
     print("\n" + "="*80)
     print("ANALYZING FEATURE DISTRIBUTIONS")
@@ -323,13 +307,12 @@ def analyze_feature_distributions(df: pd.DataFrame) -> Dict[str, Dict]:
             'percentiles': dict(zip(percentiles, bin_edges.tolist())),
             'correlation_with_target': corr,
             'mean': float(data.mean()),
-            'std': float(data.std()),
-            'recommended_bins': bin_edges.tolist()
+            'std': float(data.std())
         }
     
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / 'feature_distributions.png', dpi=200, bbox_inches='tight')
-    print(f"✓ Saved feature_distributions.png")
+    print(f"Saved feature_distributions.png")
     
     # Print recommendations
     print("\nDiscretization Recommendations:")
@@ -422,7 +405,7 @@ def create_discretized_features(
         elif 'semi' in situation:
             return 'semi_situation'
         
-        # Mixed/other
+        # other
         else:
             return np.nan
     
@@ -543,7 +526,7 @@ def test_conditional_independence(df_disc: pd.DataFrame) -> pd.DataFrame:
                 fontsize=14, fontweight='bold')
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / 'feature_dependencies.png', dpi=200, bbox_inches='tight')
-    print(f"✓ Saved feature_dependencies.png")
+    print(f"Saved feature_dependencies.png")
     
     # Test 3: Conditional independence tests
     print("\n3. Conditional Independence Tests:")
@@ -605,83 +588,9 @@ def test_conditional_independence(df_disc: pd.DataFrame) -> pd.DataFrame:
     # Save association results
     associations_df = pd.DataFrame(associations).sort_values('cramers_v', ascending=False)
     associations_df.to_csv(OUTPUT_DIR / 'feature_associations.csv', index=False)
-    print(f"\n✓ Saved feature_associations.csv")
+    print(f"\nSaved feature_associations.csv")
     
     return associations_df
-
-
-def recommend_bn_structure(associations_df: pd.DataFrame) -> Dict:
-    """
-    Recommend Bayesian Network structure based on independence tests.
-    """
-    print("\n" + "="*80)
-    print("BAYESIAN NETWORK STRUCTURE RECOMMENDATIONS")
-    print("="*80)
-    
-    # Sort features by strength of association with outcome
-    top_features = associations_df.nlargest(6, 'cramers_v')
-    
-    print("\nMost Predictive Features (by Cramér's V):")
-    print("-" * 80)
-    for _, row in top_features.iterrows():
-        print(f"{row['feature']:25s}: {row['cramers_v']:.3f}")
-    
-    # Recommended structure
-    recommendation = {
-        "complexity": "complex",
-        "nodes": [
-            "equip_advantage",
-            "momentum", 
-            "map_side_bias",
-            "round_phase",
-            "buy_phase",
-            "score_pressure",
-            "outcome"
-        ],
-        "edges": [
-            # Direct causes of outcome
-            ("equip_advantage", "outcome"),
-            ("momentum", "outcome"),
-            ("map_side_bias", "outcome"),
-            
-            # Round phase affects economy
-            ("round_phase", "buy_phase"),
-            
-            # Buy phase affects equipment
-            ("buy_phase", "equip_advantage"),
-            
-            # Score affects momentum and pressure
-            ("score_pressure", "momentum"),
-        ],
-        "reasoning": {
-            "equip_advantage → outcome": "Equipment directly determines tactical options and firepower",
-            "momentum → outcome": "Psychological factors and team confidence affect performance",
-            "map_side_bias → outcome": "Maps have inherent CT/T balance",
-            "round_phase → buy_phase": "Different halves have different economy cycles",
-            "buy_phase → equip_advantage": "Buy decisions determine equipment values",
-            "score_pressure → momentum": "Score differential affects team psychology",
-        }
-    }
-    
-    print("\nRecommended BN Structure:")
-    print("-" * 80)
-    print(f"Complexity: {recommendation['complexity'].upper()}")
-    print(f"Nodes ({len(recommendation['nodes'])}): {', '.join(recommendation['nodes'])}")
-    print(f"\nEdges ({len(recommendation['edges'])}):")
-    for parent, child in recommendation['edges']:
-        reason = recommendation['reasoning'].get(f"{parent} → {child}", "")
-        print(f"  {parent:20s} → {child:20s}")
-        if reason:
-            print(f"    Rationale: {reason}")
-    
-    # Save recommendation
-    with open(OUTPUT_DIR / 'bn_structure_recommendation.json', 'w') as f:
-        json.dump(recommendation, f, indent=2)
-    
-    print(f"\n✓ Saved bn_structure_recommendation.json")
-    
-    return recommendation
-
 
 def analyze_special_scenarios(df: pd.DataFrame, df_disc: pd.DataFrame):
     """
@@ -727,7 +636,7 @@ def analyze_special_scenarios(df: pd.DataFrame, df_disc: pd.DataFrame):
     # Save results
     results_df = pd.DataFrame(results)
     results_df.to_csv(OUTPUT_DIR / 'scenario_analysis.csv', index=False)
-    print(f"\n✓ Saved scenario_analysis.csv")
+    print(f"\nSaved scenario_analysis.csv")
     
     # Visualize
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 6))
@@ -758,7 +667,7 @@ def analyze_special_scenarios(df: pd.DataFrame, df_disc: pd.DataFrame):
     
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / 'scenario_analysis.png', dpi=200, bbox_inches='tight')
-    print(f"✓ Saved scenario_analysis.png")
+    print(f"Saved scenario_analysis.png")
     
     return results_df
 
@@ -785,10 +694,7 @@ def main():
     # Step 5: Test independence
     associations_df = test_conditional_independence(df_disc)
     
-    # Step 6: Recommend structure
-    bn_recommendation = recommend_bn_structure(associations_df)
-    
-    # Step 7: Analyze special scenarios
+    # Step 6: Analyze special scenarios
     scenario_results = analyze_special_scenarios(df, df_disc)
     
     # Save processed data
@@ -798,32 +704,29 @@ def main():
     
     # Save both continuous and discretized versions
     df.to_csv(OUTPUT_DIR / 'rounds_with_features.csv', index=False)
-    print(f"✓ Saved rounds_with_features.csv ({len(df):,} rounds)")
+    print(f"Saved rounds_with_features.csv ({len(df):,} rounds)")
     
     df_disc.to_csv(OUTPUT_DIR / 'rounds_discretized.csv', index=False)
-    print(f"✓ Saved rounds_discretized.csv ({len(df_disc):,} rounds)")
+    print(f"Saved rounds_discretized.csv ({len(df_disc):,} rounds)")
     
     # Save recommendations
     with open(OUTPUT_DIR / 'discretization_recommendations.json', 'w') as f:
         json.dump(recommendations, f, indent=2)
-    print(f"✓ Saved discretization_recommendations.json")
+    print(f"Saved discretization_recommendations.json")
     
     # Summary
     print("\n" + "="*80)
-    print("SESSION 1 COMPLETE - SUMMARY")
+    print("SUMMARY")
     print("="*80)
     print(f"\nData prepared for Bayesian Network modeling:")
-    print(f"  • Total rounds: {len(df):,}")
-    print(f"  • Features engineered: {len(df.columns)}")
-    print(f"  • Discretized features: {len([c for c in df_disc.columns if c not in df.columns])}")
+    print(f"  - Total rounds: {len(df):,}")
+    print(f"  - Features engineered: {len(df.columns)}")
+    print(f"  - Discretized features: {len([c for c in df_disc.columns if c not in df.columns])}")
     print(f"\nKey findings:")
-    print(f"  • Pistol rounds: {df['is_pistol_round'].sum():,} ({df['is_pistol_round'].sum()/len(df)*100:.1f}%)")
-    print(f"  • Overtime rounds: {df['is_overtime'].sum():,} ({df['is_overtime'].sum()/len(df)*100:.1f}%)")
-    print(f"  • Most predictive feature: {associations_df.iloc[0]['feature']} (Cramér's V = {associations_df.iloc[0]['cramers_v']:.3f})")
-    print(f"\nRecommended BN structure: {len(bn_recommendation['nodes'])} nodes, {len(bn_recommendation['edges'])} edges")
+    print(f"  - Pistol rounds: {df['is_pistol_round'].sum():,} ({df['is_pistol_round'].sum()/len(df)*100:.1f}%)")
+    print(f"  - Overtime rounds: {df['is_overtime'].sum():,} ({df['is_overtime'].sum()/len(df)*100:.1f}%)")
+    print(f"  - Most predictive feature: {associations_df.iloc[0]['feature']} (Cramér's V = {associations_df.iloc[0]['cramers_v']:.3f})")
     print(f"\nAll outputs saved to: {OUTPUT_DIR}")
-    print(f"\nNext step: Run Session 2 to build and train the Bayesian Network")
-
 
 if __name__ == "__main__":
     main()
