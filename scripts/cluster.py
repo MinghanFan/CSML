@@ -82,14 +82,14 @@ def run_clustering(
 
     labeled_path = output_dir / "match_players_with_clusters.csv"
     df.to_csv(labeled_path, index=False)
-    print(f"✓ Saved labeled dataset -> {labeled_path}")
+    print(f"Saved labeled dataset -> {labeled_path}")
 
     cluster_profile = df.groupby("cluster")[feature_cols].mean().sort_index()
     cluster_profile["win_rate"] = df.groupby("cluster")["won_match"].mean()
 
     profile_path = output_dir / "player_cluster_profiles.csv"
     cluster_profile.to_csv(profile_path)
-    print(f"✓ Saved cluster profiles -> {profile_path}")
+    print(f"Saved cluster profiles -> {profile_path}")
 
     plt.figure(figsize=(8, 6))
     scatter = plt.scatter(
@@ -108,7 +108,7 @@ def run_clustering(
     plt.tight_layout()
     plt.savefig(plot_path, dpi=200)
     plt.close()
-    print(f"✓ Saved PCA scatter plot -> {plot_path}")
+    print(f"Saved PCA scatter plot -> {plot_path}")
 
     print("\nCluster win rates:")
     print(cluster_profile["win_rate"])

@@ -19,7 +19,7 @@ def verify_dataset():
     
     # Check folder exists
     if not CLEAN_DATASET_FOLDER.exists():
-        print(f"✗ ERROR: Dataset folder not found!")
+        print(f"ERROR: Dataset folder not found!")
         print(f"  Expected: {CLEAN_DATASET_FOLDER}")
         print(f"\n  Run main_pipeline.py first.")
         sys.exit(1)
@@ -39,13 +39,13 @@ def verify_dataset():
         filepath = CLEAN_DATASET_FOLDER / filename
         if filepath.exists():
             size = filepath.stat().st_size / 1024 / 1024  # MB
-            print(f"  ✓ {filename} ({size:.2f} MB)")
+            print(f"  {filename} ({size:.2f} MB)")
         else:
-            print(f"  ✗ {filename} MISSING!")
+            print(f"  {filename} MISSING!")
             all_exist = False
     
     if not all_exist:
-        print(f"\n✗ Dataset incomplete!")
+        print(f"\nDataset incomplete!")
         sys.exit(1)
     
     # Load main dataset
@@ -65,9 +65,9 @@ def verify_dataset():
     for col in critical_cols:
         if col in df.columns:
             null_count = df[col].null_count()
-            print(f"  ✓ {col} ({null_count} nulls)")
+            print(f"  {col} ({null_count} nulls)")
         else:
-            print(f"  ✗ {col} MISSING!")
+            print(f"  {col} MISSING!")
     
     # Check data quality
     print("\nData quality checks...")
@@ -85,7 +85,7 @@ def verify_dataset():
     print(f"  Avg flash assists: {avg_flash_assists:.2f}")
     
     print("\n" + "="*80)
-    print("✓ VERIFICATION COMPLETE")
+    print("VERIFICATION COMPLETE")
     print("="*80)
     print("\nYour dataset is ready for machine learning!")
     print("\nMain file: match_players.parquet")

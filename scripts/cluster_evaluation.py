@@ -76,12 +76,12 @@ def evaluate_clusters(
 
         profile_path = profile_dir / f"cluster_profiles_k{k}.csv"
         cluster_profile.to_csv(profile_path)
-        print(f"  ✓ Saved profiles -> {profile_path}")
+        print(f"  Saved profiles -> {profile_path}")
 
     metrics_df = pd.DataFrame(results)
     metrics_path = output_dir / "cluster_metrics.csv"
     metrics_df.to_csv(metrics_path, index=False)
-    print(f"\n✓ Saved metrics summary -> {metrics_path}")
+    print(f"\nSaved metrics summary -> {metrics_path}")
 
     plt.figure(figsize=(8, 4))
     plt.plot(metrics_df["k"], metrics_df["inertia"], marker="o")
@@ -101,7 +101,7 @@ def evaluate_clusters(
     plt.savefig(output_dir / "silhouette_vs_k.png", dpi=200)
     plt.close()
 
-    print("✓ Saved elbow and silhouette plots")
+    print("Saved elbow and silhouette plots")
 
     return metrics_df
 

@@ -751,7 +751,7 @@ class CS2DataExtractor:
             # Extract match data
             match_data = self.extract_match_data(demo_zip, data)
             if match_data is None:
-                print(f"  ✗ No valid match data")
+                print(f"  No valid match data")
                 return {'success': False, 'error': 'No valid match data'}
             
             match_id = match_data['match_id']
@@ -770,12 +770,12 @@ class CS2DataExtractor:
             round_players_data = self.extract_round_players_data(match_id, data)
             self.round_players_data.extend(round_players_data)
             
-            print(f"  ✓ Extracted: {len(match_players)} players, {len(rounds_data)} rounds")
+            print(f"  Extracted: {len(match_players)} players, {len(rounds_data)} rounds")
             
             return {'success': True, 'match_id': match_id}
             
         except Exception as e:
-            print(f"  ✗ Error: {e}")
+            print(f"  Error: {e}")
             import traceback
             traceback.print_exc()
             return {'success': False, 'error': str(e)}
@@ -785,7 +785,7 @@ class CS2DataExtractor:
         demo_zips = list(self.parsed_demos_folder.glob("*.zip"))
         
         if len(demo_zips) == 0:
-            print(f"✗ No .zip files found in {self.parsed_demos_folder}")
+            print(f"No .zip files found in {self.parsed_demos_folder}")
             return []
         
         print(f"\n{'='*80}")
@@ -816,11 +816,11 @@ class CS2DataExtractor:
             'round_players': pl.DataFrame(self.round_players_data, schema=CS2DataSchema.round_players_schema),
         }
         
-        print(f"  ✓ Matches: {len(dataframes['matches'])} rows")
-        print(f"  ✓ Players: {len(dataframes['players'])} rows")
-        print(f"  ✓ Match Players: {len(dataframes['match_players'])} rows")
-        print(f"  ✓ Rounds: {len(dataframes['rounds'])} rows")
-        print(f"  ✓ Round Players: {len(dataframes['round_players'])} rows")
+        print(f"  Matches: {len(dataframes['matches'])} rows")
+        print(f"  Players: {len(dataframes['players'])} rows")
+        print(f"  Match Players: {len(dataframes['match_players'])} rows")
+        print(f"  Rounds: {len(dataframes['rounds'])} rows")
+        print(f"  Round Players: {len(dataframes['round_players'])} rows")
         
         return dataframes
     
@@ -847,13 +847,13 @@ class CS2DataExtractor:
             filename = f"{prefix}{name}" if prefix else name
             parquet_path = self.output_folder / f"{filename}.parquet"
             df.write_parquet(parquet_path)
-            print(f"  ✓ Saved {filename}.parquet")
+            print(f"  Saved {filename}.parquet")
             
             csv_path = self.output_folder / f"{filename}.csv"
             df.write_csv(csv_path)
-            print(f"  ✓ Saved {filename}.csv")
+            print(f"  Saved {filename}.csv")
         
-        print(f"\n✓ All data saved to {self.output_folder}")
+        print(f"\nAll data saved to {self.output_folder}")
     
     def generate_summary(self, dataframes: Dict[str, pl.DataFrame]) -> dict:
         """Generate summary statistics"""
@@ -903,7 +903,7 @@ class CS2DataExtractor:
         with open(summary_path, 'w') as f:
             json.dump(summary, f, indent=2)
         
-        print(f"\n✓ Summary saved to {summary_path}")
+        print(f"\nSummary saved to {summary_path}")
         
         # Print summary
         print(f"\n{'='*80}")
@@ -920,4 +920,4 @@ class CS2DataExtractor:
             else:
                 print(f"  {key}: {value}")
 
-print("✓ Data extractor loaded")
+print("Data extractor loaded")

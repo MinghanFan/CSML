@@ -19,11 +19,11 @@ def parse_single_demo(args):
         print(f"Parsing {demo_path.name}...")
         output_path = parse_demo_to_zip(demo_path, output_folder)
         
-        print(f"  ✓ {demo_path.name} -> {output_path.name}")
+        print(f"  {demo_path.name} -> {output_path.name}")
         return {'success': True, 'demo': demo_path.name}
         
     except Exception as e:
-        print(f"  ✗ {demo_path.name}: {e}")
+        print(f"  {demo_path.name}: {e}")
         import traceback
         traceback.print_exc()
         return {'success': False, 'demo': demo_path.name, 'error': str(e)}
@@ -37,7 +37,7 @@ def main():
     
     # Validate
     if not RAW_DEMOS_FOLDER.exists():
-        print(f"✗ ERROR: Raw demos folder not found!")
+        print(f"ERROR: Raw demos folder not found!")
         print(f"  Expected: {RAW_DEMOS_FOLDER}")
         print(f"\n  Create the folder and put your .dem files there.")
         sys.exit(1)
@@ -47,7 +47,7 @@ def main():
         if not p.name.startswith("._")
     )
     if len(demo_files) == 0:
-        print(f"✗ ERROR: No .dem files found!")
+        print(f"ERROR: No .dem files found!")
         print(f"  Folder: {RAW_DEMOS_FOLDER}")
         print(f"\n  Copy your demo files to this folder first.")
         sys.exit(1)
@@ -78,8 +78,8 @@ def main():
     print(f"\n{'='*80}")
     print("PARSING COMPLETE")
     print(f"{'='*80}")
-    print(f"✓ Successful: {successful}/{len(demo_files)}")
-    print(f"✗ Failed: {failed}/{len(demo_files)}")
+    print(f"Successful: {successful}/{len(demo_files)}")
+    print(f"Failed: {failed}/{len(demo_files)}")
     
     if failed > 0:
         print(f"\nFailed demos:")
@@ -90,10 +90,10 @@ def main():
     print(f"\nParsed demos saved to: {PARSED_DEMOS_FOLDER}")
     
     if successful > 0:
-        print(f"\n✓ Ready for next step!")
+        print(f"\nReady for next step")
         print(f"  Run: python scripts/main_pipeline.py")
     else:
-        print(f"\n✗ No demos parsed successfully. Check errors above.")
+        print(f"\nNo demos parsed successfully. Check errors above.")
 
 if __name__ == "__main__":
     main()

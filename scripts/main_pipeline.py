@@ -40,21 +40,21 @@ def main():
     print(f"{'='*80}")
     
     if not PARSED_DEMOS_FOLDER.exists():
-        print(f"✗ ERROR: Parsed demos folder not found!")
+        print(f"ERROR: Parsed demos folder not found!")
         print(f"  Expected: {PARSED_DEMOS_FOLDER}")
-        print(f"\n  You need to parse your demos first.")
+        print(f"\n  User need to parse demos first.")
         print(f"  Run: python scripts/parse_demos.py")
         sys.exit(1)
     
     demo_zips = list(PARSED_DEMOS_FOLDER.glob("*.zip"))
     if len(demo_zips) == 0:
-        print(f"✗ ERROR: No parsed demos found!")
+        print(f"ERROR: No parsed demos found!")
         print(f"  Folder: {PARSED_DEMOS_FOLDER}")
-        print(f"\n  You need to parse your demos first.")
+        print(f"\n  User need to parse demos first.")
         print(f"  Run: python scripts/parse_demos.py")
         sys.exit(1)
     
-    print(f"✓ Found {len(demo_zips)} parsed demos")
+    print(f"Found {len(demo_zips)} parsed demos")
     
     # Step 2: Extract
     print(f"\n{'='*80}")
@@ -71,7 +71,7 @@ def main():
     
     successful = sum(1 for r in results if r['success'])
     if successful == 0:
-        print(f"\n✗ ERROR: No demos processed successfully!")
+        print(f"\nERROR: No demos processed successfully!")
         sys.exit(1)
     
     # Step 3: Create DataFrames
@@ -98,9 +98,9 @@ def main():
     
     # Done!
     print(f"\n{'='*80}")
-    print("✓ PIPELINE COMPLETE!")
+    print("DONE! PIPELINE COMPLETE")
     print(f"{'='*80}")
-    print(f"\nYour clean dataset is ready at:")
+    print(f"\nClean dataset is ready at:")
     print(f"  {CLEAN_DATASET_FOLDER}")
 
 if __name__ == "__main__":

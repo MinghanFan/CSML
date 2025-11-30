@@ -144,7 +144,7 @@ def merge_datasets(
 
 def build_arg_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Merge a CSML clean dataset with another run that uses a custom output prefix/folder."
+        description="Merge a clean dataset with another run that uses a custom output prefix/folder."
     )
     parser.add_argument(
         "--base-folder",

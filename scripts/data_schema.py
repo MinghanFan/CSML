@@ -128,4 +128,4 @@ class CS2DataSchema:
         'won_round': pl.Boolean,
     }
 
-print("✓ Data schema loaded")
+print("Data schema loaded")

@@ -30,6 +30,6 @@ VALID_MAPS = [
 # Number of parallel workers for parsing (None = auto-detect CPU count - 1)
 NUM_WORKERS = None
 
-print(f"✓ Configuration loaded")
+print(f"Configuration loaded")
 print(f"  Raw demos: {RAW_DEMOS_FOLDER}")
 print(f"  Output: {CLEAN_DATASET_FOLDER}")

@@ -223,11 +223,11 @@ def process_remote_demos(
                 append_processed(progress_file, source_id)
                 processed_urls.add(source_id)
                 successes += 1
-                print(f"  ✓ Completed {source_id}")
+                print(f"  Completed {source_id}")
 
             except Exception as exc:
                 failures += 1
-                print(f"  ✗ Failed: {exc}")
+                print(f"  Failed: {exc}")
                 import traceback
 
                 traceback.print_exc()
