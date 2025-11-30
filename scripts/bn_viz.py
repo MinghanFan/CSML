@@ -33,7 +33,7 @@ def load_model():
     features = model_data['features']
     structure = model_data['structure']
     
-    print(f"✓ Loaded BN model")
+    print(f"Loaded BN model")
     print(f"  Nodes: {len(model.nodes())}")
     print(f"  Edges: {len(model.edges())}")
     print(f"  Features: {len(features)}")
@@ -50,8 +50,8 @@ def visualize_network_structure(model):
     try:
         import networkx as nx
     except ImportError:
-        print("⚠ networkx not installed, skipping structure visualization")
-        print("  Install with: pip install networkx --break-system-packages")
+        print("Networkx not installed, skipping structure visualization")
+        print("Install with: pip install networkx --break-system-packages")
         return
     
     # Create directed graph
@@ -111,8 +111,7 @@ def visualize_network_structure(model):
     
     # Title
     ax.set_title(
-        'Bayesian Network Structure for CS:GO Round Prediction\n' +
-        '(8-Node Complex Model)',
+        'Bayesian Network Structure for CS2 Round Prediction\n',
         fontsize=16,
         fontweight='bold',
         pad=20
@@ -138,9 +137,9 @@ def visualize_network_structure(model):
     # Add note
     note_text = (
         "Edges represent causal relationships:\n"
-        "• Equipment/Momentum/Performance → Outcome (direct predictors)\n"
-        "• Performance → Momentum (psychological effect)\n"
-        "• Round Phase → Buy Phase → Equipment (economic cycles)"
+        "- Equipment/Momentum/Performance → Outcome (direct predictors)\n"
+        "- Performance → Momentum (psychological effect)\n"
+        "- Round Phase → Buy Phase → Equipment (economic cycles)"
     )
     ax.text(
         0.02, 0.02,
@@ -153,7 +152,7 @@ def visualize_network_structure(model):
     
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / 'bn_structure.png', dpi=300, bbox_inches='tight')
-    print("✓ Saved bn_structure.png")
+    print("Saved bn_structure.png")
     plt.close()
 
 
@@ -167,7 +166,7 @@ def visualize_comparison():
     comparison_path = BN_DIR / 'bn_comparison.json'
     
     if not comparison_path.exists():
-        print("⚠ Comparison data not found")
+        print("Comparison data not found")
         print(f"  Expected: {comparison_path}")
         print("  Run bn_compare.py first")
         return
@@ -250,7 +249,7 @@ def visualize_comparison():
     
     plt.tight_layout(rect=[0, 0, 1, 0.99])
     plt.savefig(OUTPUT_DIR / 'bn_vs_lightgbm.png', dpi=300, bbox_inches='tight')
-    print("✓ Saved bn_vs_lightgbm.png")
+    print("Saved bn_vs_lightgbm.png")
     plt.close()
 
 
@@ -264,20 +263,30 @@ def create_inference_example_viz():
     examples_path = BN_DIR / 'bn_inference_examples.json'
     
     if not examples_path.exists():
-        print("⚠ Inference examples not found")
+        print("Inference examples not found")
         return
     
     with open(examples_path) as f:
         examples = json.load(f)
+
+    scenario_names = list(examples.keys())
+    if len(scenario_names) > 5:
+        rng = np.random.default_rng(42)
+        scenario_names = list(rng.choice(scenario_names, size=5, replace=False))
+
+    def pretty_label(ev):
+        import textwrap
+        label = ", ".join(f"{v}" for v in ev.values())
+        return "\n".join(textwrap.wrap(label, width=20))
+
+    labels = [pretty_label(examples[name]['evidence']) for name in scenario_names]
+    ct_probs = [examples[name]['ct_win_prob'] for name in scenario_names]
+    t_probs = [examples[name]['t_win_prob'] for name in scenario_names]
     
     # Create visualization
-    fig, ax = plt.subplots(figsize=(14, 8))
+    fig, ax = plt.subplots(figsize=(12, 6))
     
-    scenarios = list(examples.keys())
-    ct_probs = [examples[s]['ct_win_prob'] for s in scenarios]
-    t_probs = [examples[s]['t_win_prob'] for s in scenarios]
-    
-    y_pos = np.arange(len(scenarios))
+    y_pos = np.arange(len(labels))
     
     # Stacked horizontal bar
     ax.barh(y_pos, ct_probs, alpha=0.8, label='CT Win', color='#4ECDC4')
@@ -295,7 +304,7 @@ def create_inference_example_viz():
                    ha='center', va='center', fontweight='bold', fontsize=10)
     
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(scenarios)
+    ax.set_yticklabels(labels)
     ax.set_xlabel('Win Probability', fontsize=12, fontweight='bold')
     ax.set_title('Bayesian Network Inference Examples\n(Scenario-Based Predictions)',
                 fontsize=14, fontweight='bold')
@@ -306,7 +315,7 @@ def create_inference_example_viz():
     
     plt.tight_layout()
     plt.savefig(OUTPUT_DIR / 'bn_inference_examples.png', dpi=300, bbox_inches='tight')
-    print("✓ Saved bn_inference_examples.png")
+    print("Saved bn_inference_examples.png")
     plt.close()
 
 
@@ -314,7 +323,7 @@ def main():
     """Main execution."""
     
     print("="*80)
-    print("BAYESIAN NETWORK VISUALIZATION - SESSION 2 (PART 3)")
+    print("BAYESIAN NETWORK VISUALIZATION")
     print("="*80)
     
     # Load model
@@ -329,11 +338,9 @@ def main():
     print("VISUALIZATION COMPLETE")
     print("="*80)
     print(f"\nFiles saved to: {OUTPUT_DIR}")
-    print(f"  • bn_structure.png - Network diagram")
-    print(f"  • bn_vs_lightgbm.png - Performance comparison")
-    print(f"  • bn_inference_examples.png - Scenario predictions")
-    
-    print(f"\n✓ All visualizations ready for presentation!")
+    print(f"  - bn_structure.png - Network diagram")
+    print(f"  - bn_vs_lightgbm.png - Performance comparison")
+    print(f"  - bn_inference_examples.png - Scenario predictions")
 
 
 if __name__ == "__main__":
