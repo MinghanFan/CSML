@@ -1,5 +1,5 @@
 """
-Bayesian Network Model Training
+Bayesian Network Round Winner Prediction Model
 """
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from pgmpy.inference import VariableElimination
 from pgmpy.models import DiscreteBayesianNetwork
 from sklearn.metrics import accuracy_score, brier_score_loss, log_loss, roc_auc_score
 from sklearn.model_selection import GroupKFold
+from sklearn.calibration import calibration_curve
 
 import logging
 logging.getLogger("pgmpy").setLevel(logging.WARNING)
@@ -126,17 +127,99 @@ def evaluate_fold(model: DiscreteBayesianNetwork, train_df: pd.DataFrame, test_d
     }
 
 
-def cross_validate(df: pd.DataFrame, features: List[str], n_folds: int = 5) -> pd.DataFrame:
+def cross_validate(df: pd.DataFrame, features: List[str], n_folds: int = 5) -> Tuple[pd.DataFrame, np.ndarray, np.ndarray]:
+    """
+    Perform cross-validation and collect out-of-fold predictions for calibration.
+    
+    Returns:
+        cv_results: DataFrame with per-fold metrics
+        oof_predictions: Out-of-fold predicted probabilities
+        oof_true: Out-of-fold true labels
+    """
     gkf = GroupKFold(n_splits=n_folds)
     groups = df['match_id'].values
     base = build_structure()
     results = []
+    
+    # Arrays to store out-of-fold predictions
+    oof_predictions = np.zeros(len(df))
+    oof_true = np.zeros(len(df))
+    
     for fold, (train_idx, test_idx) in enumerate(gkf.split(df, groups=groups), 1):
         train_df = df.iloc[train_idx]
         test_df = df.iloc[test_idx]
-        res = evaluate_fold(base.copy(), train_df, test_df, features, fold)
+        
+        # Train and get predictions
+        trained = train_model(base.copy(), train_df)
+        y_true = (test_df[TARGET] == 'CT_win').astype(int).values
+        preds, probs = predict(trained, test_df, features)
+        y_pred = (preds == 'CT_win').astype(int)
+        
+        # Store out-of-fold predictions
+        oof_predictions[test_idx] = probs
+        oof_true[test_idx] = y_true
+        
+        # Calculate metrics
+        res = {
+            'fold': fold,
+            'accuracy': accuracy_score(y_true, y_pred),
+            'auc': roc_auc_score(y_true, probs),
+            'logloss': log_loss(y_true, probs),
+            'brier': brier_score_loss(y_true, probs),
+            'n_train': len(train_df),
+            'n_test': len(test_df),
+        }
         results.append(res)
-    return pd.DataFrame(results)
+    
+    return pd.DataFrame(results), oof_predictions, oof_true
+
+
+def expected_calibration_error(y_true: np.ndarray, y_prob: np.ndarray, n_bins: int = 10) -> float:
+    """
+    Calculate Expected Calibration Error (ECE).
+    
+    ECE measures the difference between predicted probabilities and actual frequencies.
+    Lower is better (0 = perfect calibration).
+    """
+    bin_edges = np.linspace(0, 1, n_bins + 1)
+    bin_indices = np.digitize(y_prob, bin_edges[:-1]) - 1
+    bin_indices = np.clip(bin_indices, 0, n_bins - 1)
+    
+    ece = 0.0
+    for i in range(n_bins):
+        mask = bin_indices == i
+        if mask.sum() > 0:
+            bin_acc = y_true[mask].mean()
+            bin_conf = y_prob[mask].mean()
+            bin_weight = mask.sum() / len(y_true)
+            ece += bin_weight * abs(bin_acc - bin_conf)
+    
+    return ece
+
+
+def analyze_calibration(y_true: np.ndarray, y_prob: np.ndarray) -> Dict:
+    """
+    Analyze calibration of predictions.
+    
+    Returns calibration metrics and curve data.
+    """
+    # Calculate calibration curve
+    fraction_of_positives, mean_predicted_value = calibration_curve(
+        y_true, y_prob, n_bins=10, strategy='uniform'
+    )
+    
+    # Calculate ECE
+    ece = expected_calibration_error(y_true, y_prob, n_bins=10)
+    
+    # Calculate Brier score
+    brier = brier_score_loss(y_true, y_prob)
+    
+    return {
+        'ece': float(ece),
+        'brier': float(brier),
+        'fraction_of_positives': fraction_of_positives.tolist(),
+        'mean_predicted_value': mean_predicted_value.tolist(),
+    }
 
 
 def save_cpds(model: DiscreteBayesianNetwork, output_dir: Path):
@@ -188,22 +271,85 @@ def inference_examples(model: DiscreteBayesianNetwork, df: pd.DataFrame) -> Dict
 
 
 def main():
+    print("="*80)
+    print("BAYESIAN NETWORK TRAINING WITH CALIBRATION ANALYSIS")
+    print("="*80)
+    
+    # Load and prepare data
     df_raw = load_data()
     df_clean, features = prepare_data(df_raw)
-
-    cv = cross_validate(df_clean, features, n_folds=N_FOLDS)
+    
+    print(f"\nTraining on {len(df_clean):,} rounds")
+    print(f"Features: {len(features)}")
+    
+    # Cross-validation with out-of-fold predictions
+    print(f"\nPerforming {N_FOLDS}-fold cross-validation...")
+    cv, oof_predictions, oof_true = cross_validate(df_clean, features, n_folds=N_FOLDS)
     cv.to_csv(OUTPUT_DIR / 'bn_cv_results.csv', index=False)
+    
+    # Print CV results
+    print("\nCross-validation results:")
+    print(f"  Accuracy:  {cv['accuracy'].mean():.4f} ± {cv['accuracy'].std():.4f}")
+    print(f"  AUC:       {cv['auc'].mean():.4f} ± {cv['auc'].std():.4f}")
+    print(f"  Log Loss:  {cv['logloss'].mean():.4f} ± {cv['logloss'].std():.4f}")
+    print(f"  Brier:     {cv['brier'].mean():.4f} ± {cv['brier'].std():.4f}")
 
+    # After cross_validate() returns oof_predictions, oof_true
+    print("\nChecking for prediction patterns...")
+    print(f"Min prediction: {oof_predictions.min()}")
+    print(f"Max prediction: {oof_predictions.max()}")
+    print(f"Unique predictions: {len(np.unique(oof_predictions))}")
+
+    # Check if predictions are too concentrated
+    hist, bins = np.histogram(oof_predictions, bins=10)
+    print(f"Distribution across bins: {hist}")
+
+    # Check for extreme confidence
+    extreme_confident = ((oof_predictions < 0.1) | (oof_predictions > 0.9)).sum()
+    print(f"Extreme predictions (<0.1 or >0.9): {extreme_confident}/{len(oof_predictions)} ({extreme_confident/len(oof_predictions)*100:.1f}%)")
+    
+    # Calibration analysis
+    print("\n" + "="*80)
+    print("CALIBRATION ANALYSIS")
+    print("="*80)
+    
+    calibration_results = analyze_calibration(oof_true, oof_predictions)
+    
+    print(f"\nCalibration Metrics:")
+    print(f"  Expected Calibration Error (ECE): {calibration_results['ece']:.4f}")
+    print(f"  Brier Score:                       {calibration_results['brier']:.4f}")
+    
+    ece = calibration_results['ece']
+    
+    # Train final model on full data
+    print("\n" + "="*80)
+    print("TRAINING FINAL MODEL")
+    print("="*80)
+    
     model = build_structure()
     model = train_model(model, df_clean)
+    
+    # Save CPDs
     save_cpds(model, CPD_DIR)
-
-    joblib.dump({'model': model, 'features': features, 'structure': list(model.edges())}, OUTPUT_DIR / 'bn_model.pkl')
-
+    print(f"\nCPDs saved to {CPD_DIR}")
+    
+    # Save model
+    joblib.dump({
+        'model': model, 
+        'features': features, 
+        'structure': list(model.edges()),
+        'oof_predictions': oof_predictions,
+        'oof_true': oof_true,
+    }, OUTPUT_DIR / 'bn_model.pkl')
+    print(f"Model saved to {OUTPUT_DIR / 'bn_model.pkl'}")
+    
+    # Generate inference examples
     examples = inference_examples(model, df_clean)
     with open(OUTPUT_DIR / 'bn_inference_examples.json', 'w') as f:
         json.dump(examples, f, indent=2)
-
+    print(f"Inference examples saved to {OUTPUT_DIR / 'bn_inference_examples.json'}")
+    
+    # Save metrics with calibration
     metrics = {
         'cv_mean': {
             'accuracy': float(cv['accuracy'].mean()),
@@ -217,16 +363,35 @@ def main():
             'logloss': float(cv['logloss'].std()),
             'brier': float(cv['brier'].std()),
         },
+        'calibration': {
+            'ece': calibration_results['ece'],
+            'brier': calibration_results['brier'],
+            'fraction_of_positives': calibration_results['fraction_of_positives'],
+            'mean_predicted_value': calibration_results['mean_predicted_value'],
+        },
         'n_folds': N_FOLDS,
         'n_rounds': len(df_clean),
         'structure': {'nodes': len(model.nodes()), 'edges': len(model.edges())},
     }
+    
     with open(OUTPUT_DIR / 'bn_metrics.json', 'w') as f:
         json.dump(metrics, f, indent=2)
-    print("Inference examples saved to bn_inference_examples.json")
-    print("CPDs saved to", CPD_DIR)
-    print("Model saved to", OUTPUT_DIR / 'bn_model.pkl')
-    print("Metrics saved to", OUTPUT_DIR / 'bn_metrics.json')
+    print(f"Metrics saved to {OUTPUT_DIR / 'bn_metrics.json'}")
+    
+    print("\n" + "="*80)
+    print("BAYESIAN NETWORK TRAINING COMPLETE")
+    print("="*80)
+    print("\nKey Results:")
+    print(f"  - Accuracy:  {metrics['cv_mean']['accuracy']:.1%}")
+    print(f"  - AUC:       {metrics['cv_mean']['auc']:.4f}")
+    print(f"  - ECE:       {calibration_results['ece']:.4f}")
+    print(f"\nCalibration Status: ", end="")
+    if ece < 0.05:
+        print("Excellent")
+    elif ece < 0.10:
+        print("Good")
+    else:
+        print("Needs improvement")
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 """
-LightGBM Temporal Round Prediction Model
+LightGBM Round Winner Prediction Model
 """
 
 from __future__ import annotations
