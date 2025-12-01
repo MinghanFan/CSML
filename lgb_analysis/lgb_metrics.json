@@ -19,5 +19,9 @@
     "logloss": 0.5407531646256825,
     "brier": 0.18615395163817286
   },
+  "calibration": {
+    "ece_uncalibrated": 0.019263072832581874,
+    "note": "ECE after isotonic calibration cannot be measured without nested CV"
+  },
   "best_iteration": 126
 }

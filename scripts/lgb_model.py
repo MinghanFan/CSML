@@ -24,6 +24,29 @@ REGULATION_TOTAL_ROUNDS = 24
 OVERTIME_HALF_ROUNDS = 3
 
 
+def expected_calibration_error(y_true: np.ndarray, y_prob: np.ndarray, n_bins: int = 10) -> float:
+    """
+    Calculate Expected Calibration Error (ECE).
+    
+    ECE measures the difference between predicted probabilities and actual frequencies.
+    Lower is better (0 = perfect calibration).
+    """
+    bin_edges = np.linspace(0, 1, n_bins + 1)
+    bin_indices = np.digitize(y_prob, bin_edges[:-1]) - 1
+    bin_indices = np.clip(bin_indices, 0, n_bins - 1)
+    
+    ece = 0.0
+    for i in range(n_bins):
+        mask = bin_indices == i
+        if mask.sum() > 0:
+            bin_acc = y_true[mask].mean()
+            bin_conf = y_prob[mask].mean()
+            bin_weight = mask.sum() / len(y_true)
+            ece += bin_weight * abs(bin_acc - bin_conf)
+    
+    return ece
+
+
 def safe_divide(num: pd.Series, denom: pd.Series) -> pd.Series:
     result = num / denom.replace(0, np.nan)
     return result.fillna(0.0)
@@ -89,7 +112,7 @@ def build_features(rounds: pd.DataFrame, players: pd.DataFrame, matches: pd.Data
     # ==========================================
     
     # Round context
-    df["round_num_normalized"] = df["round_num"] / 30.0  # Normalize to [0, 1] range
+    df["round_num_normalized"] = df["round_num"] / 30.0
     df["is_first_half"] = (df["round_num"] <= REGULATION_HALF_ROUNDS).astype(int)
     df["is_second_half"] = ((df["round_num"] > REGULATION_HALF_ROUNDS) & 
                              (df["round_num"] <= REGULATION_TOTAL_ROUNDS)).astype(int)
@@ -322,8 +345,20 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
     print(f"LogLoss:  {cv_scores_df['logloss'].mean():.4f} ± {cv_scores_df['logloss'].std():.4f}")
     print(f"Brier:    {cv_scores_df['brier'].mean():.4f} ± {cv_scores_df['brier'].std():.4f}")
     
-    # Calibrate predictions
-    print("\nCalibrating model...")
+    # ==========================================
+    # CALIBRATION ANALYSIS
+    # ==========================================
+    print("\n" + "="*60)
+    print("CALIBRATION ANALYSIS")
+    print("="*60)
+    
+    # ECE before calibration
+    ece_uncalibrated = expected_calibration_error(y.values, oof_predictions, n_bins=10)
+    print(f"\nUncalibrated LightGBM:")
+    print(f"  ECE: {ece_uncalibrated:.4f}")
+    
+    # Apply isotonic calibration (for deployment, but can't measure ECE properly)
+    print(f"\nApplying isotonic calibration for deployment...")
     calibrator = IsotonicRegression(out_of_bounds="clip")
     calibrator.fit(oof_predictions, y)
     calibrated_pred = calibrator.predict(oof_predictions)
@@ -335,12 +370,17 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
         "brier": brier_score_loss(y, calibrated_pred),
     }
     
-    print(f"After calibration: AUC={calibrated_scores['auc']:.4f}, "
-          f"Acc={calibrated_scores['accuracy']:.3f}")
+    print(f"\nCalibrated predictions (for deployment):")
+    print(f"  AUC:      {calibrated_scores['auc']:.4f}")
+    print(f"  Accuracy: {calibrated_scores['accuracy']:.3f}")
     
     # Train final model on all data
-    print("\nTraining final model on full dataset...")
+    print("\n" + "="*60)
+    print("TRAINING FINAL MODEL")
+    print("="*60)
+    
     avg_best_iter = int(np.mean(best_iterations))
+    print(f"Using {avg_best_iter} iterations (average of best iterations)")
     
     final_train_data = lgb.Dataset(X, label=y)
     final_model = lgb.train(
@@ -360,6 +400,8 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
             "calibrator": calibrator,
             "feature_columns": feature_cols,
             "min_round": min_round,
+            "oof_predictions": oof_predictions,
+            "oof_true": y.values,
         },
         OUTPUT_DIR / "lgb_model.pkl",
     )
@@ -371,6 +413,10 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
         "cv_mean": cv_scores_df.mean().to_dict(),
         "cv_std": cv_scores_df.std().to_dict(),
         "calibrated": calibrated_scores,
+        "calibration": {
+            "ece_uncalibrated": float(ece_uncalibrated),
+            "note": "ECE after isotonic calibration cannot be measured without nested CV",
+        },
         "best_iteration": avg_best_iter,
     }
     
@@ -429,7 +475,7 @@ def main():
     """Main execution."""
     
     print("=" * 80)
-    print("LGB ROUND PREDICTION MODEL")
+    print("LIGHTGBM ROUND PREDICTION MODEL")
     print("=" * 80)
     
     # Load data
@@ -458,6 +504,10 @@ def main():
     print(f"\n{'='*60}")
     print("MODEL COMPLETE")
     print(f"{'='*60}")
+    print(f"\nKey Results:")
+    print(f"  Accuracy:          {results['metrics']['cv_mean']['accuracy']:.1%}")
+    print(f"  AUC:               {results['metrics']['cv_mean']['auc']:.4f}")
+    print(f"  ECE (uncalibrated): {results['metrics']['calibration']['ece_uncalibrated']:.4f}")
 
 
 if __name__ == "__main__":
