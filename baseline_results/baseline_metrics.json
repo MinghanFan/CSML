@@ -1,0 +1,19 @@
+{
+  "model": "Majority Class Baseline",
+  "description": "Always predicts the most common outcome",
+  "strategy": "Always predict CT_win",
+  "cv_mean": {
+    "accuracy": 0.504804732153764,
+    "auc": 0.5,
+    "logloss": 0.6931886643715293,
+    "brier": 0.25002073790153967
+  },
+  "cv_std": {
+    "accuracy": 0.009868279996774351,
+    "auc": 0.0,
+    "logloss": 0.00019282564462207126,
+    "brier": 9.64069158158055e-05
+  },
+  "n_folds": 5,
+  "n_rounds": 24661
+}
