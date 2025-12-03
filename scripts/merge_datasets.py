@@ -1,6 +1,6 @@
 """
 Utility script to merge an existing clean dataset with a new batch that was
-produced via the remote pipeline (or any other run with custom prefixes).
+produced via the remote pipeline (or any other run with custom prefixes)
 """
 
 from __future__ import annotations

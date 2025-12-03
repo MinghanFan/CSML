@@ -1,5 +1,5 @@
 """
-Creates visualizations for the Bayesian Network.
+Creates visualizations for the Bayesian Network
 """
 
 import json

@@ -1,5 +1,5 @@
 """
-Main pipeline script to RUN.
+Main pipeline to create clean dataset from parsed demos
 """
 
 from pathlib import Path

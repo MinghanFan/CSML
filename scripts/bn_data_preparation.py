@@ -82,6 +82,9 @@ def load_and_prepare_data() -> pd.DataFrame:
     
     # Sort by match and round
     df = df.sort_values(['match_id', 'round_num']).reset_index(drop=True)
+
+    # Optionally filter out the first two rounds (pistol + follow-up)
+    # df = df[df['round_num'] >= 3].reset_index(drop=True)
     
     print(f"Created dataset with {len(df):,} rounds and {len(df.columns)} columns")
     

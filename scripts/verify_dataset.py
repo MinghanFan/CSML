@@ -1,7 +1,7 @@
 """
-Dataset verification script.
+Dataset verification script
 
-Run after main_pipeline.py to verify dataset.
+Run after data extraction pipeline to verify dataset
 """
 
 from pathlib import Path
@@ -67,7 +67,7 @@ def verify_dataset():
             null_count = df[col].null_count()
             print(f"  {col} ({null_count} nulls)")
         else:
-            print(f"  {col} MISSING!")
+            print(f"  {col} Missing!")
     
     # Check data quality
     print("\nData quality checks...")

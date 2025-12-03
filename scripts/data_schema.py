@@ -1,6 +1,7 @@
 """
-Data schema definitions for CS2 dataset.
-Defines the structure of all output tables.
+Data schema definitions for CS2 dataset
+
+Defines the structure of all output tables
 """
 
 import polars as pl

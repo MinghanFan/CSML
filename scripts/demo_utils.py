@@ -1,5 +1,5 @@
 """
-Shared utilities for parsing CS2 demo files.
+Shared utilities for parsing CS2 demo files
 
 This module centralizes the parsing configuration so different entry points
 (`parse_demos.py`, `remote_pipeline.py`, etc.) stay in sync.

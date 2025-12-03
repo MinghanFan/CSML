@@ -1,5 +1,5 @@
 """
-Data Extractor for CS2 demos.
+Data Extractor for CS2 demos
 """
 
 import zipfile

@@ -1,9 +1,9 @@
 """
-Remote demo processing pipeline.
+Remote demo processing pipeline
 
 Downloads demos on demand from a remote HTTP directory or a manifest file,
 parses each demo into the AWPy parquet bundle, feeds the result directly into
-`CS2DataExtractor`, and discards the temporary files immediately.
+`CS2DataExtractor`, and discards the temporary files immediately
 """
 
 from __future__ import annotations

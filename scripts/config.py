@@ -1,5 +1,5 @@
 """
-Configuration file for CS2 data acquisition pipeline.
+Configuration file for CS2 data acquisition pipeline
 """
 
 from pathlib import Path
