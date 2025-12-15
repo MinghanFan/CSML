@@ -1,0 +1,200 @@
+import numpy as np
+import pandas as pd
+import joblib
+import matplotlib.pyplot as plt
+from pathlib import Path
+from sklearn.metrics import (
+    accuracy_score,
+    roc_auc_score,
+    log_loss,
+    brier_score_loss,
+    roc_curve,
+    auc
+)
+from sklearn.calibration import calibration_curve
+
+
+ROOT = Path(".")
+OUT_DIR = ROOT / "lgb_analysis_outputs"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+
+# ---------------------- Utility Functions ----------------------
+
+def expected_calibration_error(y_true, y_prob, n_bins=10):
+    bin_edges = np.linspace(0, 1, n_bins + 1)
+    bin_indices = np.digitize(y_prob, bin_edges[:-1]) - 1
+    bin_indices = np.clip(bin_indices, 0, n_bins - 1)
+
+    ece = 0.0
+    for i in range(n_bins):
+        mask = bin_indices == i
+        if mask.sum() > 0:
+            bin_acc = y_true[mask].mean()
+            bin_conf = y_prob[mask].mean()
+            ece += (mask.sum() / len(y_true)) * abs(bin_acc - bin_conf)
+
+    return float(ece)
+
+
+def load_artifacts():
+    cv = joblib.load("cv_results.pkl")
+    oof_true = joblib.load("oof_true.pkl")
+    oof_pred = joblib.load("oof_predictions.pkl")
+    return cv, np.array(oof_true), np.array(oof_pred)
+
+
+# ---------------------- Quantitative Summary ----------------------
+
+def quantitative_summary(cv_df, oof_true, oof_pred):
+    res = {}
+
+    res["cv_mean"] = {
+        "accuracy": float(cv_df["accuracy"].mean()),
+        "auc": float(cv_df["auc"].mean()),
+        "logloss": float(cv_df["logloss"].mean()),
+        "brier": float(cv_df["brier"].mean()),
+    }
+    res["cv_std"] = {
+        "accuracy": float(cv_df["accuracy"].std()),
+        "auc": float(cv_df["auc"].std()),
+        "logloss": float(cv_df["logloss"].std()),
+        "brier": float(cv_df["brier"].std()),
+    }
+
+    clipped = np.clip(oof_pred, 1e-7, 1 - 1e-7)
+    pred_labels = (oof_pred >= 0.5).astype(int)
+
+    res["oof_metrics"] = {
+        "accuracy": float(accuracy_score(oof_true, pred_labels)),
+        "auc": float(roc_auc_score(oof_true, oof_pred)),
+        "logloss": float(log_loss(oof_true, clipped)),
+        "brier": float(brier_score_loss(oof_true, oof_pred)),
+    }
+
+    res["ece"] = expected_calibration_error(oof_true, oof_pred, n_bins=10)
+
+    res["oof_summary"] = {
+        "min": float(oof_pred.min()),
+        "max": float(oof_pred.max()),
+        "unique_vals": int(len(np.unique(oof_pred))),
+    }
+
+    hist, bins = np.histogram(oof_pred, bins=10)
+    res["oof_hist_bins"] = hist.tolist()
+    res["oof_hist_edges"] = bins.tolist()
+
+    return res
+
+
+# ---------------------- Extreme Prediction ----------------------
+
+def extreme_analysis(oof_pred):
+    low = int((oof_pred < 0.1).sum())
+    high = int((oof_pred > 0.9).sum())
+    total = len(oof_pred)
+
+    return {
+        "extreme_low_count": low,
+        "extreme_high_count": high,
+        "extreme_low_percent": float(low / total * 100),
+        "extreme_high_percent": float(high / total * 100),
+        "total": total,
+    }
+
+
+# ---------------------- Calibration & ROC ----------------------
+
+def analyze_calibration_and_plot(oof_true, oof_pred):
+    frac_pos, mean_pred = calibration_curve(oof_true, oof_pred, n_bins=10, strategy="uniform")
+    ece = expected_calibration_error(oof_true, oof_pred)
+    brier = float(brier_score_loss(oof_true, oof_pred))
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(mean_pred, frac_pos, marker="o", label="LGB model")
+    plt.plot([0, 1], [0, 1], "--")
+    plt.xlabel("Predicted probability")
+    plt.ylabel("Observed frequency")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / "lgb_calibration_curve.png")
+    plt.close()
+
+    fpr, tpr, _ = roc_curve(oof_true, oof_pred)
+    roc_auc_val = auc(fpr, tpr)
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(fpr, tpr)
+    plt.plot([0, 1], [0, 1], "--")
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / "lgb_roc.png")
+    plt.close()
+
+    return {
+        "calibration_curve": {
+            "fraction_of_positives": frac_pos.tolist(),
+            "mean_predicted_value": mean_pred.tolist(),
+        },
+        "ece": float(ece),
+        "brier": brier,
+        "roc_auc": float(roc_auc_val),
+    }
+
+
+# ---------------------- Main ----------------------
+
+def main():
+    print("Loading artifacts...")
+    cv_df, oof_true, oof_pred = load_artifacts()
+
+    print("\nComputing quantitative summary...")
+    quant = quantitative_summary(cv_df, oof_true, oof_pred)
+
+    print("\n====================== Quantitative Summary ======================")
+    print(f"CV Accuracy: {quant['cv_mean']['accuracy']:.4f} ± {quant['cv_std']['accuracy']:.4f}")
+    print(f"CV AUC:      {quant['cv_mean']['auc']:.4f} ± {quant['cv_std']['auc']:.4f}")
+    print(f"CV LogLoss:  {quant['cv_mean']['logloss']:.4f} ± {quant['cv_std']['logloss']:.4f}")
+    print(f"CV Brier:    {quant['cv_mean']['brier']:.4f} ± {quant['cv_std']['brier']:.4f}")
+
+    print("\n[OOF Metrics]")
+    print(f"Accuracy: {quant['oof_metrics']['accuracy']:.4f}")
+    print(f"AUC:      {quant['oof_metrics']['auc']:.4f}")
+    print(f"LogLoss:  {quant['oof_metrics']['logloss']:.4f}")
+    print(f"Brier:    {quant['oof_metrics']['brier']:.4f}")
+
+    print("\n[Prediction Summary]")
+    print(f"Min prob: {quant['oof_summary']['min']:.4f}")
+    print(f"Max prob: {quant['oof_summary']['max']:.4f}")
+    print(f"Unique values: {quant['oof_summary']['unique_vals']}")
+    print(f"Histogram counts: {quant['oof_hist_bins']}")
+
+    print("\nComputing extreme-case analysis...")
+    extreme = extreme_analysis(oof_pred)
+
+    print("\n====================== Extreme Prediction Analysis ======================")
+    print(f"Extreme low (<0.1):  {extreme['extreme_low_count']} ({extreme['extreme_low_percent']:.2f}%)")
+    print(f"Extreme high (>0.9): {extreme['extreme_high_count']} ({extreme['extreme_high_percent']:.2f}%)")
+    print(f"Total samples: {extreme['total']}")
+
+    print("\nAnalyzing calibration and creating plots...")
+    cal = analyze_calibration_and_plot(oof_true, oof_pred)
+
+    print("\n====================== Calibration Analysis ======================")
+    print(f"ECE:   {cal['ece']:.4f}")
+    print(f"Brier: {cal['brier']:.4f}")
+    print(f"AUC:   {cal['roc_auc']:.4f}")
+
+    print("\nCalibration Status: ", end="")
+    if cal["ece"] < 0.05:
+        print("Excellent")
+    elif cal["ece"] < 0.10:
+        print("Good")
+        print("Needs Improvement")
+
+    print("\nAnalysis complete. Outputs saved to:", OUT_DIR.resolve())
+
+
+if __name__ == "__main__":
+    main()

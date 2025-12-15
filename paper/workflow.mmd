@@ -1,0 +1,50 @@
+flowchart TD
+
+    subgraph Ingestion ["1. Data Acquisition & Structure"]
+        Start([HLTV .dem Files]) --> Pipeline["scripts/remote_pipeline.py"]
+        Pipeline -- "Stream & Parse (AWPy)" --> RawData[("clean_dataset/
+        (matches.csv, rounds.csv,
+        players.csv, etc.)")]
+        
+        Schema["scripts/data_schema.py"] -.-> Verify["scripts/verify_dataset.py"]
+        RawData --> Verify
+    end
+
+    subgraph Features ["2. Feature Building"]
+        Verify --> Prep["scripts/bn_data_preparation.py"]
+        Prep -- "Create pre-round features
+        (economy, streaks, lags)" --> EnrichedData[("Enriched Tables")]
+        Prep -- "Discretize for BN" --> BN_Viz["bn_analysis/
+        (feature_distributions.png,
+        feature_dependencies.png)"]
+    end
+
+    subgraph Modeling ["3. Model Training & Clustering"]
+        direction TB
+        
+        EnrichedData --> BN_Model["scripts/bn_model.py"]
+        BN_Model -- "GroupKFold" --> BN_Out["bn_cpd_tables/
+        bn_metrics.json
+        bn_calibration_curve.png"]
+
+        EnrichedData --> LGB_Model["scripts/lgb_model.py"]
+        LGB_Model -- "Isotonic Calibration" --> LGB_Out["lgb_analysis/
+        (metrics, roc_curve,
+        shap_violin.png)"]
+
+        EnrichedData --> Cluster["scripts/cluster.py"]
+        Cluster -- "Scale -> PCA -> KMeans (k=6)" --> Cluster_Out["match_players_with_clusters.csv
+        cluster_eval/ (visuals)"]
+    end
+
+    subgraph Eval ["4. Evaluation & Iteration"]
+        BN_Out & LGB_Out & Cluster_Out --> Comparison["Comparison Plots
+        (bn_analysis/bn_vs_lightgbm.png)"]
+        
+        Comparison --> Decision{Review Metrics}
+        Decision -- "Adjust Discretization/k" --> Prep
+    end
+    
+    class Pipeline,Verify,Prep,BN_Model,LGB_Model,Cluster script;
+    class RawData,EnrichedData data;
+    class BN_Viz,BN_Out,LGB_Out,Cluster_Out,Comparison artifact;

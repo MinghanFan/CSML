@@ -268,7 +268,7 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
         "lambda_l1": 0.1,
         "lambda_l2": 0.1,
         "verbosity": -1,
-        "seed": 42,
+        "seed": 13,
     }
     
     # Cross-validation
@@ -429,6 +429,8 @@ def train_model(df: pd.DataFrame, min_round: int = 3) -> Dict:
         "importance": importance_df,
         "cv_scores": cv_scores_df,
         "metrics": metrics,
+        "oof_true": y.values,
+        "oof_predictions": oof_predictions
     }
 
 
@@ -510,5 +512,8 @@ def main():
     print(f"  ECE (uncalibrated): {results['metrics']['calibration']['ece_uncalibrated']:.4f}")
 
 
+    joblib.dump(results["cv_scores"], "cv_results.pkl")
+    joblib.dump(results["oof_true"], "oof_true.pkl")
+    joblib.dump(results["oof_predictions"], "oof_predictions.pkl")
 if __name__ == "__main__":
     main()

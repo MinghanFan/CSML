@@ -10,14 +10,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+from matplotlib.colors import LinearSegmentedColormap
+from sklearn.calibration import calibration_curve
+from sklearn.metrics import (
+    auc,
+    average_precision_score,
+    confusion_matrix,
+    log_loss,
+    precision_recall_curve,
+    roc_curve,
+    brier_score_loss,
+)
 
 # Configuration
 BN_DIR = Path("bn_analysis")
 OUTPUT_DIR = Path("bn_analysis")
 
-# Plot style
-plt.style.use('seaborn-v0_8-darkgrid')
-sns.set_palette("husl")
+# Palette (kept as-is per your preference)
+palette = sns.color_palette("tab10", 10)
+COLORS = {
+    "primary": palette[0],
+    "secondary": palette[1],
+    "tertiary": palette[2],
+    "accent": palette[9],
+    "grey": palette[7],
+}
+
+plt.rcParams["axes.prop_cycle"] = plt.cycler(color=palette[:3])
+sns.set_palette("tab10")
+CONF_CMAP = LinearSegmentedColormap.from_list("primary_grad", ["#ffffff", COLORS["primary"]])
 
 
 def load_model():
@@ -32,13 +53,15 @@ def load_model():
     model = model_data['model']
     features = model_data['features']
     structure = model_data['structure']
+    oof_true = np.asarray(model_data.get('oof_true'))
+    oof_pred = np.asarray(model_data.get('oof_predictions'))
     
     print(f"Loaded BN model")
     print(f"  Nodes: {len(model.nodes())}")
     print(f"  Edges: {len(model.edges())}")
     print(f"  Features: {len(features)}")
     
-    return model, features, structure
+    return model, features, structure, oof_true, oof_pred
 
 
 def visualize_network_structure(model):
@@ -47,13 +70,8 @@ def visualize_network_structure(model):
     print("CREATING NETWORK STRUCTURE VISUALIZATION")
     print("="*80)
     
-    try:
-        import networkx as nx
-    except ImportError:
-        print("Networkx not installed, skipping structure visualization")
-        print("Install with: pip install networkx --break-system-packages")
-        return
-    
+    import networkx as nx
+
     # Create directed graph
     G = nx.DiGraph()
     G.add_edges_from(model.edges())
@@ -69,44 +87,49 @@ def visualize_network_structure(model):
     node_sizes = []
     for node in G.nodes():
         if node == 'outcome':
-            node_colors.append('#FF6B6B')  # Red
-            node_sizes.append(4000)
+            node_colors.append(COLORS["primary"])  
+            node_sizes.append(9000)
         elif node in ['equip_advantage', 'momentum', 'recent_performance']:
-            node_colors.append('#4ECDC4')  # Teal (primary predictors)
-            node_sizes.append(3500)
+            node_colors.append(COLORS["secondary"]) 
+            node_sizes.append(9000)
         else:
-            node_colors.append('#95E1D3')  # Light teal (supporting features)
-            node_sizes.append(3000)
+            node_colors.append(COLORS["tertiary"]) 
+            node_sizes.append(9000)
     
-    # Draw nodes
+    # Draw nodes as squares instead of circles
     nx.draw_networkx_nodes(
-        G, pos,
+        G,
+        pos,
         node_color=node_colors,
+        alpha=0.5,
         node_size=node_sizes,
-        edgecolors='black',
-        linewidths=2.5,
-        ax=ax
+        ax=ax,
     )
     
     # Draw labels
     nx.draw_networkx_labels(
         G, pos,
-        font_size=10,
+        font_size=12,
         font_weight='bold',
         font_family='sans-serif',
+        font_color='black',
         ax=ax
     )
     
-    # Draw edges
+    # Draw directed edges; keep arrowheads outside the larger nodes
     nx.draw_networkx_edges(
-        G, pos,
-        edge_color='#2C3E50',
+        G,
+        pos,
+        edge_color=COLORS["grey"],
         arrows=True,
-        arrowsize=25,
-        arrowstyle='->',
-        width=2.5,
-        connectionstyle='arc3,rad=0.1',
-        ax=ax
+        arrowsize=20,
+        arrowstyle="-|>",
+        width=2,
+        connectionstyle="arc3,rad=0.1",
+        # Extra margins keep arrowheads outside the large colored disks
+        min_source_margin=60,
+        min_target_margin=60,
+        ax=ax,
     )
     
     # Title
@@ -121,33 +144,17 @@ def visualize_network_structure(model):
     # Legend
     from matplotlib.patches import Patch
     legend_elements = [
-        Patch(facecolor='#FF6B6B', edgecolor='black', linewidth=2, label='Outcome (Target)'),
-        Patch(facecolor='#4ECDC4', edgecolor='black', linewidth=2, label='Primary Predictors'),
-        Patch(facecolor='#95E1D3', edgecolor='black', linewidth=2, label='Supporting Features')
+        Patch(facecolor=COLORS["primary"], edgecolor='black', linewidth=2, label='Outcome'),
+        Patch(facecolor=COLORS["secondary"], edgecolor='black', linewidth=2, label='Primary Predictors'),
+        Patch(facecolor=COLORS["tertiary"], edgecolor='black', linewidth=2, label='Supporting Features')
     ]
     ax.legend(
         handles=legend_elements,
         loc='upper left',
-        fontsize=11,
+        fontsize=14,
         frameon=True,
         fancybox=True,
         shadow=True
-    )
-    
-    # Add note
-    note_text = (
-        "Edges represent causal relationships:\n"
-        "- Equipment/Momentum/Performance → Outcome (direct predictors)\n"
-        "- Performance → Momentum (psychological effect)\n"
-        "- Round Phase → Buy Phase → Equipment (economic cycles)"
-    )
-    ax.text(
-        0.02, 0.02,
-        note_text,
-        transform=ax.transAxes,
-        fontsize=9,
-        verticalalignment='bottom',
-        bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.8)
     )
     
     plt.tight_layout()
@@ -155,6 +162,89 @@ def visualize_network_structure(model):
     print("Saved bn_structure.png")
     plt.close()
 
+def plot_roc(y_true, y_prob):
+    fpr, tpr, _ = roc_curve(y_true, y_prob)
+    plt.figure()
+    plt.plot(fpr, tpr, color=COLORS["primary"], label=f"AUC = {auc(fpr, tpr):.3f}")
+    plt.plot([0, 1], [0, 1], "--", lw=0.8, color=COLORS["grey"])
+    plt.xlabel("False Positive Rate")
+    plt.ylabel("True Positive Rate")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "bn_roc_curve.png", dpi=200)
+    plt.close()
+
+
+def plot_pr(y_true, y_prob):
+    precision, recall, _ = precision_recall_curve(y_true, y_prob)
+    ap = average_precision_score(y_true, y_prob)
+    plt.figure()
+    plt.plot(recall, precision, color=COLORS["primary"], label=f"AP = {ap:.3f}")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "bn_pr_curve.png", dpi=200)
+    plt.close()
+
+
+def plot_calibration(y_true, y_prob, bins=10):
+    prob_true, prob_pred = calibration_curve(y_true, y_prob, n_bins=bins, strategy="uniform")
+    plt.figure()
+    plt.plot(prob_pred, prob_true, marker="o", color=COLORS["primary"], label="Model")
+    plt.plot([0, 1], [0, 1], "--", lw=0.8, color=COLORS["grey"], label="Perfect")
+    plt.xlabel("Predicted probability (CT win)")
+    plt.ylabel("Observed frequency")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "bn_calibration_curve.png", dpi=200)
+    plt.close()
+
+
+def plot_confusion(y_true, y_prob, threshold=0.5):
+    y_pred = (y_prob >= threshold).astype(int)
+    cm = confusion_matrix(y_true, y_pred)
+    plt.figure()
+    plt.imshow(cm, cmap=CONF_CMAP)
+    plt.colorbar()
+    plt.xticks([0, 1], ["Pred T", "Pred CT"])
+    plt.yticks([0, 1], ["True T", "True CT"])
+    for i in range(2):
+        for j in range(2):
+            plt.text(j, i, cm[i, j], ha="center", va="center", color="black")
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "bn_confusion_matrix.png", dpi=200)
+    plt.close()
+
+
+def plot_extremes(y_prob, low=0.1, high=0.9):
+    plt.figure()
+    plt.hist(y_prob, bins=40, color=COLORS["primary"], alpha=0.75, edgecolor="white")
+    plt.axvspan(0, low, color=COLORS["secondary"], alpha=0.25, label=f"< {low}")
+    plt.axvspan(high, 1, color=COLORS["tertiary"], alpha=0.25, label=f"> {high}")
+    plt.xlabel("Predicted CT win probability")
+    plt.ylabel("Count")
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(OUTPUT_DIR / "bn_pred_prob_hist_extremes.png", dpi=200)
+    plt.close()
+
+
+def visualize_performance(y_true, y_prob, threshold=0.5):
+    plot_roc(y_true, y_prob)
+    plot_calibration(y_true, y_prob)
+    if not np.isclose(y_true.mean(), 0.5, atol=0.1):
+        plot_pr(y_true, y_prob)
+    plot_confusion(y_true, y_prob, threshold)
+    plot_extremes(y_prob)
+
+    print(f"AUC plot: {OUTPUT_DIR/'bn_roc_curve.png'}")
+    print(f"Calibration plot: {OUTPUT_DIR/'bn_calibration_curve.png'}")
+    print(f"Brier: {brier_score_loss(y_true, y_prob):.4f}, Logloss: {log_loss(y_true, y_prob):.4f}")
+    if not np.isclose(y_true.mean(), 0.5, atol=0.1):
+        print(f"PR plot: {OUTPUT_DIR/'bn_pr_curve.png'} (AP={average_precision_score(y_true, y_prob):.4f})")
+    print(f"Confusion matrix (thr={threshold}): {OUTPUT_DIR/'bn_confusion_matrix.png'}")
+    print(f"Extremes hist: {OUTPUT_DIR/'bn_pred_prob_hist_extremes.png'}")
 
 def visualize_comparison():
     """Create visualization comparing BN vs LightGBM."""
@@ -192,7 +282,7 @@ def visualize_comparison():
         models = ['Bayesian\nNetwork', 'LightGBM']
         values = [bn_mean, lgbm_mean]
         errors = [bn_std, lgbm_std]
-        colors = ['#4ECDC4', '#FF6B6B']
+        colors = [COLORS["primary"], COLORS["secondary"]]
         
         bars = ax.bar(
             models, values,
@@ -225,7 +315,7 @@ def visualize_comparison():
         # Add baseline for accuracy/AUC
         if metric in ['accuracy', 'auc']:
             ax.axhline(
-                0.5, color='red', linestyle='--',
+                0.5, color=COLORS["accent"], linestyle='--',
                 alpha=0.6, linewidth=2, label='Random Baseline'
             )
             ax.legend(fontsize=9)
@@ -289,8 +379,8 @@ def create_inference_example_viz():
     y_pos = np.arange(len(labels))
     
     # Stacked horizontal bar
-    ax.barh(y_pos, ct_probs, alpha=0.8, label='CT Win', color='#4ECDC4')
-    ax.barh(y_pos, t_probs, left=ct_probs, alpha=0.8, label='T Win', color='#FF6B6B')
+    ax.barh(y_pos, ct_probs, alpha=0.85, label='CT Win', color=COLORS["primary"])
+    ax.barh(y_pos, t_probs, left=ct_probs, alpha=0.85, label='T Win', color=COLORS["secondary"])
     
     # Add probability labels
     for i, (ct_prob, t_prob) in enumerate(zip(ct_probs, t_probs)):
@@ -308,7 +398,7 @@ def create_inference_example_viz():
     ax.set_xlabel('Win Probability', fontsize=12, fontweight='bold')
     ax.set_title('Bayesian Network Inference Examples\n(Scenario-Based Predictions)',
                 fontsize=14, fontweight='bold')
-    ax.axvline(0.5, color='black', linestyle='--', alpha=0.5, linewidth=2)
+    ax.axvline(0.5, color=COLORS["accent"], linestyle='--', alpha=0.5, linewidth=2)
     ax.legend(loc='lower right', fontsize=11)
     ax.set_xlim([0, 1])
     ax.grid(alpha=0.3, axis='x')
@@ -320,28 +410,18 @@ def create_inference_example_viz():
 
 
 def main():
-    """Main execution."""
-    
     print("="*80)
     print("BAYESIAN NETWORK VISUALIZATION")
     print("="*80)
     
     # Load model
-    model, features, structure = load_model()
+    model, features, structure, oof_true, oof_pred = load_model()
     
     # Create visualizations
     visualize_network_structure(model)
+    visualize_performance(oof_true, oof_pred)
     visualize_comparison()
     create_inference_example_viz()
     
-    print("\n" + "="*80)
-    print("VISUALIZATION COMPLETE")
-    print("="*80)
-    print(f"\nFiles saved to: {OUTPUT_DIR}")
-    print(f"  - bn_structure.png - Network diagram")
-    print(f"  - bn_vs_lightgbm.png - Performance comparison")
-    print(f"  - bn_inference_examples.png - Scenario predictions")
-
-
 if __name__ == "__main__":
     main()

@@ -1,0 +1,250 @@
+import json
+from pathlib import Path
+from typing import Dict, Any
+
+import joblib
+import numpy as np
+import pandas as pd
+from sklearn.metrics import accuracy_score, roc_auc_score, log_loss, brier_score_loss, roc_curve, auc
+from sklearn.calibration import calibration_curve
+import matplotlib.pyplot as plt
+
+ROOT = Path(".")
+BN_DIR = ROOT / "bn_analysis"
+OUT_DIR = BN_DIR / "bn_analysis_outputs"
+OUT_DIR.mkdir(parents=True, exist_ok=True)
+
+P_MODEL_PKL = BN_DIR / "bn_model.pkl"
+P_CV_CSV = BN_DIR / "bn_cv_results.csv"
+P_EXAMPLES_JSON = BN_DIR / "bn_inference_examples.json"
+CPD_DIR = BN_DIR / "bn_cpd_tables"
+
+def expected_calibration_error(y_true: np.ndarray, y_prob: np.ndarray, n_bins: int = 10) -> float:
+    bin_edges = np.linspace(0, 1, n_bins + 1)
+    bin_indices = np.digitize(y_prob, bin_edges[:-1]) - 1
+    bin_indices = np.clip(bin_indices, 0, n_bins - 1)
+    ece = 0.0
+    for i in range(n_bins):
+        mask = bin_indices == i
+        if mask.sum() > 0:
+            bin_acc = y_true[mask].mean()
+            bin_conf = y_prob[mask].mean()
+            ece += (mask.sum() / len(y_true)) * abs(bin_acc - bin_conf)
+    return float(ece)
+
+
+def load_artifacts():
+    if not P_MODEL_PKL.exists():
+        raise FileNotFoundError(
+            f"Missing {P_MODEL_PKL}. Run bn_model.py FIRST to generate model + OOF predictions."
+        )
+    model_bundle = joblib.load(P_MODEL_PKL)
+
+    oof_pred = np.array(model_bundle.get("oof_predictions"))
+    oof_true = np.array(model_bundle.get("oof_true"))
+    model_obj = model_bundle.get("model")
+    features = model_bundle.get("features")
+
+    cv_df = pd.read_csv(P_CV_CSV) if P_CV_CSV.exists() else None
+    examples = json.load(open(P_EXAMPLES_JSON)) if P_EXAMPLES_JSON.exists() else None
+
+    return {
+        "model": model_obj,
+        "features": features,
+        "oof_pred": oof_pred,
+        "oof_true": oof_true,
+        "cv_df": cv_df,
+        "examples": examples,
+    }
+
+
+def quantitative_summary(cv_df: pd.DataFrame, oof_true: np.ndarray, oof_pred: np.ndarray) -> Dict[str, Any]:
+    res = {}
+
+    if cv_df is not None:
+        res["cv_mean"] = {
+            "accuracy": float(cv_df["accuracy"].mean()),
+            "auc": float(cv_df["auc"].mean()),
+            "logloss": float(cv_df["logloss"].mean()),
+            "brier": float(cv_df["brier"].mean()),
+        }
+        res["cv_std"] = {
+            "accuracy": float(cv_df["accuracy"].std()),
+            "auc": float(cv_df["auc"].std()),
+            "logloss": float(cv_df["logloss"].std()),
+            "brier": float(cv_df["brier"].std()),
+        }
+    else:
+        res["cv_mean"] = None
+        res["cv_std"] = None
+
+    clipped = np.clip(oof_pred, 1e-7, 1 - 1e-7)
+    pred_labels = (oof_pred >= 0.5).astype(int)
+    res["oof_metrics"] = {
+        "accuracy": float(accuracy_score(oof_true, pred_labels)),
+        "auc": float(roc_auc_score(oof_true, oof_pred)),
+        "logloss": float(log_loss(oof_true, clipped)),
+        "brier": float(brier_score_loss(oof_true, oof_pred)),
+    }
+
+    res["ece"] = expected_calibration_error(oof_true, oof_pred, 10)
+
+    res["oof_summary"] = {
+        "min": float(oof_pred.min()),
+        "max": float(oof_pred.max()),
+        "unique_vals": int(len(np.unique(oof_pred))),
+    }
+
+    hist, bins = np.histogram(oof_pred, bins=10)
+    res["oof_hist_bins"] = hist.tolist()
+    res["oof_hist_edges"] = bins.tolist()
+
+    return res
+
+
+def extreme_analysis(oof_pred: np.ndarray):
+    low = int((oof_pred < 0.1).sum())
+    high = int((oof_pred > 0.9).sum())
+    total = len(oof_pred)
+    return {
+        "extreme_low_count": low,
+        "extreme_high_count": high,
+        "extreme_low_percent": float(low / total * 100),
+        "extreme_high_percent": float(high / total * 100),
+        "total": total,
+    }
+
+
+def analyze_calibration_and_plot(oof_true, oof_pred, plot_prefix="bn"):
+    frac_pos, mean_pred = calibration_curve(oof_true, oof_pred, n_bins=10, strategy="uniform")
+    ece = expected_calibration_error(oof_true, oof_pred)
+    brier = float(brier_score_loss(oof_true, oof_pred))
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(mean_pred, frac_pos, marker="o", label="BN model")
+    plt.plot([0, 1], [0, 1], "--", label="Perfect calibration")
+    plt.legend()
+    plt.xlabel("Predicted probability")
+    plt.ylabel("Observed frequency")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / f"{plot_prefix}_calibration_curve.png")
+    plt.close()
+
+    fpr, tpr, _ = roc_curve(oof_true, oof_pred)
+    roc_auc_val = auc(fpr, tpr)
+
+    plt.figure(figsize=(6, 6))
+    plt.plot(fpr, tpr)
+    plt.plot([0, 1], [0, 1], "--")
+    plt.xlabel("FPR")
+    plt.ylabel("TPR")
+    plt.tight_layout()
+    plt.savefig(OUT_DIR / f"{plot_prefix}_roc.png")
+    plt.close()
+
+    return {
+        "calibration_curve": {
+            "fraction_of_positives": frac_pos.tolist(),
+            "mean_predicted_value": mean_pred.tolist(),
+        },
+        "ece": float(ece),
+        "brier": brier,
+        "roc_auc": float(roc_auc_val),
+    }
+
+
+def qualitative_from_examples(examples_json):
+    if not examples_json:
+        return []
+
+    rows = []
+    for name, v in examples_json.items():
+        support = int(v["support"])
+        reliability = "high" if support >= 10 else "low"
+        rows.append({
+            "scenario": name,
+            "evidence": v["evidence"],
+            "ct_win_prob": v["ct_win_prob"],
+            "t_win_prob": v["t_win_prob"],
+            "prediction": v["prediction"],
+            "support": support,
+            "reliability": reliability,
+        })
+
+    return rows
+
+
+def main():
+    print("Loading artifacts...")
+    artifacts = load_artifacts()
+    oof_pred = artifacts["oof_pred"]
+    oof_true = artifacts["oof_true"]
+    cv_df = artifacts["cv_df"]
+    examples = artifacts["examples"]
+
+    print("\nComputing quantitative summary...")
+    quant = quantitative_summary(cv_df, oof_true, oof_pred)
+
+    # --- PRINT quantitative summary ---
+    print("\n====================== Quantitative Summary ======================")
+    if quant["cv_mean"]:
+        print(f"CV Accuracy: {quant['cv_mean']['accuracy']:.4f} ± {quant['cv_std']['accuracy']:.4f}")
+        print(f"CV AUC:      {quant['cv_mean']['auc']:.4f} ± {quant['cv_std']['auc']:.4f}")
+        print(f"CV LogLoss:  {quant['cv_mean']['logloss']:.4f} ± {quant['cv_std']['logloss']:.4f}")
+        print(f"CV Brier:    {quant['cv_mean']['brier']:.4f} ± {quant['cv_std']['brier']:.4f}")
+    else:
+        print("No CV results found.")
+
+    print("\n[OOF Metrics]")
+    print(f"Accuracy: {quant['oof_metrics']['accuracy']:.4f}")
+    print(f"AUC:      {quant['oof_metrics']['auc']:.4f}")
+    print(f"LogLoss:  {quant['oof_metrics']['logloss']:.4f}")
+    print(f"Brier:    {quant['oof_metrics']['brier']:.4f}")
+
+    print("\n[Prediction Summary]")
+    print(f"Min prob: {quant['oof_summary']['min']:.4f}")
+    print(f"Max prob: {quant['oof_summary']['max']:.4f}")
+    print(f"Unique values: {quant['oof_summary']['unique_vals']}")
+    print(f"Histogram counts: {quant['oof_hist_bins']}")
+
+    # Extreme-case analysis
+    print("\nComputing extreme-case analysis...")
+    extreme = extreme_analysis(oof_pred)
+
+    print("\n====================== Extreme Prediction Analysis ======================")
+    print(f"Extreme low (<0.1):  {extreme['extreme_low_count']} ({extreme['extreme_low_percent']:.2f}%)")
+    print(f"Extreme high (>0.9): {extreme['extreme_high_count']} ({extreme['extreme_high_percent']:.2f}%)")
+    print(f"Total samples: {extreme['total']}")
+
+    # Calibration analysis + plots
+    print("\nAnalyzing calibration and creating plots...")
+    cal = analyze_calibration_and_plot(oof_true, oof_pred)
+
+    print("\n====================== Calibration Analysis ======================")
+    print(f"ECE:   {cal['ece']:.4f}")
+    print(f"Brier: {cal['brier']:.4f}")
+    print(f"AUC:   {cal['roc_auc']:.4f}")
+
+    print("\nCalibration Status: ", end="")
+    if cal["ece"] < 0.05:
+        print("Excellent")
+    elif cal["ece"] < 0.10:
+        print("Good")
+    else:
+        print("Needs Improvement")
+
+    # Qualitative examples
+    print("\nSummarizing inference examples...")
+    qual = qualitative_from_examples(examples)
+
+    print("\n====================== Qualitative Analysis ======================")
+    for q in qual[:10]:
+        print(f"[{q['scenario']}] pred={q['prediction']} | CT={q['ct_win_prob']:.3f} | "
+              f"support={q['support']} | reliability={q['reliability']}")
+
+    print("\nAnalysis complete. Outputs saved to:", OUT_DIR.resolve())
+
+
+if __name__ == "__main__":
+    main()

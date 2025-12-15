@@ -274,6 +274,8 @@ def main():
     print("="*80)
     print("BAYESIAN NETWORK TRAINING WITH CALIBRATION ANALYSIS")
     print("="*80)
+    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+
     
     # Load and prepare data
     df_raw = load_data()
@@ -329,6 +331,17 @@ def main():
     model = build_structure()
     model = train_model(model, df_clean)
     
+    joblib.dump(
+    {
+        "model": model,
+        "features": features,
+        "structure": list(model.edges()),
+        "oof_predictions": oof_predictions,
+        "oof_true": oof_true,
+        "cv_results": cv.to_dict(orient="records"),
+    },
+    OUTPUT_DIR / "bn_model.pkl"
+    )
     # Save CPDs
     save_cpds(model, CPD_DIR)
     print(f"\nCPDs saved to {CPD_DIR}")

@@ -1,0 +1,123 @@
+{
+  "cpd_buy_phase.csv": [
+    {
+      "evidence": "('first_half',)",
+      "top_state": "both_full",
+      "prob": 0.5976402505086805
+    },
+    {
+      "evidence": "('second_half',)",
+      "top_state": "both_full",
+      "prob": 0.4300959050083727
+    },
+    {
+      "evidence": "('overtime',)",
+      "top_state": "both_full",
+      "prob": 0.9750248508946324
+    }
+  ],
+  "cpd_equip_advantage.csv": [
+    {
+      "evidence": "('major_advantage',)",
+      "top_state": "T_strong",
+      "prob": 0.6167856622468308
+    },
+    {
+      "evidence": "('both_full',)",
+      "top_state": "CT_strong",
+      "prob": 0.3225627973885139
+    },
+    {
+      "evidence": "('both_eco',)",
+      "top_state": "even",
+      "prob": 0.995276334435522
+    },
+    {
+      "evidence": "('semi_situation',)",
+      "top_state": "CT_strong",
+      "prob": 0.5881023547422906
+    }
+  ],
+  "cpd_map_side_bias.csv": [
+    {
+      "evidence": "(prior)",
+      "top_state": "balanced",
+      "prob": 0.676250133847307
+    }
+  ],
+  "cpd_momentum.csv": [
+    {
+      "evidence": "('T_performing', 'close')",
+      "top_state": "T_streak",
+      "prob": 0.6165118283689303
+    },
+    {
+      "evidence": "('T_performing', 'moderate')",
+      "top_state": "T_streak",
+      "prob": 0.8682343870470317
+    },
+    {
+      "evidence": "('T_performing', 'blowout')",
+      "top_state": "T_streak",
+      "prob": 0.7716665747227893
+    },
+    {
+      "evidence": "('even', 'close')",
+      "top_state": "CT_slight",
+      "prob": 0.4556625448537573
+    },
+    {
+      "evidence": "('even', 'moderate')",
+      "top_state": "T_slight",
+      "prob": 0.4206873036362307
+    }
+  ],
+  "cpd_outcome.csv": [
+    {
+      "evidence": "('T_strong', 'T_favored', 'T_streak', 'T_performing')",
+      "top_state": "T_win",
+      "prob": 0.8434335801722835
+    },
+    {
+      "evidence": "('T_strong', 'T_favored', 'T_streak', 'even')",
+      "top_state": "T_win",
+      "prob": 0.7397868561278863
+    },
+    {
+      "evidence": "('T_strong', 'T_favored', 'T_streak', 'CT_performing')",
+      "top_state": "CT_win",
+      "prob": 0.5
+    },
+    {
+      "evidence": "('T_strong', 'T_favored', 'T_slight', 'T_performing')",
+      "top_state": "T_win",
+      "prob": 0.7773212818405916
+    },
+    {
+      "evidence": "('T_strong', 'T_favored', 'T_slight', 'even')",
+      "top_state": "T_win",
+      "prob": 0.7979643208930721
+    }
+  ],
+  "cpd_recent_performance.csv": [
+    {
+      "evidence": "(prior)",
+      "top_state": "even",
+      "prob": 0.5440625334618268
+    }
+  ],
+  "cpd_round_phase.csv": [
+    {
+      "evidence": "(prior)",
+      "top_state": "first_half",
+      "prob": 0.5065183638505194
+    }
+  ],
+  "cpd_score_pressure.csv": [
+    {
+      "evidence": "(prior)",
+      "top_state": "blowout",
+      "prob": 0.395170789163722
+    }
+  ]
+}

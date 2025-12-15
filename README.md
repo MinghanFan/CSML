@@ -1,4 +1,4 @@
-# CSML
+# Intro to AI Project
 
 Parse CS2 demos into clean tables, engineer features, and train a Bayesian Network and LightGBM round predictor.
 
