@@ -1,50 +1,87 @@
 flowchart TD
 
     subgraph Ingestion ["1. Data Acquisition & Structure"]
-        Start([HLTV .dem Files]) --> Pipeline["scripts/remote_pipeline.py"]
-        Pipeline -- "Stream & Parse (AWPy)" --> RawData[("clean_dataset/
+        Start([HLTV .dem Files]) --> ParseLocal["scripts/parse_demos.py
+        (AWPy -> .zip bundles)"]
+        ParseLocal --> ExtractLocal["scripts/main_pipeline.py
+        (CS2DataExtractor)"]
+        
+        RemoteStart([Remote HLTV URLs / Local Path]) --> RemotePipe["scripts/remote_pipeline.py
+        (download + parse + extract)"]
+        
+        Schema["scripts/data_schema.py
+        (table definitions for extractor)"] -.-> ExtractLocal
+        Schema -.-> RemotePipe
+        
+        ExtractLocal --> RawData[("clean_dataset/
         (matches.csv, rounds.csv,
         players.csv, etc.)")]
+        RemotePipe --> RawData
         
-        Schema["scripts/data_schema.py"] -.-> Verify["scripts/verify_dataset.py"]
-        RawData --> Verify
+        RawData --> Verify["scripts/verify_dataset.py
+        (presence + sanity checks)"]
     end
 
-    subgraph Features ["2. Feature Building"]
-        Verify --> Prep["scripts/bn_data_preparation.py"]
-        Prep -- "Create pre-round features
-        (economy, streaks, lags)" --> EnrichedData[("Enriched Tables")]
-        Prep -- "Discretize for BN" --> BN_Viz["bn_analysis/
-        (feature_distributions.png,
-        feature_dependencies.png)"]
+    subgraph BN ["2. BN Prep & Training"]
+        Verify --> BN_Prep["scripts/bn_data_preparation.py"]
+        BN_Prep -- "Engineer round-level features
+        + discretize" --> BN_Data[("bn_analysis/
+        rounds_with_features.csv,
+        rounds_discretized.csv,
+        feature_associations.csv,
+        discretization_recommendations.json")]
+        BN_Data -- "Select features + structure"
+        --> BN_Model["scripts/bn_model.py"]
+        BN_Model -- "GroupKFold" --> BN_Out["bn_analysis/
+        (bn_metrics.json,
+        bn_cpd_tables/,
+        bn_calibration_curve.png,
+        bn_model.pkl)"]
     end
 
-    subgraph Modeling ["3. Model Training & Clustering"]
-        direction TB
-        
-        EnrichedData --> BN_Model["scripts/bn_model.py"]
-        BN_Model -- "GroupKFold" --> BN_Out["bn_cpd_tables/
-        bn_metrics.json
-        bn_calibration_curve.png"]
-
-        EnrichedData --> LGB_Model["scripts/lgb_model.py"]
-        LGB_Model -- "Isotonic Calibration" --> LGB_Out["lgb_analysis/
-        (metrics, roc_curve,
+    subgraph LGB ["3. LightGBM Pipeline"]
+        Verify --> LGB_Model["scripts/lgb_model.py
+        (loads raw tables +
+        builds its own features)"]
+        LGB_Model -- "GroupKFold + Isotonic" --> LGB_Out["lgb_analysis/
+        (lgb_metrics.json,
+        lgb_feature_importance.csv,
+        roc_curve.png,
         shap_violin.png)"]
-
-        EnrichedData --> Cluster["scripts/cluster.py"]
-        Cluster -- "Scale -> PCA -> KMeans (k=6)" --> Cluster_Out["match_players_with_clusters.csv
-        cluster_eval/ (visuals)"]
     end
 
-    subgraph Eval ["4. Evaluation & Iteration"]
-        BN_Out & LGB_Out & Cluster_Out --> Comparison["Comparison Plots
-        (bn_analysis/bn_vs_lightgbm.png)"]
-        
-        Comparison --> Decision{Review Metrics}
-        Decision -- "Adjust Discretization/k" --> Prep
+    subgraph Baseline ["4. Baseline Benchmark"]
+        Verify --> Baseline_Model["scripts/baseline_model.py
+        (majority class per CV fold)"]
+        Baseline_Model --> Baseline_Out["baseline_results/
+        (baseline_metrics.json,
+        baseline_cv_results.csv)"]
+    end
+
+    subgraph Clustering ["5. Player Clustering"]
+        Verify --> MatchPlayers[("clean_dataset/
+        match_players.csv")]
+        MatchPlayers --> Cluster["scripts/cluster.py
+        + cluster_evaluation.py"]
+        Cluster -- "Scale -> PCA -> KMeans" --> Cluster_Out["cluster_eval/
+        (match_players_with_clusters.csv,
+        cluster_metrics.csv,
+        player_clusters_pca.png)"]
+        Cluster_Out --> MatchPred["scripts/match_prediction.py
+        (team-level RandomForest using
+        cluster composition from match_players_with_clusters.csv)"]
+        MatchPred --> MatchPredDemo["scripts/demo_match_predictor.py
+        (example usage)"]
+        MatchPred --> MatchPredTest["scripts/test_match_predictor.py
+        (unit tests)"]
+    end
+
+    subgraph Eval ["6. Evaluation & Comparison"]
+        BN_Out --> Comparison["scripts/bn_analysis.py
+        + lgb_analysis.py"]
+        LGB_Out --> Comparison
     end
     
-    class Pipeline,Verify,Prep,BN_Model,LGB_Model,Cluster script;
-    class RawData,EnrichedData data;
-    class BN_Viz,BN_Out,LGB_Out,Cluster_Out,Comparison artifact;
+    class Pipeline,Verify,BN_Prep,BN_Model,LGB_Model,Baseline_Model,Cluster,MatchPred script;
+    class RawData,BN_Data,MatchPlayers data;
+    class BN_Viz,BN_Out,LGB_Out,Baseline_Out,Cluster_Out,Comparison artifact;
